@@ -2,8 +2,8 @@
 Contributors: girts_u
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
-Tested up to: 4.3
-Stable tag: 1.1.2
+Tested up to: 4.5.2
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,6 @@ This plugin will also automatically calculate taxes where it is required for Pri
 = Known Limitations =
 
 * Works with WooCommmerce 2.1 and up
-* Works only if every item in the order is fulfilled by Printful
 
 == Installation ==
 1. Upload 'printful-shipping' to the '/wp-content/plugins/' directory
@@ -42,6 +41,9 @@ Go to https://www.theprintful.com/dashboard/store , select your WooCommerce stor
 
 == Upgrade Notice ==
 
+= 1.2 =
+Support calculating shipping rates for both Printful and non-Printful products at the same time
+
 = 1.1.2 =
 Removed check for Curl extension
 
@@ -61,6 +63,12 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 1.2 =
+* Support calculating shipping rates for both Printful and non-Printful products at the same time (non-Printful
+products will get default rates provided by Woocommerce)
+* Added caching to tax rates
+* Improved compatibility with Woocommerce 2.6
 
 = 1.1.2 =
 * Removed check for Curl extension (since we already used wp_remote_get and it is no longer necessary)

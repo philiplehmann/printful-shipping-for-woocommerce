@@ -121,24 +121,30 @@ class Printful_Integration extends WC_Integration
         $countries = $this->get_tax_countries();
         if(isset($countries[$country][$state]))
         {
-            $rate = false;
-            try {
-                $client = $this->get_client();
-                $response = $client->post('tax/rates', array(
-                    'recipient' => array(
-                        'country_code' => $country,
-                        'state_code' => $state,
-                        'city' => $city,
-                        'zip' => $postcode,
-                    )
-                ));
-            }
-            catch(Exception $e)
-            {}
+            $key = 'printful_tax_' . $country.'-'.$state.'-'.$city.'-'.$postcode;
+            $rate = get_transient($key);
+            if ($rate === false) {
+                try {
+                    $client = $this->get_client();
+                    $response = $client->post('tax/rates', array(
+                        'recipient' => array(
+                            'country_code' => $country,
+                            'state_code' => $state,
+                            'city' => $city,
+                            'zip' => $postcode,
+                        )
+                    ));
+                }
+                catch(Exception $e)
+                {}
 
-            if(isset($response['rate']))
-            {
-                $rate = $response['rate'];
+                if(isset($response['rate']))
+                {
+                    $rate = $response['rate'];
+                } else {
+                    $rate = 0;
+                }
+                set_transient($key, $rate, 1800);
             }
 
             if ($rate)

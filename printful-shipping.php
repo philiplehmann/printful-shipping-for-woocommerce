@@ -3,7 +3,7 @@
 Plugin Name: Printful Integration for WooCommerce
 Plugin URI: https://wordpress.org/plugins/printful-shipping-for-woocommerce/
 Description: Calculate correct shipping and tax rates for your Printful-Woocommerce integration.
-Version: 1.1.2
+Version: 1.2
 Author: Printful
 Author URI: http://www.theprintful.com
 License: GPL2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,7 +16,7 @@ new Printful_Base();
 
 class Printful_Base {
 
-    const VERSION = '1.1.2';
+    const VERSION = '1.2';
 
     /**
      * Construct the plugin.
@@ -34,18 +34,11 @@ class Printful_Base {
         //Register integration section
         add_filter('woocommerce_integrations', array($this, 'add_integration'));
 
-        //Register shipping method
-        add_filter('woocommerce_shipping_methods', array($this, 'add_shipping'));
-
         //Register API endpoint
         add_filter('woocommerce_api_classes', array($this, 'add_api_resource'));
 
-    }
-
-    public function add_shipping( $methods ) {
         require_once 'includes/class-printful-shipping.php';
-        $methods[] = 'Printful_Shipping';
-        return $methods;
+        new Printful_Shipping();
     }
 
     public function add_integration( $integrations ) {

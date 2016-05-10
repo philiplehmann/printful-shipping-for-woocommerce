@@ -7,6 +7,9 @@ class Printful_Shipping extends WC_Shipping_Method
     public $calculate_tax = false;
     private $last_error = false;
 
+    //Store whether currently processed package contains Printful products (for WC<2.6)
+    private $printful_package = true;
+
     public function __construct()
     {
         $this->id = 'printful_shipping';
@@ -21,7 +24,14 @@ class Printful_Shipping extends WC_Shipping_Method
         $this->enabled = $this->get_option('enabled');
         $this->show_warnings = $this->get_option('show_warnings') == 'yes';
 
-        $this->type = 'order';
+        //Initialize shipping methods for specific package (or no package)
+        add_filter('woocommerce_load_shipping_methods', array($this, 'woocommerce_load_shipping_methods'), 10000);
+
+        //Remove other shipping methods for Printful package on WC < 2.6
+        add_filter('woocommerce_shipping_methods', array($this, 'woocommerce_shipping_methods'), 10000);
+
+        add_filter('woocommerce_cart_shipping_packages', array($this, 'woocommerce_cart_shipping_packages'));
+
     }
 
     public function generate_settings_html($form_fields = false)
@@ -58,9 +68,115 @@ class Printful_Shipping extends WC_Shipping_Method
                 'type'			=> 'checkbox',
                 'label'			=> 'Display Printful status messages if rate API request fails',
                 'default'		=> 'yes'
-            ),
+            )
         );
     }
+
+    //Enable only Printful shipping method for Printful packages
+    public function woocommerce_load_shipping_methods( $package = array() ) {
+        $this->printful_package = false;
+        if($package && !empty($package['printful'])) {
+            if($this->enabled == 'yes') {
+                $this->printful_package = true;
+                //Remove default methods if we process Printful package
+                WC()->shipping()->unregister_shipping_methods();
+                WC()->shipping()->register_shipping_method($this);
+            }
+        } else if(!$package) {
+            //Show Printful tab on Shipping rate settings
+            WC()->shipping()->register_shipping_method($this);
+        }
+    }
+
+    //Remove non-Printful methods for Printful packages on WC < 2.6
+    public function woocommerce_shipping_methods($methods) {
+        if($this->printful_package && version_compare(WC()->version, '2.6', '<')) {
+            //For WC < 2.6 woocommerce_shipping_methods is executed after woocommerce_load_shipping_methods
+            //So we need to clean up unnecessary methods from there
+            return array();
+        }
+        return $methods;
+    }
+
+    //Split Printul products to a separate package if there are any
+    public function woocommerce_cart_shipping_packages($packages = array()) {
+
+        //Printful rates are turned off, do not split products
+        if ($this->enabled !== 'yes') {
+            return $packages;
+        }
+
+        $return_packages = array();
+
+        foreach ($packages as $package) {
+
+            $ids = array();
+            foreach ($package['contents'] as $key => $item) {
+                $ids[$key]= $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
+            }
+
+            $printful_ids = array();
+            if($ids) {
+                asort($ids);
+                $values = implode(',', array_unique($ids));
+                $key = 'printful_productids_'.md5($values);
+                $printful_ids = get_transient($key);
+                if ($printful_ids === false) {
+                    try {
+                        $client = Printful_Integration::instance()->get_client();
+                        $status = $client->get('sync/variants', array(
+                            'external_ids' => $values
+                        ));
+                        if(!empty($status['sync_variants'])) {
+                            foreach($status['sync_variants'] as $variant) {
+                                if($variant['synced']) {
+                                    $printful_ids[]= $variant['external_id'];
+                                }
+                            }
+                        }
+                        set_transient($key, $printful_ids, 1800);
+                    } catch (PrintfulException $e) {
+                        $this->set_error($e);
+                        //Failed to get Printful status, return default packages
+                        return $packages;
+                    }
+                }
+            }
+            $new_contents = array(
+                'printful' => array(),
+                'woocommerce' => array()
+            );
+
+            foreach($ids as $key => $external_id) {
+                if(in_array($external_id,$printful_ids)) {
+                    $new_contents['printful'][$key] = $package['contents'][$key];
+                } else {
+                    $new_contents['woocommerce'][$key] = $package['contents'][$key];
+                }
+            }
+
+            foreach ($new_contents as $key => $contents) {
+                if($contents) {
+                    $new_package = $package;
+                    $new_package['contents_cost'] = 0;
+                    $new_package['contents'] = $contents;
+                    foreach ($contents as $item ) {
+                        if ( $item['data']->needs_shipping() ) {
+                            if ( isset( $item['line_total'] ) ) {
+                                $new_package['contents_cost'] += $item['line_total'];
+                            }
+                        }
+                    }
+                    if ($key == 'printful') {
+                        $new_package['printful'] = true;
+                    }
+                    $return_packages[]= $new_package;
+                }
+            }
+        }
+        return $return_packages;
+    }
+
 
     public function calculate_shipping($package = array())
     {
@@ -83,7 +199,8 @@ class Printful_Shipping extends WC_Shipping_Method
             }
             $request['items'] []= array(
                 'external_variant_id' => $item['variation_id'] ? $item['variation_id'] : $item['product_id'],
-                'quantity' => $item['quantity']
+                'quantity' => $item['quantity'],
+                'value' => $item['line_total'] / $item['quantity']
             );
         }
 
@@ -99,9 +216,15 @@ class Printful_Shipping extends WC_Shipping_Method
         }
 
         try {
-            $response = $client->post('shipping/rates', $request, array(
-                'expedited' => true,
-            ));
+            $key = 'printful_rates_' . md5(json_encode($request));
+            $response = get_transient($key);
+            if($response === false) {
+                $response = $client->post('shipping/rates', $request, array(
+                    'expedited' => true,
+                ));
+                //Cache locally, since WC < 2.6 had problems with caching rates form ultiple packages internally
+                set_transient($key, $response, 1800);
+            }
 
             foreach ($response as $rate) {
                 $rateData = array(
