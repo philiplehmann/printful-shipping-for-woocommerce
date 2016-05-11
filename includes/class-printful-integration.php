@@ -179,7 +179,6 @@ class Printful_Integration extends WC_Integration
 
                 foreach($list as $country)
                 {
-                    $list[$country['country']] = array();
                     foreach($country['states'] as $state){
                         $countries[$country['code']][$state['code']] = 1;
                     }
