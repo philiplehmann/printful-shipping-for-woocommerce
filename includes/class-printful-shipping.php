@@ -121,7 +121,8 @@ class Printful_Shipping extends WC_Shipping_Method
                 $values = implode(',', array_unique($ids));
                 $key = 'printful_productids_'.md5($values);
                 $printful_ids = get_transient($key);
-                if ($printful_ids === false) {
+                if (!is_array($printful_ids)) {
+                    $printful_ids = array();
                     try {
                         $client = Printful_Integration::instance()->get_client();
                         $status = $client->get('sync/variants', array(
