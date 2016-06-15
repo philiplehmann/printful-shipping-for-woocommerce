@@ -97,23 +97,12 @@ class Printful_Integration extends WC_Integration
                 'label'			=> 'Use HTTP instead of HTTPS to connect to the Printful API (may be required if the plugin does not work for some hosting configurations)',
                 'default'		=> 'no'
             ),
+            'info' => array(
+                'type' => 'title',
+                'description' => 'Go to <b><a href="' . admin_url('admin.php?page=wc-settings&tab=shipping&section=printful_shipping') . '">Shipping → Printful Shipping</a></b> to enable Printful shipping rate calculation'
+            )
+
         );
-    }
-
-    public function generate_settings_html($form_fields = false)
-    {
-        parent::generate_settings_html($form_fields);
-
-        ?>
-            <tr valign="top">
-                <th scope="row" class="titledesc">
-                    <label >Calculate shipping rates</label>
-                </th>
-                <td class="forminp">
-                    Go to <b><a href="<?php echo admin_url('admin.php?page=wc-settings&tab=shipping&section=printful_shipping') ?>">Shipping → Printful Shipping</a></b> to enable Printful shipping rate calculation
-                </td>
-            </tr>
-        <?php
     }
 
     public function calculate_tax($matched_tax_rates, $country, $state, $postcode, $city, $tax_class)

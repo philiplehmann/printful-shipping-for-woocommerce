@@ -3,7 +3,7 @@ Contributors: girts_u
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 4.5.2
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Go to https://www.theprintful.com/dashboard/store , select your WooCommerce stor
 
 == Upgrade Notice ==
 
+= 1.2.2 =
+Fixed PHP warning on Woocommerce 2.6
+
 = 1.2.1 =
 Fixed bug
 
@@ -67,6 +70,9 @@ First release
 
 == Changelog ==
 
+= 1.2.2 =
+* Fixed PHP warning on Woocommerce 2.6 due to changed method signature
+* Fixed conflict with "Multiple Packages for WooCommerce" plugin
 
 = 1.2.1 =
 * Fixed bug that could have show error message when calculating shipping rates

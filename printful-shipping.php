@@ -16,7 +16,7 @@ new Printful_Base();
 
 class Printful_Base {
 
-    const VERSION = '1.2.1';
+    const VERSION = '1.2.2';
 
     /**
      * Construct the plugin.
@@ -36,7 +36,7 @@ class Printful_Base {
 
         //Register API endpoint
         add_filter('woocommerce_api_classes', array($this, 'add_api_resource'));
-
+        require_once 'includes/class-printful-integration.php';
         require_once 'includes/class-printful-shipping.php';
         new Printful_Shipping();
     }

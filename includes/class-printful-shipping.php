@@ -30,30 +30,9 @@ class Printful_Shipping extends WC_Shipping_Method
         //Remove other shipping methods for Printful package on WC < 2.6
         add_filter('woocommerce_shipping_methods', array($this, 'woocommerce_shipping_methods'), 10000);
 
-        add_filter('woocommerce_cart_shipping_packages', array($this, 'woocommerce_cart_shipping_packages'));
+        add_filter('woocommerce_cart_shipping_packages', array($this, 'woocommerce_cart_shipping_packages', 10000));
 
     }
-
-    public function generate_settings_html($form_fields = false)
-    {
-        if (empty(Printful_Integration::instance()->settings['printful_key']))
-        {
-            ?>
-                <tr><td colspan="2">
-                       <div class="error below-h2" style="margin:0">
-                        <p>
-                            Please add Printful API key to the
-                            <a href="<?php echo admin_url('admin.php?page=wc-settings&tab=integration&section=printful') ?>">Printful Integration settings section</a>
-                            to enable rate calculation.
-                        </p>
-                        </div>
-                </td></tr>
-            <?php
-        }
-        parent::generate_settings_html($form_fields);
-
-    }
-
     public function init_form_fields()
     {
         $this->form_fields = array(
@@ -70,6 +49,15 @@ class Printful_Shipping extends WC_Shipping_Method
                 'default'		=> 'yes'
             )
         );
+
+        if (empty(Printful_Integration::instance()->settings['printful_key'])) {
+            $this->form_fields['info'] = array(
+                'type' => 'title',
+                'description' => 'Please add Printful API key to the
+                    <a href="'. admin_url('admin.php?page=wc-settings&tab=integration&section=printful') .'">Printful Integration settings section</a>
+                    to enable rate calculation.'
+            );
+        }
     }
 
     //Enable only Printful shipping method for Printful packages
