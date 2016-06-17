@@ -133,15 +133,29 @@ class Printful_Shipping extends WC_Shipping_Method
             }
             $new_contents = array(
                 'printful' => array(),
+                'virtual' => array(),
                 'woocommerce' => array()
             );
 
             foreach($ids as $key => $external_id) {
+                $item = $package['contents'][$key];
                 if(in_array($external_id,$printful_ids)) {
-                    $new_contents['printful'][$key] = $package['contents'][$key];
+                    $new_contents['printful'][$key] = $item;
+                } else if($item['data']->is_virtual() || $item['data']->is_downloadable()) {
+                    $new_contents['virtual'][$key] = $item;
                 } else {
-                    $new_contents['woocommerce'][$key] = $package['contents'][$key];
+                    $new_contents['woocommerce'][$key] = $item;
                 }
+            }
+
+            //Put virtual products together with any other package
+            if($new_contents['virtual']) {
+                if($new_contents['printful'] && !$new_contents['woocommerce']) {
+                    $new_contents['printful'] += $new_contents['virtual'];
+                } else {
+                    $new_contents['woocommerce'] += $new_contents['virtual'];
+                }
+                unset ($new_contents['virtual']);
             }
 
             foreach ($new_contents as $key => $contents) {
