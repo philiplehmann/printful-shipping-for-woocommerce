@@ -3,7 +3,7 @@ Contributors: girts_u
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 4.5.2
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Go to https://www.theprintful.com/dashboard/store , select your WooCommerce stor
 
 == Upgrade Notice ==
 
+= 1.2.5 =
+Added option to allow Woocommerce default rates together with Printful rates for Printful products
+
 = 1.2.4 =
 Prevent virtual products from requiring shipping rate when bought together with Printful products
 
@@ -75,6 +78,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 1.2.5 =
+* Added option to allow Woocommerce default rates together with Printful rates for Printful products
 
 = 1.2.4 =
 * Prevent virtual products from requiring shipping rate when bought together with Printful products

@@ -5,6 +5,7 @@ class Printful_Shipping extends WC_Shipping_Method
 {
     public $show_warnings = false;
     public $calculate_tax = false;
+    public $override_defaults = true;
     private $last_error = false;
 
     //Store whether currently processed package contains Printful products (for WC<2.6)
@@ -23,6 +24,7 @@ class Printful_Shipping extends WC_Shipping_Method
 
         $this->enabled = $this->get_option('enabled');
         $this->show_warnings = $this->get_option('show_warnings') == 'yes';
+        $this->override_defaults = $this->get_option('override_defaults') == 'yes';
 
         //Initialize shipping methods for specific package (or no package)
         add_filter('woocommerce_load_shipping_methods', array($this, 'woocommerce_load_shipping_methods'), 10000);
@@ -41,6 +43,12 @@ class Printful_Shipping extends WC_Shipping_Method
                 'type'			=> 'checkbox',
                 'label'			=> __( 'Enable this shipping method', 'woocommerce' ),
                 'default'		=> 'no'
+            ),
+            'override_defaults' => array(
+                'title'			=> 'Disable Woocommerce rates',
+                'type'			=> 'checkbox',
+                'label'			=> 'Disable standard Woocommerce rates for products fulfilled by Printful',
+                'default'		=> 'yes'
             ),
             'show_warnings' => array(
                 'title'			=> 'Show Printful warnings',
@@ -66,8 +74,10 @@ class Printful_Shipping extends WC_Shipping_Method
         if($package && !empty($package['printful'])) {
             if($this->enabled == 'yes') {
                 $this->printful_package = true;
-                //Remove default methods if we process Printful package
-                WC()->shipping()->unregister_shipping_methods();
+                if($this->override_defaults) {
+                    //Remove default methods if we process Printful package
+                    WC()->shipping()->unregister_shipping_methods();
+                }
                 WC()->shipping()->register_shipping_method($this);
             }
         } else if(!$package) {
@@ -78,7 +88,7 @@ class Printful_Shipping extends WC_Shipping_Method
 
     //Remove non-Printful methods for Printful packages on WC < 2.6
     public function woocommerce_shipping_methods($methods) {
-        if($this->printful_package && version_compare(WC()->version, '2.6', '<')) {
+        if($this->override_defaults && $this->printful_package && version_compare(WC()->version, '2.6', '<')) {
             //For WC < 2.6 woocommerce_shipping_methods is executed after woocommerce_load_shipping_methods
             //So we need to clean up unnecessary methods from there
             return array();
