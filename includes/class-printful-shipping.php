@@ -235,7 +235,7 @@ class Printful_Shipping extends WC_Shipping_Method
                 $response = $client->post('shipping/rates', $request, array(
                     'expedited' => true,
                 ));
-                //Cache locally, since WC < 2.6 had problems with caching rates form ultiple packages internally
+                //Cache locally, since WC < 2.6 had problems with caching rates form multiple packages internally
                 set_transient($key, $response, 1800);
             }
 
@@ -244,7 +244,6 @@ class Printful_Shipping extends WC_Shipping_Method
                     'id' => $this->id . '_' . $rate['id'],
                     'label' => $rate['name'],
                     'cost' => $rate['rate'],
-                    'taxes' => false,
                     'calc_tax' => 'per_order'
                 );
                 $this->add_rate($rateData);

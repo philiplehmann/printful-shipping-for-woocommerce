@@ -110,7 +110,7 @@ class Printful_Integration extends WC_Integration
         $countries = $this->get_tax_countries();
         if(isset($countries[$country][$state]))
         {
-            $key = 'printful_tax_' . $country.'-'.$state.'-'.$city.'-'.$postcode;
+            $key = 'printful_tax_rate_' . $country.'-'.$state.'-'.$city.'-'.$postcode;
             $rate = get_transient($key);
             if ($rate === false) {
                 try {
@@ -129,21 +129,25 @@ class Printful_Integration extends WC_Integration
 
                 if(isset($response['rate']))
                 {
-                    $rate = $response['rate'];
+                    $rate = $response;
                 } else {
-                    $rate = 0;
+                    $rate = array(
+                        'required' => false,
+                        'rate' => 0,
+                        'shipping_taxable' => false,
+                    );
                 }
                 set_transient($key, $rate, 1800);
             }
 
-            if ($rate)
+            if ($rate['required'])
             {
-                $id = $this->get_printful_rate_id($country, $state);
+                $id = $this->get_printful_rate_id($country, $state, $rate['shipping_taxable']);
                 return array(
                     $id => array(
-                        'rate' => $rate * 100,
+                        'rate' => $rate['rate'] * 100,
                         'label' => 'Sales Tax',
-                        'shipping' => 'no',
+                        'shipping' => $rate['shipping_taxable'] ? 'yes' : 'no',
                         'compound' => 'no',
                     )
                 );
@@ -174,7 +178,7 @@ class Printful_Integration extends WC_Integration
                 }
                 if(!empty($countries))
                 {
-                    set_transient('printful_tax_countries', $countries, 86400);
+                    set_transient('printful_tax_countries', $countries, 6 * 3600);
                 }
             }
             catch(Exception $e)
@@ -189,17 +193,20 @@ class Printful_Integration extends WC_Integration
     /**
      * Creates dummy tax rate ID to display Printful tax rates in the cart summary.
      */
-    private function get_printful_rate_id($cc, $state)
+    private function get_printful_rate_id($cc, $state, $includeShipping = false)
     {
         global $wpdb;
+
+        $includeShipping = (int)$includeShipping;
 
         $states = WC()->countries->get_states($cc);
         $tax_title = (isset($states[$state]) ? $states[$state] .' ': '' ). 'Sales Tax';
         $id = $wpdb->get_var(
             $wpdb->prepare("SELECT tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_class='printful'
-            and tax_rate_country = %s AND tax_rate_state = %s  LIMIT 1",
+            and tax_rate_country = %s AND tax_rate_state = %s AND tax_rate_shipping = %s  LIMIT 1",
             '_'.$cc,
-            $state
+            $state,
+            $includeShipping
         ));
         if(empty($id))
         {
@@ -212,7 +219,7 @@ class Printful_Integration extends WC_Integration
                     'tax_rate_name'     => $tax_title,
                     'tax_rate_priority' => 1,
                     'tax_rate_compound' => 0,
-                    'tax_rate_shipping' => 0,
+                    'tax_rate_shipping' => $includeShipping,
                     'tax_rate_class'    => 'printful'
                 )
             );
