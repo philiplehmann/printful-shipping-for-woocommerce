@@ -206,6 +206,14 @@ class Printful_Shipping extends WC_Shipping_Method
             'currency' => get_woocommerce_currency()
         );
 
+
+        if ($request['recipient']['country_code'] == 'US' && 
+             (empty($request['recipient']['zip']) || 
+              empty($request['recipient']['state_code']))
+        ) {
+            return false;
+        }
+
         foreach ($package['contents'] as $item) {
             if (!empty($item['data']) && ($item['data']->is_virtual() || $item['data']->is_downloadable())) {
                 continue;
