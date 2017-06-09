@@ -204,7 +204,7 @@ class Printful_Integration extends WC_Integration
         $id = $wpdb->get_var(
             $wpdb->prepare("SELECT tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_class='printful'
             and tax_rate_country = %s AND tax_rate_state = %s AND tax_rate_shipping = %s  LIMIT 1",
-            '_'.$cc,
+            $cc,
             $state,
             $includeShipping
         ));
@@ -213,7 +213,7 @@ class Printful_Integration extends WC_Integration
             $wpdb->insert(
                 $wpdb->prefix . "woocommerce_tax_rates",
                 array(
-                    'tax_rate_country'  => '_'.$cc,
+                    'tax_rate_country'  => $cc,
                     'tax_rate_state'    => $state,
                     'tax_rate'          => 0,
                     'tax_rate_name'     => $tax_title,
