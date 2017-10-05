@@ -1,9 +1,9 @@
 === Printful Integration for WooCommerce ===
-Contributors: girts_u
+Contributors: girts_u, kievins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 4.8
-Stable tag: 1.2.8
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,24 +22,39 @@ This plugin will also automatically calculate taxes where it is required for Pri
 == Installation ==
 1. Upload 'printful-shipping' to the '/wp-content/plugins/' directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Add your Printful API key to WooCommerce->Settings->Integration->Integration tab
+1. Click the "Connect" button or add your Printful API key manually to Printful->Settings tab
 1. Enable shipping rate calculation in WooCommerce->Settings->Shipping->Printful Shipping tab
 1. To automatically calculate taxes please check 'Enable taxes and tax calculations' under WooCommerce Tax settings.
-1. Then go to 'Integration' tab and check 'Calculate sales tax for locations where it is required for Printful orders'.
+1. Then go to Printful->Settings tab and check 'Calculated for all products shipped to North Carolina and California'.
 
 == Frequently Asked Questions ==
 
 = How do I get Printful API key? =
 
-Go to https://www.theprintful.com/dashboard/store , select your WooCommerce store, click "Edit" and then click "Enable API Access". Your API key will be generated and displayed there.
+Go to https://www.printful.com/dashboard/store , select your WooCommerce store, click "Edit" and then click "Enable API Access". Your API key will be generated and displayed there.
 
 == Screenshots ==
 
-1. Plugin settings dialog
-2. Shipping rate dialog
-3. Shipping rate selection
+1. Connect to Printful
+2. Printful dashboard
+3. Integration settings
+4. Plugin status page
+5. Support page
+6. Shipping live rates in cart
 
 == Upgrade Notice ==
+
+= 2.0 =
+New major plugin version
+* All new Printful dashboard
+* Connect to Printful with a single click
+* View your Printful profits and latest Printful product orders in WordPress admin
+* Edit your shipping carriers from Printful dashboard
+* Improved sales tax compatibility with existing tax rates
+* New status page - see if your integration is running smoothly
+* New support page - all info about finding help in one place
+* Size chart tab - when pushing products from Printful, the size chart will be placed in a separate tab
+* Improved logging of API requests coming to and from Printful
 
 = 1.2.8 =
 Fixed bug that caused tax rates to become invisible on checkout since WC 3.0
@@ -87,6 +102,18 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.0 =
+New major plugin version
+* All new Printful dashboard
+* Connect to Printful with a single click
+* View your Printful profits and latest Printful product orders in WordPress admin
+* Edit your shipping carriers from Printful dashboard
+* Improved sales tax compatibility with existing tax rates
+* New status page - see if your integration is running smoothly
+* New support page - all info about finding help in one place
+* Size chart tab - when pushing products from Printful, the size chart will be placed in a separate tab
+* Improved logging of API requests coming to and from Printful
 
 = 1.2.8 =
 * Fixed bug that caused tax rates to become invisible on checkout since WC 3.0

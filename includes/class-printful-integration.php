@@ -1,243 +1,152 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Printful_Integration extends WC_Integration
+class Printful_Integration
 {
+    const PF_API_CONNECT_STATUS = 'printful_api_connect_status';
+    const PF_CONNECT_ERROR = 'printful_connect_error';
 
-    public static $_instance;
+	public static $_instance;
 
-    public static function instance() {
-        if ( is_null( self::$_instance ) )
-            self::$_instance = new self();
-        return self::$_instance;
-    }
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
+			self::$_instance = new self();
+		}
 
-    public function __construct()
-    {
-        $this->id = 'printful';
-        $this->method_title = 'Printful Integration';
-        $this->method_description = 'Enable integration with Printful fulfillment service';
+		return self::$_instance;
+	}
 
-        add_action('woocommerce_update_options_integration_' . $this->id, array($this, 'process_admin_options'));
+	public function __construct() {
+		self::$_instance = $this;
+	}
 
-        $this->init_form_fields();
-        $this->init_settings();
+	/**
+	 * @return Printful_Client
+	 */
+	public function get_client() {
 
-        if ($this->get_option('calculate_tax') == 'yes')
-        {
-            //Update tax options if taxes are enabled
-            if (get_option('woocommerce_calc_taxes') != 'yes')
-            {
-                update_option('woocommerce_calc_taxes', 'yes');
-            }
-            if (get_option('woocommerce_tax_based_on') != 'shipping')
-            {
-                update_option('woocommerce_tax_based_on', 'shipping');
-            }
+		require_once 'class-printful-client.php';
+		$client = new Printful_Client( $this->get_option( 'printful_key' ), $this->get_option( 'disable_ssl' ) == 'yes' );
 
-            //Show warning in the tax settings section
-            add_action('woocommerce_settings_tax_options', array($this, 'show_tax_warning'));
+		return $client;
+	}
 
-            //Override tax rates calculated by Woocommerce
-            add_filter('woocommerce_matched_tax_rates', array($this, 'calculate_tax'), 10, 6);
-        }
+	/**
+	 * Check if the connection to printful is working
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function is_connected($force = false) {
 
-        self::$_instance = $this;
-    }
+		$api_key = $this->get_option( 'printful_key' );
 
-    public function get_client()
-    {
-        require_once 'class-printful-client.php';
-        $client = new Printful_Client($this->get_option('printful_key'), $this->get_option('disable_ssl') == 'yes');
-        return $client;
-    }
+		//dont need to show error - the plugin is simply not setup
+		if ( empty( $api_key )) {
+			return false;
+		}
 
-    public function init_settings()
-    {
-        parent::init_settings();
+		//validate length, show error
+		if ( strlen( $api_key ) != 36 ) {
+			$message      = 'Invalid API key - the key must be 36 characters long. Please ensure that your API key in <a href="%s">Settings</a> matches the one in your <a href="%s">Printful dashboard</a>.';
+			$settings_url = admin_url( 'admin.php?page=printful-dashboard&tab=settings' );
+			$printful_url = Printful_Base::get_printful_host() . 'dashboard/';
+			$this->set_connect_error(sprintf( $message, $settings_url, $printful_url ) );
+			return false;
+		}
 
-        //Copy settings from old plugin settings location if upgraded from plugin version 1.0.2
-        if ($this->get_option('printful_key') === false)
-        {
-            $oldsettings = get_option( $this->plugin_id . 'printful_shipping_settings', null );
-            $this->settings['printful_key'] = '';
+		//show connect status from cache
+		if ( ! $force ) {
+			$connected = get_transient( self::PF_API_CONNECT_STATUS );
+			if ( $connected && $connected['status'] == 1 ) {
+				$this->clear_connect_error();
+				return true;
+			} else if ( $connected && $connected['status'] == 0 ) {    //try again in a minute
+				return false;
+			}
+		}
 
-            if(!empty($oldsettings['printful_key']))
-            {
-                $this->settings['printful_key'] = $oldsettings['printful_key'];
-            }
-            if(!empty($oldsettings['disable_ssl']))
-            {
-                $this->settings['disable_ssl'] = $oldsettings['disable_ssl'];
-            }
+		$client   = $this->get_client();
+		$response = false;
 
-            update_option($this->plugin_id . 'printful_settings', $this->settings);
-        }
-    }
+		//attempt to connect to printful to verify the API key
+		try {
+			$storeData = $client->get( 'store' );
+			if ( ! empty( $storeData ) ) {
+				$response = true;
+				$this->clear_connect_error();
+				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 1 ) );  //no expiry
+			}
+		} catch ( Exception $e ) {
 
-    public function init_form_fields()
-    {
-        $this->form_fields = array(
-            'printful_key' => array(
-                'title' => 'Printful store API key',
-                'type' => 'text',
-                'desc_tip' => true,
-                'description'=> 'Your store\'s Printful API key. Create it in the Prinful dashboard',
-                'default' => false,
-            ),
-            'calculate_tax' => array(
-                'title'			=> 'Calculate sales tax',
-                'type'			=> 'checkbox',
-                'label'			=> 'Calculate sales tax for locations where it is required for Printful orders',
-                'default'		=> 'no'
-            ),
-            'disable_ssl' => array(
-                'title'			=> 'Disable SSL',
-                'type'			=> 'checkbox',
-                'label'			=> 'Use HTTP instead of HTTPS to connect to the Printful API (may be required if the plugin does not work for some hosting configurations)',
-                'default'		=> 'no'
-            ),
-            'info' => array(
-                'type' => 'title',
-                'description' => 'Go to <b><a href="' . admin_url('admin.php?page=wc-settings&tab=shipping&section=printful_shipping') . '">Shipping → Printful Shipping</a></b> to enable Printful shipping rate calculation'
-            )
+			if ( $e->getCode() == 401 ) {
+				$message      = 'Invalid API key. Please ensure that your API key in <a href="%s">Settings</a> matches the one in your <a href="%s">Printful dashboard</a>.';
+				$settings_url = admin_url( 'admin.php?page=printful-dashboard&tab=settings' );
+				$printful_url = Printful_Base::get_printful_host() . 'dashboard/';
+				$this->set_connect_error( sprintf( $message, $settings_url, $printful_url ) );
+				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 0 ), MINUTE_IN_SECONDS );  //try again in 1 minute
+			} else {
+				$this->set_connect_error( 'Could not connect to Printful API. Please try again later.' );
+			}
 
-        );
-    }
+			//do nothing
+			set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 0 ), MINUTE_IN_SECONDS );  //try again in 1 minute
+		}
 
-    public function calculate_tax($matched_tax_rates, $country, $state, $postcode, $city, $tax_class)
-    {
-        $countries = $this->get_tax_countries();
-        if(isset($countries[$country][$state]))
-        {
-            $key = 'printful_tax_rate_' . $country.'-'.$state.'-'.$city.'-'.$postcode;
-            $rate = get_transient($key);
-            if ($rate === false) {
-                try {
-                    $client = $this->get_client();
-                    $response = $client->post('tax/rates', array(
-                        'recipient' => array(
-                            'country_code' => $country,
-                            'state_code' => $state,
-                            'city' => $city,
-                            'zip' => $postcode,
-                        )
-                    ));
-                }
-                catch(Exception $e)
-                {}
+		return $response;
+	}
 
-                if(isset($response['rate']))
-                {
-                    $rate = $response;
-                } else {
-                    $rate = array(
-                        'required' => false,
-                        'rate' => 0,
-                        'shipping_taxable' => false,
-                    );
-                }
-                set_transient($key, $rate, 1800);
-            }
+	/**
+	 * Update connect error message
+	 * @param string $error
+	 */
+	public function set_connect_error($error = '') {
+		update_option(self::PF_CONNECT_ERROR, $error);
+	}
 
-            if ($rate['required'])
-            {
-                $id = $this->get_printful_rate_id($country, $state, $rate['shipping_taxable']);
-                return array(
-                    $id => array(
-                        'rate' => $rate['rate'] * 100,
-                        'label' => 'Sales Tax',
-                        'shipping' => $rate['shipping_taxable'] ? 'yes' : 'no',
-                        'compound' => 'no',
-                    )
-                );
-            }
-        }
-        //Return no taxes
-        return array();
-    }
+	/**
+	 * Get current connect error message
+	 */
+	public function get_connect_error() {
+		return get_option(self::PF_CONNECT_ERROR, false);
+	}
 
-    /**
-     * Gets list of countries and states where Printful needs to calculate sales tax
-     */
-    private function get_tax_countries()
-    {
-        $countries = get_transient('printful_tax_countries');
-        if (!$countries)
-        {
-            $countries = array();
-            try {
-                $client = $this->get_client();
-                $list = $client->get('tax/countries');
+	/**
+	 * Remove option used for storing current connect error
+	 */
+	public function clear_connect_error() {
+		delete_option(self::PF_CONNECT_ERROR);
+	}
 
-                foreach($list as $country)
-                {
-                    foreach($country['states'] as $state){
-                        $countries[$country['code']][$state['code']] = 1;
-                    }
-                }
-                if(!empty($countries))
-                {
-                    set_transient('printful_tax_countries', $countries, 6 * 3600);
-                }
-            }
-            catch(Exception $e)
-            {
-                //Default to CA if can't get the actual state list
-                return array('US' => array('CA' => 1));
-            }
-        }
-        return $countries;
-    }
+	/**
+	 * AJAX call endpoint for connect status check
+	 */
+	public static function ajax_force_check_connect_status() {
+		if ( Printful_Integration::instance()->is_connected( true ) ) {
+			die( 'OK' );
+		}
+		die( 'FAIL' );
+	}
 
-    /**
-     * Creates dummy tax rate ID to display Printful tax rates in the cart summary.
-     */
-    private function get_printful_rate_id($cc, $state, $includeShipping = false)
-    {
-        global $wpdb;
+	/**
+	 * Wrapper method for getting an option
+	 * @param $name
+	 * @param array $default
+	 * @return bool
+	 */
+	public function get_option($name, $default = array()) {
+		$options  = get_option( 'woocommerce_printful_settings', $default );
+		if ( ! empty( $options[ $name ] ) ) {
+			return $options[ $name ];
+		}
+		return false;
+	}
 
-        $includeShipping = (int)$includeShipping;
-
-        $states = WC()->countries->get_states($cc);
-        $tax_title = (isset($states[$state]) ? $states[$state] .' ': '' ). 'Sales Tax';
-        $id = $wpdb->get_var(
-            $wpdb->prepare("SELECT tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_class='printful'
-            and tax_rate_country = %s AND tax_rate_state = %s AND tax_rate_shipping = %s  LIMIT 1",
-            $cc,
-            $state,
-            $includeShipping
-        ));
-        if(empty($id))
-        {
-            $wpdb->insert(
-                $wpdb->prefix . "woocommerce_tax_rates",
-                array(
-                    'tax_rate_country'  => $cc,
-                    'tax_rate_state'    => $state,
-                    'tax_rate'          => 0,
-                    'tax_rate_name'     => $tax_title,
-                    'tax_rate_priority' => 1,
-                    'tax_rate_compound' => 0,
-                    'tax_rate_shipping' => $includeShipping,
-                    'tax_rate_class'    => 'printful'
-                )
-            );
-            $id = $wpdb->insert_id;
-        }
-        return $id;
-    }
-
-    public function show_tax_warning(){
-        ?>
-        <div class="error below-h2">
-            <p>
-                Warning: Tax rates are overriden by Printful Integration plugin. Go to
-                <a href="<?php echo admin_url('admin.php?page=wc-settings&tab=integration&section=printful') ?>">Printful Integration settings</a>
-                to disable automatic tax calculation if you want to use your own settings.
-            </p>
-        </div>
-        <?php
-    }
-
+	/**
+	 * Save the setting
+	 * @param $settings
+	 */
+	public function update_settings( $settings ) {
+		delete_transient( self::PF_API_CONNECT_STATUS );    //remove the successful API status since API key could have changed
+		update_option( 'woocommerce_printful_settings', $settings );
+	}
 }
