@@ -13,7 +13,9 @@ Calculate live shipping rates and tax rates based on actual Printful shipping co
 
 Display actual live shipping rates from carriers like FedEx on your WooCommerce checkout page. This plugin will return a list of available shipping rates specific to the shipping address your customer provides when checking out. These rates are identical to the list you get when you submit an order manually via Printful dashboard.
 
-This plugin will also automatically calculate taxes where it is required for Printful so that your originally intended profit margin stays intact.
+This plugin will also automatically calculate taxes where it is required for Printful so that your originally intended profit margin stays intact. These settings can be used together with other custom tax rates in the WooCommerce Tax section, if neeeded.
+
+In the Dashboard section, you'll also see information regarding your recent Printful orders, their value and profit.
 
 = Known Limitations =
 
@@ -46,15 +48,6 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 
 = 2.0 =
 New major plugin version
-* All new Printful dashboard
-* Connect to Printful with a single click
-* View your Printful profits and latest Printful product orders in WordPress admin
-* Edit your shipping carriers from Printful dashboard
-* Improved sales tax compatibility with existing tax rates
-* New status page - see if your integration is running smoothly
-* New support page - all info about finding help in one place
-* Size chart tab - when pushing products from Printful, the size chart will be placed in a separate tab
-* Improved logging of API requests coming to and from Printful
 
 = 1.2.8 =
 Fixed bug that caused tax rates to become invisible on checkout since WC 3.0
@@ -104,7 +97,7 @@ First release
 == Changelog ==
 
 = 2.0 =
-New major plugin version
+* New major plugin version
 * All new Printful dashboard
 * Connect to Printful with a single click
 * View your Printful profits and latest Printful product orders in WordPress admin
