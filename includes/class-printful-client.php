@@ -10,7 +10,7 @@ class Printful_Client {
 	private $lastResponseRaw;
 	private $lastResponse;
 	private $userAgent = 'Printful WooCommerce Plugin';
-	private $apiUrl = 'https://api.printful.com/';
+	private $apiUrl;
 
 	/**
 	 * @param string $key Printful Store API key
@@ -36,9 +36,8 @@ class Printful_Client {
 			$this->apiUrl = str_replace( 'https://', 'http://', $this->apiUrl );
 		}
 
-		if ( defined( 'PF_DEV_API_HOST' ) ) {
-			$this->apiUrl = PF_DEV_API_HOST;
-		}
+		//setup api host
+		$this->apiUrl = Printful_Base::get_printful_api_host();
 	}
 
     /**

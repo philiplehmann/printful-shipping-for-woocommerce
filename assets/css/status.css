@@ -16,3 +16,6 @@
 .printful-status .col-desc {
     width: 57%;
 }
+.printful-status tbody tr:first-child td {
+    font-weight: bold;
+}

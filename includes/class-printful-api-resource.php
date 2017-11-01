@@ -79,7 +79,15 @@ class Printful_API_Resource extends WC_API_Resource {
 		$checklist['overall_status'] = ( $checklist['overall_status'] ? 'OK' : 'FAIL' );
 
 		foreach ( $checklist['items'] as $key => $item ) {
-			$item['status']             = ( $item['status'] ? 'OK' : 'FAIL' );
+
+			if ( $item['status'] == Printful_Admin_Status::PF_STATUS_OK ) {
+				$item['status'] = 'OK';
+			} elseif ( $item['status'] == Printful_Admin_Status::PF_STATUS_WARNING ) {
+				$item['status'] = 'WARNING';
+			} else {
+				$item['status'] = 'FAIL';
+			}
+
 			$checklist['items'][ $key ] = $item;
 		}
 

@@ -68,31 +68,29 @@ class Printful_Admin_Support {
 		echo "##### Printful Checklist #####\n";
 		$checklist = Printful_Admin_Status::get_checklist();
 		foreach ( $checklist['items'] as $item ) {
-
 			$status = 'OK';
 			if($item['status'] == Printful_Admin_Status::PF_STATUS_WARNING) {
 				$status = 'WARNING';
 			} else if($item['status'] == Printful_Admin_Status::PF_STATUS_FAIL) {
 				$status = 'FAIL';
 			}
+			echo "* ";
 			echo str_pad( esc_html($item['name']), 30 ) . "=> " . esc_html($status) . "\n";
 		}
 
 		echo "\n\n##### Printful Last Sync's #####\n";
 		$syncReport = $this->get_sync_report();
 		if ( ! empty( $syncReport ) ) {
-
 			echo str_pad( 'Date', 30 );
 			echo str_pad( 'Request', 30 );
 			echo str_pad( 'Message', 30 );
 			echo "\n";
 
 			foreach ( $syncReport as $sr ) {
-
+				echo "* ";
 				echo str_pad( esc_html($sr['date']) . ';', 30 );
 				echo str_pad( esc_html($sr['path']) . ';', 30 );
 				echo str_pad( esc_html($sr['message']) . ';', 30 );
-
 				echo "\n";
 			}
 		}
@@ -106,6 +104,7 @@ class Printful_Admin_Support {
 		echo "\n\n##### Active Plugins #####\n";
 		foreach ( $system_status->get_active_plugins() as $plugin ) {
 			if ( ! empty( $plugin['name'] ) ) {
+				echo "* ";
 				echo esc_html( $plugin['name'] ) . " (" . $plugin['version'] . ")\n";
 			}
 		}
@@ -203,6 +202,7 @@ class Printful_Admin_Support {
 
 		foreach ( $data as $key => $item ) {
 			if ( is_string( $item ) ) {
+				echo "* ";
 				echo str_pad( $key, 30 ) . "=> " . $item . "\n";
 			}
 		}

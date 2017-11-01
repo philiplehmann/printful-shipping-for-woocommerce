@@ -87,8 +87,13 @@ class Printful_Request_log {
 	 * @param $request
 	 * @param $result
 	 * @param string $context
+	 * @return bool
 	 */
 	private function save_to_wc_log( $request, $result, $context) {
+
+		if ( ! function_exists( 'wc_get_logger' ) ) {
+			return false;
+		}
 
 		$logger   = wc_get_logger();
 		$context  = array( 'source' => $context );

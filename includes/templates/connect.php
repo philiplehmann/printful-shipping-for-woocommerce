@@ -23,7 +23,7 @@
             $url = '#';
         } else {
             ?><p class="connect-description">You're almost done! Just 2 more steps to have your WooCommerce store connected to Printful for automatic order fulfillment.</p><?php
-            $url = Printful_Base::get_printful_host() . 'dashboard/woocommerce/plugin-connect?website=' . urlencode( trailingslashit( get_site_url() ) ) . '&key=' . urlencode( $consumer_key ) . '&returnUrl=' . urlencode( get_admin_url( null,'admin.php?page=' . Printful_Admin::MENU_SLUG_DASHBOARD ) );
+            $url = Printful_Base::get_printful_host() . 'dashboard/woocommerce/plugin-connect?website=' . urlencode( trailingslashit( get_home_url() ) ) . '&key=' . urlencode( $consumer_key ) . '&returnUrl=' . urlencode( get_admin_url( null,'admin.php?page=' . Printful_Admin::MENU_SLUG_DASHBOARD ) );
         }
 
         echo '<a href="' . esc_url($url) . '" class="button button-primary printful-connect-button ' . ( ! empty( $issues ) ? 'disabled' : '' ) . '" target="_blank">Connect</a>';

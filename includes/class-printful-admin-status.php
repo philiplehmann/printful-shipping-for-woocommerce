@@ -17,6 +17,16 @@ class Printful_Admin_Status {
     public static $_instance;
 	public static $checklist_items = array(
 		array(
+			'name'        => 'Connection to Printful API',
+			'description' => 'Is your store successfully connected to Printful API?',
+			'method'      => 'check_PF_API_connect',
+		),
+		array(
+			'name'        => 'Printful API key is set',
+			'description' => 'Your store needs access to Printful API to use most of it\'s features like shipping rates, tax rates and other settings.',
+			'method'      => 'check_PF_API_key',
+		),
+		array(
 			'name'        => 'WordPress Permalinks',
 			'description' => 'WooCommerce API will not work unless your permalinks in Settings > Permalinks are set up correctly. Make sure you that they are NOT set to "plain".',
 			'method'      => 'check_permalinks',
@@ -28,12 +38,12 @@ class Printful_Admin_Status {
 		),
 		array(
 			'name'        => 'WooCommerce API enabled',
-			'description' => 'Your site needs to enbable WooCommerce API so that Printful can connect to it',
+			'description' => 'Your site needs to enbable WooCommerce API so that Printful can connect to it.',
 			'method'      => 'check_WC_API_enabled',
 		),
 		array(
 			'name'        => 'WooCommerce Webhooks',
-			'description' => 'Printful requires WooCommerce webhooks to quickly capture you incoming orders, products updates etc.',
+			'description' => 'Printful requires WooCommerce webhooks to be set up to quickly capture you incoming orders, products updates etc.',
 			'method'      => 'check_PF_webhooks',
 		),
 		array(
@@ -50,16 +60,6 @@ class Printful_Admin_Status {
 			'name'        => 'WordPress remote requests',
 			'description' => 'WordPress needs to be able to connect to Printful server to call webhooks. If this check fails, contact your hosting support.',
 			'method'      => 'check_remote_requests',
-		),
-		array(
-			'name'        => 'Printful API key is set',
-			'description' => 'Your store needs access to Printful API to use most of it\'s features like shipping rates, tax rates and other settings.',
-			'method'      => 'check_PF_API_key',
-		),
-		array(
-			'name'        => 'Connection to Printful API',
-			'description' => 'Is your store successfully connected to Printful API',
-			'method'      => 'check_PF_API_connect',
 		),
 		array(
 			'name'        => 'Recent store sync errors',
@@ -93,8 +93,14 @@ class Printful_Admin_Status {
 			'silent'      => true,
 		),
 		array(
+			'name'        => 'WP SpamShield',
+			'description' => 'If you are using WP SpamShield, you might experiance problems connecting to Printful and pushing products.',
+			'method'      => 'check_wp_spamshield',
+			'silent'      => true,
+		),
+		array(
 			'name'        => 'Remove Print Aura plugin',
-			'description' => 'Print Aura plugin is known to cause issues so it needs to be removed',
+			'description' => 'Print Aura plugin is known to cause issues so it needs to be removed.',
 			'method'      => 'check_printaura_plugin',
 			'silent'      => true,
 		),
@@ -472,6 +478,18 @@ class Printful_Admin_Status {
 	/**
 	 * @return int
 	 */
+	private function check_wp_spamshield() {
+
+		if ( ! is_plugin_active( 'wp-spamshield/wp-spamshield.php' ) ) {
+			return self::PF_STATUS_OK;
+		}
+
+		return self::PF_STATUS_FAIL;
+	}
+
+	/**
+	 * @return int
+	 */
 	private function check_remote_requests() {
 
 		// Setup request args.
@@ -492,7 +510,7 @@ class Printful_Admin_Status {
 		$http_args['headers']['X-WC-Webhook-Topic']  = self::PF_REMOTE_REQUEST_TOPIC;
 
 		// Webhook away!
-		$response = wp_safe_remote_request( Printful_Base::get_printful_host() . self::PF_REMOTE_REQUEST_URL, $http_args );
+		$response = wp_safe_remote_request( Printful_Base::get_printful_api_host() . self::PF_REMOTE_REQUEST_URL, $http_args );
 
 		if ( is_wp_error( $response ) ) {
 			return self::PF_STATUS_FAIL;
@@ -506,7 +524,7 @@ class Printful_Admin_Status {
 	 */
 	private function check_WC_auth_url_access() {
 
-		$url       = home_url( '/' ) . 'wc-auth/v1/authorize?app_name=Printful&scope=read_write&user_id=1&return_url=https%3A%2F%2Fwww.printful.com%2Fdashboard%2Fwoocommerce%2Freturn&callback_url=https%3A%2F%2Fwww.printful.com%2Fwebhook%2Fwoocommerce-auth-callback';
+		$url       = home_url( '/' ) . 'wc-auth/v1/authorize?app_name=Printful&scope=read_write&user_id=1&return_url=https%3A%2F%2Fwww.printful.com%2Fdashboard%2Fwoocommerce%2Freturn&callback_url=https%3A%2F%2Fapi.printful.com%2Fwebhook%2Fwoocommerce-auth-callback';
 		$http_args = array(
 			'timeout'    => 60,
 			'method'     => 'GET',
@@ -514,7 +532,12 @@ class Printful_Admin_Status {
 		);
 
 		$response = wp_safe_remote_get( $url, $http_args );
-		$code     = $response['response']['code'];
+
+		if ( is_wp_error( $response ) ) {
+			return self::PF_STATUS_FAIL;
+		}
+
+		$code = $response['response']['code'];
 
 		if ( $code == 200 ) {
 			return self::PF_STATUS_OK;

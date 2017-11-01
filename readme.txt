@@ -3,26 +3,18 @@ Contributors: girts_u, kievins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 4.8
-Stable tag: 2.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Calculate live shipping rates and tax rates based on actual Printful shipping costs
+See order statistics, automate tax settings and enable live shipping rates for your customers.
 
 == Description ==
 
-Display actual live shipping rates from carriers like FedEx on your WooCommerce checkout page. This plugin will return a list of available shipping rates specific to the shipping address your customer provides when checking out. These rates are identical to the list you get when you submit an order manually via Printful dashboard.
-
-This plugin will also automatically calculate taxes where it is required for Printful so that your originally intended profit margin stays intact. These settings can be used together with other custom tax rates in the WooCommerce Tax section, if neeeded.
-
-In the Dashboard section, you'll also see information regarding your recent Printful orders, their value and profit.
-
-= Known Limitations =
-
-* Works with WooCommmerce 2.1 and up
+See your order, revenue and profit statistics on WooCommerce Printful's dashboard, automate tax settings and enable live shipping rates from carriers like FedEx on your WooCommerce checkout page. These rates are identical to the list you get when you submit an order manually and are specific to the shipping address your customer provides when checking out.
 
 == Installation ==
-1. Upload 'printful-shipping' to the '/wp-content/plugins/' directory
+1. Upload 'printful-shipping-for-woocommerce' to the '/wp-content/plugins/' directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Click the "Connect" button or add your Printful API key manually to Printful->Settings tab
 1. Enable shipping rate calculation in WooCommerce->Settings->Shipping->Printful Shipping tab
@@ -45,6 +37,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 6. Shipping live rates in cart
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+Fixed various minor issues
 
 = 2.0 =
 New major plugin version
@@ -95,6 +90,11 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.0.1 =
+* Improved Printful connection status detection
+* Improvements for system report
+* Show warning if attempting to connect from localhost
 
 = 2.0 =
 * New major plugin version

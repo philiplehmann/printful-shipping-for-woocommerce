@@ -16,7 +16,16 @@ var Printful_Connect;
             jQuery('.printful-connect-button').click(function () {
                 jQuery(this).hide();
                 jQuery(this).siblings('.loader').removeClass('hidden');
+
+                setTimeout(function() {
+                    Printful_Connect.hide_loader();
+                }, 60000); //hide the loader after a minute, assume failure
             });
+        },
+        hide_loader: function() {
+            var button = jQuery('.printful-connect-button');
+            button.show();
+            button.siblings('.loader').addClass('hidden');
         },
         listen_status: function () {
             this.interval = setInterval(this.get_status.bind(this), 10000);    //check status every 10 secs

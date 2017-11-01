@@ -67,6 +67,10 @@ class Printful_Admin_Dashboard {
 			$issues[]     = sprintf( $message, $settings_url );
 		}
 
+		if ( strpos( get_site_url(), 'localhost' ) ) {
+			$issues[] = 'You can\'t connect to Printful from localhost. Printful needs to be able reach your site to establish a connection.';
+		}
+
 		Printful_Admin::load_template( 'header', array( 'tabs' => Printful_Admin::get_tabs() ) );
 
 		Printful_Admin::load_template( 'connect', array(

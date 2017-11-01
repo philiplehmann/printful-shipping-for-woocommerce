@@ -71,10 +71,16 @@ class Printful_Integration
 		//attempt to connect to printful to verify the API key
 		try {
 			$storeData = $client->get( 'store' );
-			if ( ! empty( $storeData ) ) {
+			if ( ! empty( $storeData ) && $storeData['type'] == 'woocommerce') {
 				$response = true;
 				$this->clear_connect_error();
 				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 1 ) );  //no expiry
+			} elseif ( $storeData['type'] != 'woocommerce' ) {
+				$message      = 'Invalid API key. This API key belongs to a ' . ucfirst( $storeData['type'] ) . ' store. WooCommerce store must used to connect with Printful. Enter the correct key in <a href="%s">Settings</a>.';
+				$settings_url = admin_url( 'admin.php?page=printful-dashboard&tab=settings' );
+				$printful_url = Printful_Base::get_printful_host() . 'dashboard/';
+				$this->set_connect_error( sprintf( $message, $settings_url, $printful_url ) );
+				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 0 ), MINUTE_IN_SECONDS );  //try again in 1 minute
 			}
 		} catch ( Exception $e ) {
 
