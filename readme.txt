@@ -3,7 +3,7 @@ Contributors: girts_u, kievins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 4.8
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 6. Shipping live rates in cart
 
 == Upgrade Notice ==
+
+= 2.0.2 =
+Improved compatibility with WC 3.3.0
 
 = 2.0.1 =
 Fixed various minor issues
@@ -90,6 +93,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.0.2 =
+* Fixed incorrect webhook status indication since WC 3.3.0
 
 = 2.0.1 =
 * Improved Printful connection status detection

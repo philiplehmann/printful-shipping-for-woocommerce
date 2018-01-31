@@ -305,6 +305,7 @@ class Printful_Admin_Status {
 	 * @return int
 	 */
 	private function check_PF_webhooks() {
+	    global $wpdb;
 
 		// Query args
 		$args = array(
@@ -315,15 +316,24 @@ class Printful_Admin_Status {
 			'post_status'         => 'published',
 		);
 
-		// Get the webhooks
-		$webhook_results = new WP_Query( $args );
-		$webhooks        = $webhook_results->posts;
+        // Get the webhooks
+        // In version 3.3 the webhooks are stored in separate table, before that they were stored in posts table
+        if (version_compare(WC()->version, '3.3', '<')) {
+            $webhook_results = new WP_Query($args);
+            $webhooks = $webhook_results->posts;
+            $count = count($webhooks) > 0;
+        } else {
+            $count = $wpdb->get_var(
+                $wpdb->prepare("SELECT COUNT(*) as webhook_count FROM {$wpdb->prefix}wc_webhooks WHERE name = %s",
+                    self::PF_WEBHOOK_NAME
+                ));
+        }
 
-		if ( count( $webhooks ) > 0 ) {
-			return self::PF_STATUS_OK;
-		}
+        if ($count > 0) {
+            return self::PF_STATUS_OK;
+        }
 
-		return self::PF_STATUS_FAIL;
+        return self::PF_STATUS_FAIL;
 	}
 
 	/**
@@ -345,6 +355,8 @@ class Printful_Admin_Status {
 		$search = "AND description LIKE '%" . esc_sql( $wpdb->esc_like( wc_clean( self::API_KEY_SEARCH_STRING ) ) ) . "%' ";
 		$query  = "SELECT * FROM {$wpdb->prefix}woocommerce_api_keys WHERE 1 = 1 {$search} ORDER BY last_access DESC LIMIT 1";
 		$key    = $wpdb->get_row( $query );
+
+
 
 		if ( ! empty( $key ) && $key->permissions == 'read_write' ) {
 			return self::PF_STATUS_OK;
