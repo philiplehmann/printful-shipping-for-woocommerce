@@ -33,7 +33,7 @@ class Printful_Admin_Support {
 
 		Printful_Admin::load_template( 'header', array( 'tabs' => Printful_Admin::get_tabs() ) );
 
-		Printful_Admin::load_template( 'ajax-loader', array( 'action' => 'get_printful_status_report', 'message' => 'Building support report (this may take up to 30 seconds)...' ) );
+		Printful_Admin::load_template( 'ajax-loader', array( 'action' => 'get_printful_status_report', 'message' => __( 'Building support report (this may take up to 30 seconds)...', 'printful' ) ) );
 
 		Printful_Admin::load_template( 'support-info' );
 
@@ -65,7 +65,7 @@ class Printful_Admin_Support {
 
 		ob_start();
 
-		echo "##### Printful Checklist #####\n";
+		echo __( "##### Printful Checklist #####\n", 'printful' );
 		$checklist = Printful_Admin_Status::get_checklist();
 		foreach ( $checklist['items'] as $item ) {
 			$status = 'OK';
@@ -75,22 +75,22 @@ class Printful_Admin_Support {
 				$status = 'FAIL';
 			}
 			echo "* ";
-			echo str_pad( esc_html($item['name']), 30 ) . "=> " . esc_html($status) . "\n";
+			echo esc_html( str_pad( esc_html( $item['name'] ), 30 ) ) . '=> ' . esc_html( $status ) . "\n";
 		}
 
 		echo "\n\n##### Printful Last Sync's #####\n";
 		$syncReport = $this->get_sync_report();
 		if ( ! empty( $syncReport ) ) {
-			echo str_pad( 'Date', 30 );
-			echo str_pad( 'Request', 30 );
-			echo str_pad( 'Message', 30 );
+			echo esc_html( str_pad( 'Date', 30 ) );
+			echo esc_html( str_pad( 'Request', 30 ) );
+			echo esc_html( str_pad( 'Message', 30 ) );
 			echo "\n";
 
 			foreach ( $syncReport as $sr ) {
 				echo "* ";
-				echo str_pad( esc_html($sr['date']) . ';', 30 );
-				echo str_pad( esc_html($sr['path']) . ';', 30 );
-				echo str_pad( esc_html($sr['message']) . ';', 30 );
+				echo esc_html( str_pad( $sr['date'] . ';', 30 ) );
+				echo esc_html( str_pad( $sr['path'] . ';', 30 ) );
+				echo esc_html( str_pad( $sr['message'] . ';', 30 ) );
 				echo "\n";
 			}
 		}
@@ -105,7 +105,7 @@ class Printful_Admin_Support {
 		foreach ( $system_status->get_active_plugins() as $plugin ) {
 			if ( ! empty( $plugin['name'] ) ) {
 				echo "* ";
-				echo esc_html( $plugin['name'] ) . " (" . $plugin['version'] . ")\n";
+				echo esc_html( $plugin['name'] ) . " (" . esc_html( $plugin['version'] ) . ")\n";
 			}
 		}
 
@@ -203,7 +203,7 @@ class Printful_Admin_Support {
 		foreach ( $data as $key => $item ) {
 			if ( is_string( $item ) ) {
 				echo "* ";
-				echo str_pad( $key, 30 ) . "=> " . $item . "\n";
+				echo esc_html( str_pad($key, 30) ) . "=> " . esc_html($item) . "\n";
 			}
 		}
 	}

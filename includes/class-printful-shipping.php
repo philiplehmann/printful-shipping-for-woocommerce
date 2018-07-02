@@ -8,6 +8,8 @@ class Printful_Shipping extends WC_Shipping_Method
     public $override_defaults = true;
     private $last_error = false;
 
+    const PRINTFUL_SHIPPING = 'printful_shipping';
+
     //Store whether currently processed package contains Printful products (for WC<2.6)
     private $printful_package = true;
 
@@ -52,15 +54,15 @@ class Printful_Shipping extends WC_Shipping_Method
 				'default' => 'no',
 			),
 			'override_defaults' => array(
-				'title'   => 'Disable Woocommerce rates',
+				'title'   => __( 'Disable Woocommerce rates', 'woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => 'Disable standard Woocommerce rates for products fulfilled by Printful',
+				'label'   => __( 'Disable standard Woocommerce rates for products fulfilled by Printful', 'woocommerce' ),
 				'default' => 'yes',
 			),
 			'show_warnings'     => array(
-				'title'   => 'Show Printful warnings',
+				'title'   => __( 'Show Printful warnings', 'woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => 'Display Printful status messages if rate API request fails',
+				'label'   => __( 'Display Printful status messages if rate API request fails', 'woocommerce' ),
 				'default' => 'yes',
 			),
 		);
@@ -279,12 +281,20 @@ class Printful_Shipping extends WC_Shipping_Method
 
 			foreach ( $response as $rate ) {
 				$rateData = array(
-					'id'       => $this->id . '_' . $rate['id'],
+                    'id'       => $this->id . '_' . $rate['id'],
 					'label'    => $rate['name'],
 					'cost'     => $rate['rate'],
 					'calc_tax' => 'per_order',
 				);
+
+				// Before 3.4.0 rate could be passed as ID, after it's set as method_id which refers to class ID
+                if ( version_compare( WC()->version, '3.4.0', '>=' ) ) {
+				    $this->id = self::PRINTFUL_SHIPPING . '_' . $rate['id'];
+                }
+
 				$this->add_rate( $rateData );
+                // Reset class ID after adding rate so ID name does not stack as huge string in foreach
+                $this->id = self::PRINTFUL_SHIPPING;
 			}
 		} catch ( PrintfulException $e ) {
 			$this->set_error( $e );

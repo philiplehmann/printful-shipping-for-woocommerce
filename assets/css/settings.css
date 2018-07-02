@@ -38,3 +38,9 @@
     float: left;
     line-height: 24px;
 }
+
+.printful-setting-group .carrier-type {
+    font-weight: bold;
+    padding: 20px 0;
+    display: block;
+}

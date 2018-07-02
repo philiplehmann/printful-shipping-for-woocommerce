@@ -3,19 +3,24 @@
 Plugin Name: Printful Integration for WooCommerce
 Plugin URI: https://wordpress.org/plugins/printful-shipping-for-woocommerce/
 Description: Calculate correct shipping and tax rates for your Printful-Woocommerce integration.
-Version: 2.0.2
+Version: 2.0.3
 Author: Printful
 Author URI: http://www.printful.com
 License: GPL2 http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: printful
 WC requires at least: 3.0.0
-WC tested up to: 3.3.0
+WC tested up to: 3.4.3
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+if ( ! defined( 'PF_PLUGIN_FILE' ) ) {
+    define( 'PF_PLUGIN_FILE', __FILE__ );
+}
+
 class Printful_Base {
 
-    const VERSION = '2.0.2';
+    const VERSION = '2.0.3';
 	const PF_HOST = 'https://www.printful.com/';
 	const PF_API_HOST = 'https://api.printful.com/';
 
@@ -24,6 +29,8 @@ class Printful_Base {
      */
     public function __construct() {
         add_action( 'plugins_loaded', array( $this, 'init' ) );
+        add_action( 'plugins_loaded', array( $this, 'printful_load_plugin_textdomain') );
+        add_action( 'rest_api_init', array( 'Printful_REST_API', 'init' ) );
     }
 
     /**
@@ -54,6 +61,7 @@ class Printful_Base {
 	    require_once 'includes/class-printful-admin-support.php';
 	    require_once 'includes/class-printful-size-chart-tab.php';
 	    require_once 'includes/class-printful-size-chart-tab.php';
+        require_once 'includes/class-printful-rest-api.php';
 
 	    //launch init
 	    Printful_Taxes::init();
@@ -70,6 +78,15 @@ class Printful_Base {
 	    add_action( 'wp_ajax_get_printful_status_checklist', array( 'Printful_Admin_Status', 'render_status_table_ajax' ) );
 	    add_action( 'wp_ajax_get_printful_status_report', array( 'Printful_Admin_Support', 'render_status_report_ajax' ) );
 	    add_action( 'wp_ajax_get_printful_carriers', array( 'Printful_Admin_Settings', 'render_carriers_ajax' ) );
+    }
+
+    /**
+     * Load Localisation files.
+     *
+     * Note: the first-loaded translation file overrides any following ones if the same translation is present.
+     */
+    public function printful_load_plugin_textdomain() {
+        load_plugin_textdomain( 'printful', false, plugin_basename( dirname( PF_PLUGIN_FILE ) ) . '/i18n/languages' );
     }
 
 	/**

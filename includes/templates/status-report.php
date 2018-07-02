@@ -1,7 +1,7 @@
 <div class="support-report-wrap">
-	<p>Copy the box content below and add it to your support message</p>
+	<p><?php esc_html_e('Copy the box content below and add it to your support message', 'printful'); ?></p>
 	<textarea class="support-report"><?php echo esc_html($status_report); ?></textarea>
-	<button class="button button-primary button-large support-report-btn">Copy</button>
+	<button class="button button-primary button-large support-report-btn"><?php esc_html_e('Copy', 'printful'); ?></button>
 	<script type="text/javascript">
         var copyTextareaBtn = document.querySelector('.support-report-btn');
 

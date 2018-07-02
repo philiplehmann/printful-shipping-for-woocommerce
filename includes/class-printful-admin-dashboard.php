@@ -127,13 +127,13 @@ class Printful_Admin_Dashboard {
 			if ( $stats ) {
 				Printful_Admin::load_template( 'stats', array( 'stats' => $stats ) );
 			} else {
-				Printful_Admin::load_template( 'ajax-loader', array( 'action' => 'get_printful_stats', 'message' => 'Loading your stats...' ) );
+				Printful_Admin::load_template( 'ajax-loader', array( 'action' => 'get_printful_stats', 'message' => __( 'Loading your stats...', 'printful' ) ) );
 			}
 
 			if ($orders) {
 				Printful_Admin::load_template( 'order-table', array( 'orders' => $orders ) );
 			} else {
-				Printful_Admin::load_template( 'ajax-loader', array( 'action' => 'get_printful_orders', 'message' => 'Loading your orders...' ) );
+				Printful_Admin::load_template( 'ajax-loader', array( 'action' => 'get_printful_orders', 'message' => __( 'Loading your orders...', 'printful' ) ) );
 			}
 
 		} else {
@@ -255,14 +255,19 @@ class Printful_Admin_Dashboard {
 		global $wpdb;
 
 		// Get the API key
-		$search = "AND description LIKE '%" . esc_sql( $wpdb->esc_like( wc_clean( self::API_KEY_SEARCH_STRING ) ) ) . "%' ";
-		$query  = "SELECT truncated_key FROM {$wpdb->prefix}woocommerce_api_keys WHERE 1 = 1 {$search} ORDER BY key_id DESC LIMIT 1";
-		$consumer_key = $wpdb->get_var( $query );
+        $printfulKey = '%' . esc_sql( $wpdb->esc_like( wc_clean( self::API_KEY_SEARCH_STRING ) ) ) . '%';
+        $consumer_key = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT truncated_key FROM {$wpdb->prefix}woocommerce_api_keys WHERE description LIKE %s ORDER BY key_id DESC LIMIT 1",
+                $printfulKey
+            )
+        );
 
 		//if not found by description, it was probably manually created. try the last used key instead
 		if ( ! $consumer_key ) {
-			$query  = "SELECT truncated_key FROM {$wpdb->prefix}woocommerce_api_keys ORDER BY key_id DESC LIMIT 1";
-			$consumer_key = $wpdb->get_var( $query );
+			$consumer_key = $wpdb->get_var(
+			    "SELECT truncated_key FROM {$wpdb->prefix}woocommerce_api_keys ORDER BY key_id DESC LIMIT 1"
+            );
 		}
 
 		return $consumer_key;

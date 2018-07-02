@@ -76,18 +76,18 @@ class Printful_Integration
 				$this->clear_connect_error();
 				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 1 ) );  //no expiry
 			} elseif ( $storeData['type'] != 'woocommerce' ) {
-				$message      = 'Invalid API key. This API key belongs to a ' . ucfirst( $storeData['type'] ) . ' store. WooCommerce store must used to connect with Printful. Enter the correct key in <a href="%s">Settings</a>.';
+				$message      = 'Invalid API key. This API key belongs to a ' . ucfirst( $storeData['type'] ) . ' store. Please copy the correct key from <a href="%s">Printful store settings</a> and enter it in the <a href="%s">Printful plugin settings</a>';
 				$settings_url = admin_url( 'admin.php?page=printful-dashboard&tab=settings' );
-				$printful_url = Printful_Base::get_printful_host() . 'dashboard/';
+				$printful_url = Printful_Base::get_printful_host() . 'dashboard/store';
 				$this->set_connect_error( sprintf( $message, $settings_url, $printful_url ) );
 				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 0 ), MINUTE_IN_SECONDS );  //try again in 1 minute
 			}
 		} catch ( Exception $e ) {
 
 			if ( $e->getCode() == 401 ) {
-				$message      = 'Invalid API key. Please ensure that your API key in <a href="%s">Settings</a> matches the one in your <a href="%s">Printful dashboard</a>.';
+				$message      = 'Invalid API key. Please ensure that your API key in <a href="%s">Printful plugin settings</a> matches the one in your <a href="%s">Printful store settings</a>.';
 				$settings_url = admin_url( 'admin.php?page=printful-dashboard&tab=settings' );
-				$printful_url = Printful_Base::get_printful_host() . 'dashboard/';
+				$printful_url = Printful_Base::get_printful_host() . 'dashboard/store';
 				$this->set_connect_error( sprintf( $message, $settings_url, $printful_url ) );
 				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 0 ), MINUTE_IN_SECONDS );  //try again in 1 minute
 			} else {

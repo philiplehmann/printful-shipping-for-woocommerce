@@ -50,7 +50,7 @@ class Printful_Size_Chart_Tab {
 	 */
 	public function size_chart_tab_content() {
 
-		echo '<h2>' . __( 'Size Chart', 'printful' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Size Chart', 'printful' ) . '</h2>';
 		echo $this->get_size_chart_content();
 	}
 

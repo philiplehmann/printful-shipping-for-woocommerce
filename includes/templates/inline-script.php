@@ -1,3 +1,3 @@
 <script type="text/javascript">
-    <?php echo $script; ?>
+    <?php echo esc_js( $script ); ?>
 </script>

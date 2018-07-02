@@ -33,14 +33,14 @@
                             <?php elseif ($setting['type'] == 'checkbox') : ?>
 
                                 <label for="<?php echo esc_attr($key); ?>">
-                                <input class="" type="checkbox" name="<?php echo esc_attr($key); ?>" id="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($setting['value']); ?>" <?php if($setting['value'] == 'yes') { echo 'checked="checked"'; } ?>><?php echo esc_html($setting['label']); ?></label><br>
+                                <input class="" type="checkbox" name="<?php echo esc_attr($key); ?>" id="<?php echo esc_attr($key); ?>" value="1" <?php if($setting['value'] == 'yes') { echo 'checked="checked"'; } ?>><?php echo esc_html($setting['label']); ?></label><br>
 
                             <?php elseif ($setting['type'] == 'checkbox-group') : ?>
 
                                 <?php foreach ( $setting['items'] as $checkbox_key => $item ) : ?>
 
                                     <label for="<?php echo esc_attr($checkbox_key); ?>" class="checkbox-group-item">
-                                    <input class="" type="checkbox" name="<?php echo esc_attr($key) . '[]'; ?>" id="<?php echo esc_attr($checkbox_key); ?>" value="<?php echo esc_attr($checkbox_key); ?>" <?php if ( $item['value'] == 'yes' ) {echo 'checked="checked"';} ?>><?php echo wp_kses_post( $item['label'] ); ?></label><br>
+                                        <input class="" type="checkbox" name="<?php echo esc_attr($key) . '[]'; ?>" id="<?php echo esc_attr($checkbox_key); ?>" value="<?php echo esc_attr($checkbox_key); ?>" <?php if ( $item['value'] == 'yes' ) {echo 'checked="checked"';} ?>><?php echo wp_kses_post( $item['label'] ); ?></label><br>
 
                                 <?php endforeach; ?>
 

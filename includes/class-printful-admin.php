@@ -68,7 +68,7 @@ class Printful_Admin {
 	public function register_admin_menu_page() {
 
 		add_menu_page(
-			self::PAGE_TITLE_DASHBOARD,
+			__('Dashboard', 'printful'),
 			self::MENU_TITLE_TOP,
 			self::CAPABILITY,
 			self::MENU_SLUG_DASHBOARD,
@@ -103,15 +103,15 @@ class Printful_Admin {
 	public static function get_tabs() {
 
 		$tabs = array(
-			array( 'name' => 'Settings', 'tab_url' => 'settings' ),
-			array( 'name' => 'Status', 'tab_url' => 'status' ),
-			array( 'name' => 'Support', 'tab_url' => 'support' ),
+			array( 'name' => __( 'Settings', 'printful' ), 'tab_url' => 'settings' ),
+			array( 'name' => __( 'Status', 'printful' ), 'tab_url' => 'status' ),
+			array( 'name' => __( 'Support', 'printful' ), 'tab_url' => 'support' ),
 		);
 
 		if ( Printful_Integration::instance()->is_connected() ) {
-			array_unshift( $tabs, array( 'name' => 'Dashboard', 'tab_url' => false ) );
+			array_unshift( $tabs, array( 'name' => __( 'Dashboard', 'printful' ), 'tab_url' => false ) );
 		} else {
-			array_unshift( $tabs, array( 'name' => 'Connect', 'tab_url' => false ) );
+			array_unshift( $tabs, array( 'name' => __( 'Connect', 'printful' ), 'tab_url' => false ) );
 		}
 
 		return $tabs;
