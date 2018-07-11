@@ -46,7 +46,9 @@ class Printful_Admin {
 	 * Loads stylesheet for printful toolbar element
 	 */
     public function add_global_style() {
-	    wp_enqueue_style( 'printful-global', plugins_url( '../assets/css/global.css', __FILE__ ) );
+	    if ( is_user_logged_in() ) {
+		    wp_enqueue_style( 'printful-global', plugins_url( '../assets/css/global.css', __FILE__ ) );
+	    }
     }
 
 	/**

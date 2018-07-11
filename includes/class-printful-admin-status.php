@@ -55,7 +55,7 @@ class Printful_Admin_Status {
             ),
             array(
                 'name'        => __('WooCommerce authentication URL access', 'printful'),
-                'description' => __('Some hosts have unnecessarily intrusive security checks in place that prevent WooCommerce API authentication from working (mod_security rule #1234234). If this check fails, you will not be able authorize Printful app.', 'printful'),
+                'description' => __('Printful needs access to WooCommerce API authorize page. This sometimes may get blocked due to hosts having unnecessarily intrusive security checks in place that prevent WooCommerce API authentication from working (for example mod_security rule #1234234). If this check fails, you will not be able authorize Printful app.', 'printful'),
                 'method'      => 'check_WC_auth_url_access',
             ),
             array(
@@ -405,7 +405,7 @@ class Printful_Admin_Status {
 	private function check_PHP_time_limit() {
 		$time_limit = ini_get( 'max_execution_time' );
 
-		if ( $time_limit >= 30 ) {
+		if ( !$time_limit || $time_limit >= 30 ) {
 			return self::PF_STATUS_OK;
 		}
 

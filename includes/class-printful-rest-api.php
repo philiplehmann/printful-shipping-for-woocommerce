@@ -97,25 +97,25 @@ class Printful_REST_API
     public static function post_size_guide( $data )
     {
         if ( empty( $data['size_chart'] ) ) {
-            return new WP_Error( 'printful_api_size_chart_empty', __( 'No size chart was provided', 'printful' ), ['status' => 400]);
+            return new WP_Error( 'printful_api_size_chart_empty', __( 'No size chart was provided', 'printful' ), array('status' => 400));
         }
 
         //product id is valid
         $product_id = intval( $data['product_id'] );
         if ( $product_id < 1 ) {
-            return new WP_Error( 'printful_api_product_not_found', __( 'The product ID is invalid', 'printful' ), ['status' => 400]);
+            return new WP_Error( 'printful_api_product_not_found', __( 'The product ID is invalid', 'printful' ), array('status' => 400));
         }
 
         //product exists
         $product = get_post( $product_id );
         if ( empty( $product ) || $product->post_type != 'product' ) {
-            return new WP_Error( 'printful_api_product_not_found', __( 'The product is not found', 'printful' ), ['status' => 400]);
+            return new WP_Error( 'printful_api_product_not_found', __( 'The product is not found', 'printful' ), array('status' => 400));
         }
 
         //how about permissions?
         $post_type = get_post_type_object( $product->post_type );
         if ( ! current_user_can( $post_type->cap->edit_post, $product->ID ) ) {
-            return new WP_Error( 'printful_api_user_cannot_edit_product_size_chart', __( 'You do not have permission to edit the size chart', 'printful' ), ['status' => 401]);
+            return new WP_Error( 'printful_api_user_cannot_edit_product_size_chart', __( 'You do not have permission to edit the size chart', 'printful' ), array('status' => 401));
         }
 
         //lets do this
