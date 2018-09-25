@@ -29,6 +29,8 @@ var Printful_Settings;
                         if (response === 'OK') {
                             pass.show(0).delay(3000).hide(0);
                         } else {
+                            fail.empty();
+                            fail.append('<span class="dashicons dashicons-no"></span>' + response);
                             fail.show(0).delay(3000).hide(0);
                         }
                     }

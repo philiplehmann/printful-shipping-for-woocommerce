@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var bool $disabled
+ */
+?>
 <p class="printful-submit">
 	<input name="save" class="button-primary woocommerce-save-button <?php if($disabled) { echo 'disabled'; } ?>" type="submit" value="<?php esc_attr_e('Save changes', 'printful'); ?>" <?php if($disabled) { echo 'disabled'; } ?>/>
 	<input type="hidden" id="_wpnonce" name="_wpnonce" value="<?php echo esc_attr($nonce); ?>">
@@ -9,8 +14,6 @@
             <?php esc_html_e('Saved successfully', 'printful'); ?>
         </span>
         <span class="fail">
-            <span class="dashicons dashicons-no"></span>
-            <?php esc_html_e('Saving settings failed', 'printful'); ?>
         </span>
     </span>
 </p>

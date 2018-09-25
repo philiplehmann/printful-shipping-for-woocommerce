@@ -98,6 +98,21 @@ class Printful_Client {
 		return $this->request( 'PUT', $path, $params, $data );
 	}
 
+
+    /**
+     * Perform a PATCH request to the API
+     * @param string $path Request path
+     * @param array $data Request body data as an associative array
+     * @param array $params
+     * @return mixed API response
+     * @throws PrintfulApiException if the API call status code is not in the 2xx range
+     * @throws PrintfulException if the API call has failed or the response is invalid
+     */
+    public function patch( $path, $data = array(), $params = array() )
+    {
+        return $this->request( 'PATCH', $path, $params, $data );
+    }
+
     /**
      * Return raw response data from the last request
      * @return string|null Response data

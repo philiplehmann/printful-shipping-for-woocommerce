@@ -6,7 +6,14 @@ class Printful_Admin_Settings {
 	public static $_instance;
 	const CARRIER_TYPE_STANDARD = 'standard';
 	const CARRIER_TYPE_EXPEDITED = 'expedited';
+	const CARRIER_TYPE_DOMESTIC = 'domestic';
+	const CARRIER_TYPE_INTERNATIONAL = 'international';
+    const CARRIER_REGION_US = 'US';
+    const CARRIER_REGION_EU = 'LV';
 
+    /**
+     * @return array
+     */
 	public static function getIntegrationFields()
     {
         return array(
@@ -128,78 +135,57 @@ class Printful_Admin_Settings {
 			return $carrier_settings;
 		}
 
-        $carriers = Printful_Carriers::instance()->carriers;
-        if ( empty( $carriers ) ) {
+        $carrier_regions = Printful_Carriers::instance()->carriers;
+
+        if ( empty( $carrier_regions ) ) {
             return false;
 		}
 
-		$standard  = array();
-		$expedited = array();
-
-        foreach ( $carriers as $carrier ) {
-
-            $item = array(
-                'title'   => false,
-                'type'    => 'checkbox',
-                'label'   => $carrier['title'] . ' <i>' . $carrier['subtitle'] . '</i>',
-                'default' => 'yes',
-                'value'   => ( $carrier['status'] == 'on' ? 'yes' : 'no' ),
-            );
-
-            if ( $carrier['type'] == self::CARRIER_TYPE_STANDARD ) {
-                $standard[ $carrier['carrier_id'] ] = $item;
-            } else {
-                $expedited[ $carrier['carrier_id'] ] = $item;
-            }
-        }
-
-        $carrier_settings['settings'][ self::CARRIER_TYPE_STANDARD ] = array(
-            'title' => 'Standard shipping',
-            'type'  => 'checkbox-group',
-            'items' => $standard,
-        );
-
-        $carrier_settings['settings'][ self::CARRIER_TYPE_EXPEDITED ] = array(
-            'title' => 'Expedited shipping',
-            'type'  => 'checkbox-group',
-            'items' => $expedited,
-        );
+        $carrier_settings[ 'settings' ] = $this->prepare_form_data( $carrier_regions );
 
 		return $carrier_settings;
 	}
 
 	/**
 	 * Prepare carrier data for posting to Printful API
-	 * @return array
+	 * @return array|bool
 	 */
 	public function prepare_carriers() {
 
-        $carriers  = Printful_Carriers::instance()->carriers;
+        $carrier_regions = Printful_Carriers::instance()->carriers;
 
-        if ( empty( $carriers ) ) {
+        if ( empty( $carrier_regions ) ) {
 			return false;
 		}
 
-        $standard  = ( ( ! empty( $_POST[ self::CARRIER_TYPE_STANDARD ] ) && wp_verify_nonce( $_POST['_wpnonce'], 'printful_settings' ) ) ? $_POST[ self::CARRIER_TYPE_STANDARD ] : array() );
-        $expedited = ( ( ! empty( $_POST[ self::CARRIER_TYPE_EXPEDITED ] ) && wp_verify_nonce( $_POST['_wpnonce'], 'printful_settings' ) ) ? $_POST[ self::CARRIER_TYPE_EXPEDITED ] : array() );
+        $us_carriers[ self::CARRIER_REGION_US ]  = ( ( ! empty( $_POST[ self::CARRIER_REGION_US ] ) && wp_verify_nonce( $_POST['_wpnonce'], 'printful_settings' ) ) ? $_POST[ self::CARRIER_REGION_US ] : array() );
+        $eu_carriers[ self::CARRIER_REGION_EU ] = ( ( ! empty( $_POST[ self::CARRIER_REGION_EU ] ) && wp_verify_nonce( $_POST['_wpnonce'], 'printful_settings' ) ) ? $_POST[ self::CARRIER_REGION_EU ] : array() );
 
-        $saved_carriers = array_merge( $standard, $expedited );
+        $parsed_carriers = $this->parse_region_carriers( $us_carriers, $eu_carriers );
+        $us_carriers = $parsed_carriers['us_carriers'];
+        $eu_carriers = $parsed_carriers['eu_carriers'];
 
-        if ( empty( $saved_carriers ) ) {
+        if ( empty( $us_carriers ) && empty( $eu_carriers ) ) {
 			return false;
 		}
 
+        $saved_carriers = array_merge( $us_carriers, $eu_carriers );
 		$request_body   = array();
 
-        foreach ( $carriers as $carrier ) {
-            $status = 'off';
-            if ( in_array( $carrier['carrier_id'], $saved_carriers ) ) {
-                $status = 'on';
+        foreach ( $carrier_regions as $region => $carrier_region ) {
+            foreach ( $carrier_region as $carrier_type => $carrier_methods ) {
+                foreach ( $carrier_methods as $carrier_method => $carrier_data ) {
+                    $is_active = false;
+
+                    if ( in_array( $carrier_method, $saved_carriers[ $region ][ $carrier_type ] ) ) {
+                        $is_active = true;
+                    }
+
+                    $request_body[ $region ][ $carrier_type ][ $carrier_method ] = array(
+                        'isActive' => $is_active
+                    );
+                }
             }
-            $request_body[] = array(
-                'carrier_id' => $carrier['carrier_id'],
-                'status'     => $status,
-            );
         }
 
         return $request_body;
@@ -223,7 +209,9 @@ class Printful_Admin_Settings {
 
 				if ( ! $result ) {
 					die( 'Error: failed to save carriers' );
-				}
+				} else if (isset($result['error'])) {
+                    die ( $result['error']);
+                }
 			}
 
 			$options = array();
@@ -250,4 +238,91 @@ class Printful_Admin_Settings {
 			die('OK');
 		}
 	}
+
+    /**
+     * @param array $carrier_regions
+     * @return array|bool
+     */
+    private function prepare_form_data( $carrier_regions )
+    {
+        $carrier_settings = array();
+
+        foreach ( $carrier_regions as $region => $carrier_types ) {
+            foreach ($carrier_types as $carrier_type => $carrier_data) {
+                foreach ($carrier_data as $key => $carrier) {
+                    $carrier_item = array(
+                        'label' => $carrier[ 'label' ] . ' <i>' . $carrier[ 'subtitle' ] . '</i>',
+                        'value' => ( $carrier[ 'isActive' ] == true ? 'yes' : 'no' ),
+                    );
+
+                    $carrier_regions[ $region ][ $carrier_type ][ $carrier['key'] ] = $carrier_item;
+                }
+            }
+        }
+
+        $item_array = $this->format_carrier_items( $carrier_regions );
+
+        $carrier_settings[ self::CARRIER_REGION_US ] = array(
+            'title' => __( 'International from USA', 'printful' ),
+            'type'  => 'checkbox-group',
+            'items' => $item_array[ self::CARRIER_REGION_US ]
+        );
+
+        $carrier_settings[ self::CARRIER_REGION_EU ] = array(
+            'title' => __( 'International from EU', 'printful' ),
+            'type'  => 'checkbox-group',
+            'items' => $item_array[ self::CARRIER_REGION_EU ]
+        );
+
+        return $carrier_settings;
+    }
+
+    /**
+     * Prepare carrier item data for form
+     * @param array $carrier_regions
+     * @return array
+     */
+    private function format_carrier_items( $carrier_regions )
+    {
+        $item_array = array();
+
+        foreach ( $carrier_regions as $region => $carrier_types ) {
+            foreach ( $carrier_types as $carrier_type => $carrier_data ) {
+                $item_array[ $region ][ $carrier_type ] = array(
+                    'subtitle' => ucfirst($carrier_type) . ' shipping',
+                    'carriers' => $carrier_data
+                );
+            }
+        }
+
+        return array(
+            self::CARRIER_REGION_US => $item_array[ self::CARRIER_REGION_US ],
+            self::CARRIER_REGION_EU => $item_array[ self::CARRIER_REGION_EU ]
+        );
+    }
+
+    /**
+     * @param array $us_carriers
+     * @param array $eu_carriers
+     * @return array
+     */
+    private function parse_region_carriers( $us_carriers, $eu_carriers )
+    {
+        foreach ( $us_carriers[ self::CARRIER_REGION_US ] as $carrier_type => $carrier_methods ) {
+            foreach ( $carrier_methods as $key => $carrier_method ) {
+                $us_carriers[ self::CARRIER_REGION_US ][ $carrier_type ][ $key ] = str_replace( self::CARRIER_REGION_US . '_' . $carrier_type . '_', '', $carrier_method );
+            }
+        }
+
+        foreach ( $eu_carriers[ self::CARRIER_REGION_EU ] as $carrier_type => $carrier_methods ) {
+            foreach ( $carrier_methods as $key => $carrier_method ) {
+                $eu_carriers[ self::CARRIER_REGION_EU ][ $carrier_type ][ $key ] = str_replace( self::CARRIER_REGION_EU . '_' . $carrier_type.'_', '', $carrier_method );
+            }
+        }
+
+        return array(
+            'eu_carriers' => $eu_carriers,
+            'us_carriers' => $us_carriers
+        );
+    }
 }

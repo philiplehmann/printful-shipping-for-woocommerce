@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var string $title
+ * @var string $description
+ * @var string $carrier_version
+ * @var array $settings
+ */
+?>
 <div class="printful-setting-group">
 
     <h2><?php echo esc_html($title); ?></h2>
@@ -39,8 +47,22 @@
 
                                 <?php foreach ( $setting['items'] as $checkbox_key => $item ) : ?>
 
-                                    <label for="<?php echo esc_attr($checkbox_key); ?>" class="checkbox-group-item">
-                                        <input class="" type="checkbox" name="<?php echo esc_attr($key) . '[]'; ?>" id="<?php echo esc_attr($checkbox_key); ?>" value="<?php echo esc_attr($checkbox_key); ?>" <?php if ( $item['value'] == 'yes' ) {echo 'checked="checked"';} ?>><?php echo wp_kses_post( $item['label'] ); ?></label><br>
+                                    <label class="carrier-type"><?php echo $item['subtitle']; ?></label>
+                                    <?php foreach ( $item['carriers'] as $carrier_name => $carrier ): ?>
+
+                                        <label for="<?php echo esc_attr( $key ) . '_' . esc_attr( $checkbox_key ).'_'.esc_attr( $carrier_name ); ?>" class="checkbox-group-item">
+                                            <input class="" type="checkbox" name="<?php echo esc_attr( $key ) . '[' . esc_attr( $checkbox_key ) . '][]'; ?>"
+                                                   id="<?php echo esc_attr( $key ) . '_' .esc_attr( $checkbox_key ) . '_' . esc_attr( $carrier_name ); ?>"
+                                                   value="<?php echo esc_attr( $key ) . '_' . esc_attr( $checkbox_key ) . '_' . esc_attr( $carrier_name ); ?>"
+                                                <?php if ( $carrier['value'] == 'yes' ) {
+                                                    echo 'checked="checked"';
+                                                } ?>
+                                            >
+                                            <?php echo wp_kses_post( $carrier['label'] ); ?>
+                                        </label>
+                                        <br>
+
+                                    <?php endforeach; ?>
 
                                 <?php endforeach; ?>
 

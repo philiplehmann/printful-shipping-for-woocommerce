@@ -4,7 +4,7 @@
 		<h3><?php esc_html_e('Need help? Get in touch!', 'printful') ?></h3>
 		<p><?php esc_html_e('Email, call, text, or visit us. We\'ve got support teams in the USA and Europe to make sure we\'re there when you need us.', 'printful') ?><br/><?php esc_html_e('We\'d love to hear from you.', 'printful') ?></p>
 		<div class="btn-wrap">
-			<a href="<?php echo esc_url(Printful_Base::get_printful_host()); ?>support" class="button button-primary button-large" target="_blank"><?php esc_html_e('Contact support', 'printful') ?></a>
+			<a href="<?php echo esc_url(Printful_Base::get_printful_host()); ?>contacts" class="button button-primary button-large" target="_blank"><?php esc_html_e('Contact support', 'printful') ?></a>
 		</div>
 	</div>
 

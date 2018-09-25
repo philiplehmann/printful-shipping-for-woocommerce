@@ -113,6 +113,9 @@ class Printful_Admin_Status {
      * @return Printful_Admin_Status
      */
 	public static function instance() {
+        if ( ! function_exists( 'get_plugins' ) ) {
+            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        }
 
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();

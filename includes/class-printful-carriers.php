@@ -25,7 +25,6 @@ class Printful_Carriers {
 	 * @return mixed
 	 */
 	public function get_carriers() {
-
 		$carriers = get_transient( 'printful_carriers' );
 		if ( ! $carriers ) {
 			$carriers = $this->refresh_carriers();
@@ -41,7 +40,7 @@ class Printful_Carriers {
 	public function refresh_carriers() {
 
 		try {
-            $carriers = Printful_Integration::instance()->get_client()->get( 'store/carriers-services' );
+            $carriers = Printful_Integration::instance()->get_client()->get( 'store/get-shipping-methods' );
 			$this->update_carrier_cache( $carriers );
 		} catch (PrintfulApiException $e) {
 			$carriers = array();
@@ -74,7 +73,7 @@ class Printful_Carriers {
 
 		$shipping = new self;
 		try {
-            $carriers = Printful_Integration::instance()->get_client()->post( 'store/carriers-services', $data );
+            $carriers = Printful_Integration::instance()->get_client()->patch( 'store/update-shipping-methods', $data );
 			$shipping->update_carrier_cache( $carriers );
 		} catch ( PrintfulApiException $e ) {
 			$carriers = false;
