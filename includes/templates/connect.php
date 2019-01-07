@@ -14,7 +14,7 @@
                 <ul>
                     <?php
                     foreach ( $issues as $issue ) {
-                        echo '<li>' . esc_html( $issue ) . '</li>';
+                        echo '<li>' . wp_kses_post( $issue ) . '</li>';
                     }
                     ?>
                 </ul>

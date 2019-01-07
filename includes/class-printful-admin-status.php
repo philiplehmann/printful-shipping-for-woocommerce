@@ -9,7 +9,7 @@ class Printful_Admin_Status {
 
 	const API_KEY_SEARCH_STRING = 'Printful';
 	const PF_WEBHOOK_NAME = 'Printful Integration';
-	const PF_REMOTE_REQUEST_URL = 'webhook/woocommerce?store=1';
+	const PF_REMOTE_REQUEST_URL = 'hook/woocommerce?store=1';
 	const PF_REMOTE_REQUEST_TOPIC = 'woo.plugin.test';
 	const PF_STATUS_ISSUE_COUNT = 'printful_status_issue_count';
 	const PF_CACHED_CHECKLIST = 'printful_cached_checklist';
@@ -96,7 +96,7 @@ class Printful_Admin_Status {
             ),
             array(
                 'name'        => __('WP SpamShield', 'printful'),
-                'description' => __('If you are using WP SpamShield, you might experiance problems connecting to Printful and pushing products.', 'printful'),
+                'description' => __('If you are using WP SpamShield, you might experience problems connecting to Printful and pushing products.', 'printful'),
                 'method'      => 'check_wp_spamshield',
                 'silent'      => true,
             ),
@@ -548,7 +548,7 @@ class Printful_Admin_Status {
 	 */
 	private function check_WC_auth_url_access() {
 
-		$url       = home_url( '/' ) . 'wc-auth/v1/authorize?app_name=Printful&scope=read_write&user_id=1&return_url=https%3A%2F%2Fwww.printful.com%2Fdashboard%2Fwoocommerce%2Freturn&callback_url=https%3A%2F%2Fapi.printful.com%2Fwebhook%2Fwoocommerce-auth-callback';
+		$url       = home_url( '/' ) . 'wc-auth/v1/authorize?app_name=Printful&scope=read_write&user_id=1&return_url=https%3A%2F%2Fwww.printful.com%2Fdashboard%2Fwoocommerce%2Freturn&callback_url=https%3A%2F%2Fapi.printful.com%2Fhook%2Fwoocommerce-auth-callback';
 		$http_args = array(
 			'timeout'    => 60,
 			'method'     => 'GET',

@@ -109,20 +109,20 @@ class Printful_API_Resource extends WC_API_Resource {
 
 		$error = false;
 
+		$options = get_option( 'woocommerce_printful_settings', array() );
+
 		$apiKey  = $data['accessKey'];
 		$storeId = $data['storeId'];
-
-		$option  = Printful_Integration::instance()->get_option( 'printful_settings', array() );
 		$storeId = intval( $storeId );
 
 		if ( ! is_string( $apiKey ) || strlen( $apiKey ) == 0 || $storeId == 0 ) {
 			$error = 'Failed to update access data';
 		}
 
-		$option['printful_key']      = $apiKey;
-		$option['printful_store_id'] = $storeId;
+		$options['printful_key']      = $apiKey;
+		$options['printful_store_id'] = $storeId;
 
-		Printful_Integration::instance()->update_settings( $option );
+		Printful_Integration::instance()->update_settings( $options );
 
 		return array(
 			'error' => $error,

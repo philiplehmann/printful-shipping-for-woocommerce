@@ -199,6 +199,7 @@ class Printful_Admin_Settings {
 		if ( ! empty( $_POST ) ) {
 
 			check_admin_referer( 'printful_settings' );
+			$error_msg = null;
 
 			//save carriers first, so API key change does not affect this
 			if ( Printful_Integration::instance()->is_connected(true) ) {
@@ -208,9 +209,9 @@ class Printful_Admin_Settings {
 				$result = Printful_Carriers::instance()->post_carriers( $request_body );
 
 				if ( ! $result ) {
-					die( 'Error: failed to save carriers' );
+					$error_msg = 'Error: failed to save carriers';
 				} else if (isset($result['error'])) {
-                    die ( $result['error']);
+					$error_msg = $result['error'];
                 }
 			}
 
@@ -234,6 +235,10 @@ class Printful_Admin_Settings {
 
 			//save integration settings
 			Printful_Integration::instance()->update_settings( $options );
+
+			if ( $error_msg ) {
+				die( $error_msg );
+			}
 
 			die('OK');
 		}

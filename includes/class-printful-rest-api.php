@@ -69,20 +69,20 @@ class Printful_REST_API
     {
         $error = false;
 
+	    $options = get_option( 'woocommerce_printful_settings', array() );
+
         $api_key  = $request->get_param('accessKey');
         $store_id = $request->get_param('storeId');
-
-        $option  = Printful_Integration::instance()->get_option( 'printful_settings', array() );
         $store_id = intval( $store_id );
 
         if ( ! is_string( $api_key ) || strlen( $api_key ) == 0 || $store_id == 0 ) {
             $error = 'Failed to update access data';
         }
 
-        $option['printful_key']      = $api_key;
-        $option['printful_store_id'] = $store_id;
+	    $options['printful_key']      = $api_key;
+	    $options['printful_store_id'] = $store_id;
 
-        Printful_Integration::instance()->update_settings( $option );
+        Printful_Integration::instance()->update_settings( $options );
 
         return array(
             'error' => $error,

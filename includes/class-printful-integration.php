@@ -91,7 +91,7 @@ class Printful_Integration
 				$this->set_connect_error( sprintf( $message, $settings_url, $printful_url ) );
 				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 0 ), MINUTE_IN_SECONDS );  //try again in 1 minute
 			} else {
-				$this->set_connect_error( 'Could not connect to Printful API. Please try again later.' );
+				$this->set_connect_error( 'Could not connect to Printful API. Please try again later. (Error ' . $e->getCode() . ': ' . $e->getMessage() . ')' );
 			}
 
 			//do nothing
