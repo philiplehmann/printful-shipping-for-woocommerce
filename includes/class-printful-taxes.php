@@ -7,7 +7,6 @@ class Printful_Taxes {
 	 * Initialize the values, hooks and actions
 	 */
 	public static function init() {
-
 		if ( Printful_Integration::instance()->get_option( 'calculate_tax' ) == 'yes' ) {
 			//Update tax options if taxes are enabled
 			if ( get_option( 'woocommerce_calc_taxes' ) != 'yes' ) {
@@ -19,7 +18,7 @@ class Printful_Taxes {
 
 			//Override tax rates calculated by Woocommerce
 			$taxes = new self;
-			add_filter( 'woocommerce_matched_tax_rates', array($taxes, 'calculate_tax' ), 10, 6 );
+			add_filter( 'woocommerce_matched_tax_rates', array( $taxes, 'calculate_tax' ), 10, 6 );
 		}
 	}
 
@@ -34,7 +33,6 @@ class Printful_Taxes {
 	 * @return mixed
 	 */
 	public function calculate_tax( $matched_tax_rates, $country, $state, $postcode, $city, $tax_class ) {
-
 		//if a tax rate is already matched, avoid adding extra one
 		if ( ! empty( $matched_tax_rates ) ) {
 			return $matched_tax_rates;
@@ -44,6 +42,8 @@ class Printful_Taxes {
 		if ( isset( $countries[ $country ][ $state ] ) && !empty($postcode) ) {     //only make the request if country, state and zip are set
 			$key  = 'printful_tax_rate_' . $country . '-' . $state . '-' . $city . '-' . $postcode;
 			$rate = get_transient( $key );
+			$response = null;
+
 			if ( $rate === false ) {
 				try {
 					$client   = Printful_Integration::instance()->get_client();
@@ -97,7 +97,6 @@ class Printful_Taxes {
 	 * @return bool
 	 */
 	private function isRateUnique( $rate, $matched_tax_rates ) {
-
 		if ( empty( $matched_tax_rates ) ) {
 			return true;
 		}
@@ -116,10 +115,11 @@ class Printful_Taxes {
 	 * @return array|mixed
 	 */
 	private function get_tax_countries() {
-
 		$countries = get_transient( 'printful_tax_countries' );
+
 		if ( ! $countries ) {
 			$countries = array();
+
 			try {
 				$client = Printful_Integration::instance()->get_client();
 				$list   = $client->get( 'tax/countries' );
@@ -129,6 +129,7 @@ class Printful_Taxes {
 						$countries[ $country['code'] ][ $state['code'] ] = 1;
 					}
 				}
+
 				if ( ! empty( $countries ) ) {
 					set_transient( 'printful_tax_countries', $countries, 6 * 3600 );
 				}
@@ -156,7 +157,7 @@ class Printful_Taxes {
 		$includeShipping = (int) $includeShipping;
 
 		$states    = WC()->countries->get_states( $cc );
-		$tax_title = ( isset( $states[ $state ] ) ? $states[ $state ] . ' ' : '' ) . 'Sales Tax';
+		$tax_title = ( isset( $states[ $state ] ) ? $states[ $state ] . ' ' : '' ) . __( 'Sales Tax', 'printful' );
 		$id        = $wpdb->get_var(
 			$wpdb->prepare( "SELECT tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_class='printful'
             and tax_rate_country = %s AND tax_rate_state = %s AND tax_rate_shipping = %s  LIMIT 1",

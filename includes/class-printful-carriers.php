@@ -77,7 +77,7 @@ class Printful_Carriers {
 			$shipping->update_carrier_cache( $carriers );
 		} catch ( PrintfulApiException $e ) {
 			$carriers = false;
-		} catch (PrintfulException $e) {
+		} catch ( PrintfulException $e ) {
 			$carriers = false;
 		}
 

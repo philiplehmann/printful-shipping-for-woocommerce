@@ -19,90 +19,85 @@ class Printful_Admin_Status {
 	public static function getChecklistItems() {
 	    return array(
             array(
-                'name'        => __('Connection to Printful API', 'printful'),
-                'description' => __('Is your store successfully connected to Printful API?', 'printful'),
+                'name'        => __( 'Connection to Printful API', 'printful' ),
+                'description' => __( 'Is your store successfully connected to Printful API?', 'printful' ),
                 'method'      => 'check_PF_API_connect',
             ),
             array(
-                'name'        => __('Printful API key is set', 'printful'),
-                'description' => __('Your store needs access to Printful API to use most of it\'s features like shipping rates, tax rates and other settings.', 'printful'),
+                'name'        => __( 'Printful API key is set', 'printful' ),
+                'description' => __( 'Your store needs access to Printful API to use most of it\'s features like shipping rates, tax rates and other settings.', 'printful' ),
                 'method'      => 'check_PF_API_key',
             ),
             array(
-                'name'        => __('WordPress Permalinks', 'printful'),
-                'description' => __('WooCommerce API will not work unless your permalinks in Settings > Permalinks are set up correctly. Make sure you that they are NOT set to "plain".', 'printful'),
+                'name'        => __( 'WordPress Permalinks', 'printful' ),
+                'description' => __( 'WooCommerce API will not work unless your permalinks in Settings > Permalinks are set up correctly. Make sure you that they are NOT set to "plain".', 'printful' ),
                 'method'      => 'check_permalinks',
             ),
             array(
-                'name'        => __('WordPress version', 'printful'),
-                'description' => __('WordPress should always be updated to the latest version. Updates can be installed from your WordPress admin dashboard.', 'printful'),
+                'name'        => __( 'WordPress version', 'printful' ),
+                'description' => __( 'WordPress should always be updated to the latest version. Updates can be installed from your WordPress admin dashboard.', 'printful' ),
                 'method'      => 'check_WP_version',
             ),
             array(
-                'name'        => __('WooCommerce API enabled', 'printful'),
-                'description' => __('Your site needs to enbable WooCommerce API so that Printful can connect to it.', 'printful'),
+                'name'        => __( 'WooCommerce API enabled', 'printful' ),
+                'description' => __( 'Your site needs to enbable WooCommerce API so that Printful can connect to it.', 'printful' ),
                 'method'      => 'check_WC_API_enabled',
             ),
             array(
-                'name'        => __('WooCommerce Webhooks', 'printful'),
-                'description' => __('Printful requires WooCommerce webhooks to be set up to quickly capture you incoming orders, products updates etc.', 'printful'),
+                'name'        => __( 'WooCommerce Webhooks', 'printful' ),
+                'description' => __( 'Printful requires WooCommerce webhooks to be set up to quickly capture you incoming orders, products updates etc.', 'printful' ),
                 'method'      => 'check_PF_webhooks',
             ),
             array(
-                'name'        => __('WooCommerce API keys are set', 'printful'),
-                'description' => __('Printful needs access to your WooCommerce API for the integration to work - otherwise we can\'t sync your store, push or pull your products etc.', 'printful'),
+                'name'        => __( 'WooCommerce API keys are set', 'printful' ),
+                'description' => __( 'Printful needs access to your WooCommerce API for the integration to work - otherwise we can\'t sync your store, push or pull your products etc.', 'printful' ),
                 'method'      => 'check_WC_API_access',
             ),
             array(
-                'name'        => __('WooCommerce authentication URL access', 'printful'),
-                'description' => __('Printful needs access to WooCommerce API authorize page. This sometimes may get blocked due to hosts having unnecessarily intrusive security checks in place that prevent WooCommerce API authentication from working (for example mod_security rule #1234234). If this check fails, you will not be able authorize Printful app.', 'printful'),
+                'name'        => __( 'WooCommerce authentication URL access', 'printful' ),
+                'description' => __( 'Printful needs access to WooCommerce API authorize page. This sometimes may get blocked due to hosts having unnecessarily intrusive security checks in place that prevent WooCommerce API authentication from working (for example mod_security rule #1234234). If this check fails, you will not be able authorize Printful app.', 'printful' ),
                 'method'      => 'check_WC_auth_url_access',
             ),
             array(
-                'name'        => __('WordPress remote requests', 'printful'),
-                'description' => __('WordPress needs to be able to connect to Printful server to call webhooks. If this check fails, contact your hosting support.', 'printful'),
+                'name'        => __( 'WordPress remote requests', 'printful' ),
+                'description' => __( 'WordPress needs to be able to connect to Printful server to call webhooks. If this check fails, contact your hosting support.', 'printful' ),
                 'method'      => 'check_remote_requests',
             ),
             array(
-                'name'        => __('Recent store sync errors', 'printful'),
-                'description' => __('Printful will connect to your store\'s API regularly and sync your latest products, orders etc. If there have been any recent issues with sync, this check will fail.', 'printful'),
+                'name'        => __( 'Recent store sync errors', 'printful' ),
+                'description' => __( 'Printful will connect to your store\'s API regularly and sync your latest products, orders etc. If there have been any recent issues with sync, this check will fail.', 'printful' ),
                 'method'      => 'check_PF_sync_errors',
             ),
             array(
-                'name'        => __('Write permissions', 'printful'),
-                'description' => __('Make the uploads directory writable. This is required for mockup generator product push to work correctly. Contact your hosting provider if you need help with this.', 'printful'),
+                'name'        => __( 'Write permissions', 'printful' ),
+                'description' => __( 'Make the uploads directory writable. This is required for mockup generator product push to work correctly. Contact your hosting provider if you need help with this.', 'printful' ),
                 'method'      => 'check_uploads_write',
             ),
             array(
-                'name'        => __('PHP memory limit', 'printful'),
-                'description' => __('Set PHP allocated memory limit to at least 128mb. Contact your hosting provider if you need help with this.', 'printful'),
+                'name'        => __( 'PHP memory limit', 'printful' ),
+                'description' => __( 'Set PHP allocated memory limit to at least 128mb. Contact your hosting provider if you need help with this.', 'printful' ),
                 'method'      => 'check_PHP_memory_limit',
             ),
             array(
-                'name'        => __('PHP script time limit', 'printful'),
-                'description' => __('Set PHP script execution time limit to at least 30 seconds. This is required to successfully push products with many variants. Contact your hosting provider if you need help with this.', 'printful'),
+                'name'        => __( 'PHP script time limit', 'printful' ),
+                'description' => __( 'Set PHP script execution time limit to at least 30 seconds. This is required to successfully push products with many variants. Contact your hosting provider if you need help with this.', 'printful' ),
                 'method'      => 'check_PHP_time_limit',
             ),
-            // array(
-            //     'name'        => __('Error logs', 'printful'),
-            //     'description' => __('Your WordPress site needs to have it\'s error logging set up correctly so in case of issues you can figure out what\'s wrong. Note: your hosting might already have an independent log from WordPress.', 'printful'),
-            //     'method'      => 'check_WP_error_logs',
-            // ),
             array(
-                'name'        => __('W3 Total Cache DB Cache', 'printful'),
-                'description' => __('If you are using W3 Total Cache, the database caching feature needs to be disabled since it can cause issues with product push to store.', 'printful'),
+                'name'        => __( 'W3 Total Cache DB Cache', 'printful' ),
+                'description' => __( 'If you are using W3 Total Cache, the database caching feature needs to be disabled since it can cause issues with product push to store.', 'printful' ),
                 'method'      => 'check_W3_db_cache',
                 'silent'      => true,
             ),
             array(
-                'name'        => __('WP SpamShield', 'printful'),
-                'description' => __('If you are using WP SpamShield, you might experience problems connecting to Printful and pushing products.', 'printful'),
+                'name'        => __( 'WP SpamShield', 'printful' ),
+                'description' => __( 'If you are using WP SpamShield, you might experience problems connecting to Printful and pushing products.', 'printful' ),
                 'method'      => 'check_wp_spamshield',
                 'silent'      => true,
             ),
             array(
-                'name'        => __('Remove Print Aura plugin', 'printful'),
-                'description' => __('Print Aura plugin is known to cause issues so it needs to be removed.', 'printful'),
+                'name'        => __( 'Remove Print Aura plugin', 'printful' ),
+                'description' => __( 'Print Aura plugin is known to cause issues so it needs to be removed.', 'printful' ),
                 'method'      => 'check_printaura_plugin',
                 'silent'      => true,
             ),
@@ -166,11 +161,11 @@ class Printful_Admin_Status {
 	 * @param bool $only_cached_results
 	 * @return array
 	 */
-	public static function get_checklist($only_cached_results = false) {
+	public static function get_checklist( $only_cached_results = false ) {
 
 		$status = self::instance();
 
-		$list = get_transient(Printful_Admin_Status::PF_CACHED_CHECKLIST);
+		$list = get_transient( Printful_Admin_Status::PF_CACHED_CHECKLIST );
 
 		if ( $only_cached_results || $list ) {
 			return $list;
@@ -464,9 +459,9 @@ class Printful_Admin_Status {
 	 */
     private function check_WC_API_enabled() {
 
-        $enabled = get_option('woocommerce_api_enabled', false);
+        $enabled = get_option( 'woocommerce_api_enabled', false );
 
-        if($enabled == 'yes') {
+        if ( $enabled == 'yes' ) {
             return self::PF_STATUS_OK;
         }
 
@@ -564,22 +559,6 @@ class Printful_Admin_Status {
 		$code = $response['response']['code'];
 
 		if ( $code == 200 ) {
-			return self::PF_STATUS_OK;
-		}
-
-		return self::PF_STATUS_FAIL;
-	}
-
-	/**
-	 * @return int
-	 */
-	private function check_WP_error_logs() {
-
-		if (
-			( defined( 'WP_DEBUG' ) && WP_DEBUG == true )
-			&&
-			( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG == true )
-		) {
 			return self::PF_STATUS_OK;
 		}
 

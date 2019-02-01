@@ -16,7 +16,7 @@ class Printful_Size_Chart_Tab {
 	public static function init() {
 		$size_chart = new self;
 		add_filter( 'woocommerce_product_tabs', array( $size_chart, 'init_size_chart_tab' ) );
-		add_action( 'add_meta_boxes', array($size_chart, 'init_metabox'));
+		add_action( 'add_meta_boxes', array( $size_chart, 'init_metabox' ) );
 		add_action( 'save_post', array( $size_chart, 'save_size_chart' ), 1, 2 );
 	}
 
@@ -24,7 +24,7 @@ class Printful_Size_Chart_Tab {
 	 * Initialize meta boxes
 	 */
 	public function init_metabox() {
-		add_meta_box( 'pf_size_chart', __( 'Size chart', 'printful' ), array($this, 'size_chart_metabox'), 'product', 'normal' );
+		add_meta_box( 'pf_size_chart', __( 'Size chart', 'printful' ), array( $this, 'size_chart_metabox' ), 'product', 'normal' );
 	}
 
 	/**
@@ -33,7 +33,6 @@ class Printful_Size_Chart_Tab {
 	 * @return mixed
 	 */
 	public function init_size_chart_tab( $tabs ) {
-
 		if ( strlen( $this->get_size_chart_content() ) > 0 ) {
 			$tabs['size_chart'] = array(
 				'title'    => __( 'Size Chart', 'printful' ),
@@ -49,7 +48,6 @@ class Printful_Size_Chart_Tab {
 	 * Display the size chart content
 	 */
 	public function size_chart_tab_content() {
-
 		echo '<h2>' . esc_html__( 'Size Chart', 'printful' ) . '</h2>';
 		echo $this->get_size_chart_content();
 	}
@@ -58,8 +56,8 @@ class Printful_Size_Chart_Tab {
 	 * @return mixed
 	 */
 	public function get_size_chart_content() {
-
 		global $post;
+
 		return htmlspecialchars_decode(get_post_meta( $post->ID, 'pf_size_chart', true ));
 	}
 
@@ -67,7 +65,6 @@ class Printful_Size_Chart_Tab {
 	 * @param $meta_id
 	 */
 	public function size_chart_metabox( $meta_id ) {
-
 		$settings = array(
 			'textarea_name' => 'pf_size_chart',
 			'tinymce'       => array(
@@ -86,7 +83,7 @@ class Printful_Size_Chart_Tab {
 	 * @param $post_id
 	 * @param $post
 	 */
-	public function save_size_chart($post_id, $post ) {
+	public function save_size_chart( $post_id, $post ) {
 
 		// $post_id and $post are required
 		if ( empty( $post_id ) || empty( $post ) || self::$saved_meta_boxes ) {

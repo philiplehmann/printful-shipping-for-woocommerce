@@ -19,11 +19,11 @@ class Printful_Admin {
      */
 	public function register_admin() {
 
-		add_action( 'admin_menu', array($this, 'register_admin_menu_page'));
-        add_action( 'admin_enqueue_scripts', array($this, 'add_admin_styles'));
-		add_action( 'admin_enqueue_scripts', array($this, 'add_admin_scripts'));
-		add_action( 'wp_enqueue_scripts', array($this, 'add_global_style'));
-		add_action( 'admin_bar_menu', array($this, 'add_printful_status_toolbar'), 999 );
+		add_action( 'admin_menu', array( $this, 'register_admin_menu_page' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_global_style' ) );
+		add_action( 'admin_bar_menu', array( $this, 'add_printful_status_toolbar' ), 999 );
     }
 
     /**
@@ -70,7 +70,7 @@ class Printful_Admin {
 	public function register_admin_menu_page() {
 
 		add_menu_page(
-			__('Dashboard', 'printful'),
+			__( 'Dashboard', 'printful' ),
 			self::MENU_TITLE_TOP,
 			self::CAPABILITY,
 			self::MENU_SLUG_DASHBOARD,
@@ -98,10 +98,11 @@ class Printful_Admin {
 		}
 	}
 
-	/**
-	 * Get the tabs used in printful admin pages
-	 * @return array
-	 */
+    /**
+     * Get the tabs used in printful admin pages
+     * @return array
+     * @throws PrintfulException
+     */
 	public static function get_tabs() {
 
 		$tabs = array(

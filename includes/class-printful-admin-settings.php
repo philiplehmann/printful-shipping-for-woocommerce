@@ -85,15 +85,17 @@ class Printful_Admin_Settings {
 		Printful_Admin::load_template( 'footer' );
 	}
 
-	/**
-	 * Display the ajax content for carrier settings
-	 */
+    /**
+     * Display the ajax content for carrier settings
+     * @throws PrintfulException
+     */
 	public static function render_carriers_ajax() {
 
 		$carrier_settings = self::instance()->setup_carrier_fields();
 		Printful_Admin::load_template( 'setting-group', $carrier_settings );
 		$enable_submit = 'Printful_Settings.enable_submit_btn();';
-		Printful_Admin::load_template( 'inline-script', array('script' => $enable_submit) );
+		Printful_Admin::load_template( 'inline-script', array( 'script' => $enable_submit ) );
+
 		exit;
 	}
 
@@ -118,9 +120,10 @@ class Printful_Admin_Settings {
 		return $integration_settings;
 	}
 
-	/**
-	 * @internal param $carrier_settings
-	 */
+    /**
+     * @internal param $carrier_settings
+     * @throws PrintfulException
+     */
 	public function setup_carrier_fields() {
 
 		$carrier_settings = array(
@@ -131,7 +134,8 @@ class Printful_Admin_Settings {
 		);
 
 		if ( ! Printful_Integration::instance()->is_connected() ) {
-			$carrier_settings['description'] = __('You need to be connected to Printful API to edit carrier settings!', 'printful' );
+			$carrier_settings['description'] = __( 'You need to be connected to Printful API to edit carrier settings!', 'printful' );
+
 			return $carrier_settings;
 		}
 
@@ -191,9 +195,10 @@ class Printful_Admin_Settings {
         return $request_body;
 	}
 
-	/**
-	 * Ajax endpoint for saving the settings
-	 */
+    /**
+     * Ajax endpoint for saving the settings
+     * @throws PrintfulException
+     */
 	public static function save_printful_settings() {
 
 		if ( ! empty( $_POST ) ) {

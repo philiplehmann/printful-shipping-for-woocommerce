@@ -84,6 +84,7 @@ class Printful_Shipping extends WC_Shipping_Method
 	public function woocommerce_load_shipping_methods( $package = array() ) {
 
 		$this->printful_package = false;
+
 		if ( $package && ! empty( $package['printful'] ) ) {
 			if ( $this->enabled == 'yes' ) {
 				$this->printful_package = true;
@@ -123,7 +124,6 @@ class Printful_Shipping extends WC_Shipping_Method
 	 * @return array
 	 */
 	public function woocommerce_cart_shipping_packages( $packages = array() ) {
-
 		//Printful rates are turned off, do not split products
 		if ( $this->enabled !== 'yes' ) {
 			return $packages;
@@ -132,7 +132,6 @@ class Printful_Shipping extends WC_Shipping_Method
 		$return_packages = array();
 
 		foreach ( $packages as $package ) {
-
 			$ids = array();
 			foreach ( $package['contents'] as $key => $item ) {
 				$ids[ $key ] = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
@@ -223,7 +222,6 @@ class Printful_Shipping extends WC_Shipping_Method
 	 * @return bool
 	 */
 	public function calculate_shipping( $package = array() ) {
-
 		$request = array(
 			'recipient' => array(
 				'address1'     => $package['destination']['address'],
@@ -308,7 +306,6 @@ class Printful_Shipping extends WC_Shipping_Method
 	 * @param $error
 	 */
 	private function set_error( $error ) {
-
 		if ( $this->show_warnings ) {
 			$this->last_error = $error;
 			add_filter( 'woocommerce_cart_no_shipping_available_html', array( $this, 'show_error' ) );
@@ -322,9 +319,9 @@ class Printful_Shipping extends WC_Shipping_Method
 	 * @return string
 	 */
 	public function show_error( $data ) {
-
 		$error   = $this->last_error;
 		$message = $error->getMessage();
+
 		if ( $error instanceof PrintfulApiException && $error->getCode() == 401 ) {
 			$message = 'Invalid API key';
 		}

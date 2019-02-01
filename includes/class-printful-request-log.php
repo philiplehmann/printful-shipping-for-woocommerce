@@ -13,7 +13,7 @@ class Printful_Request_log {
 	public static function init() {
 		$printful_log = new self;
 		add_filter( 'woocommerce_api_serve_request', array( $printful_log, 'log_incoming_printful_api_requests' ), 10, 3 );
-		add_filter ('printful_api_result', array($printful_log, 'log_outgoing_printful_api_requests'), 10, 4);
+		add_filter( 'printful_api_result', array( $printful_log, 'log_outgoing_printful_api_requests'), 10, 4 );
 	}
 
 	/**
@@ -60,6 +60,8 @@ class Printful_Request_log {
 
 		$original_result = $result;
 		$request['path'] = $url;
+        $params_set = null;
+        $code_success = null;
 
 		if ( ! is_wp_error( $result ) ) {
 			$result       = json_decode( $result['body'], true );
@@ -76,9 +78,9 @@ class Printful_Request_log {
 		$response_hash = md5( serialize( array( 'request' => $request, 'results' => $result ) ) );
 
 		//save summary in database to be easily accessible for status page
-		$this->save_to_printful_log( $method . ' ' . $url, $result, $response_hash,  self::PF_OPTION_OUTGOING_API_REQUEST_LOG);
+		$this->save_to_printful_log( $method . ' ' . $url, $result, $response_hash,  self::PF_OPTION_OUTGOING_API_REQUEST_LOG );
 
-		return $original_result;    //don't change the result
+		return $original_result; //don't change the result
 	}
 
 	/**
@@ -89,7 +91,7 @@ class Printful_Request_log {
 	 * @param string $context
 	 * @return bool
 	 */
-	private function save_to_wc_log( $request, $result, $context) {
+	private function save_to_wc_log( $request, $result, $context ) {
 
 		if ( ! function_exists( 'wc_get_logger' ) ) {
 			return false;
@@ -102,6 +104,8 @@ class Printful_Request_log {
 			'results' => (array) $result,
 		);
 		$logger->error( wc_print_r( $log_item, true ), $context );
+
+		return true;
 	}
 
 	/**

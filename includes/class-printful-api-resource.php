@@ -1,6 +1,10 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Class Printful_API_Resource
+ * @deprecated 2.0.3
+ */
 class Printful_API_Resource extends WC_API_Resource {
 
     /** @var string $base the route base */

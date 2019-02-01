@@ -3,16 +3,31 @@
 /**
  * API class
  */
-class Printful_REST_API
+class Printful_REST_API_Controller extends WC_REST_Controller
 {
+    /**
+     * Endpoint namespace.
+     *
+     * @var string
+     */
+    protected $namespace = 'wc/v2';
+
+    /**
+     * Route base.
+     *
+     * @var string
+     */
+    protected $rest_base = 'printful';
+
     /**
      * Register the REST API routes.
      */
-    public static function init() {
-        register_rest_route('wc/v2', '/printful/access', array(
+    public function register_routes() {
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/access', array(
             array(
                 'methods' => WP_REST_Server::EDITABLE,
-                'callback' => array( 'Printful_REST_API', 'set_printful_access' ),
+                'callback' => array( $this, 'set_printful_access' ),
+                'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 'args' => array(
                     'accessKey' => array(
                         'required' => false,
@@ -28,10 +43,11 @@ class Printful_REST_API
             )
         ) );
 
-        register_rest_route('wc/v2', '/printful/products/(?P<product_id>\d+)/size-chart', array(
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/products/(?P<product_id>\d+)/size-chart', array(
             array(
                 'methods' => WP_REST_Server::EDITABLE,
-                'callback' => array( 'Printful_REST_API', 'post_size_guide' ),
+                'callback' => array( $this, 'post_size_guide' ),
+                'permission_callback' => array( $this, 'update_item_permissions_check' ),
                 'args' => array(
                     'product_id' => array(
                         'description' => __( 'Unique identifier for the resource.', 'printful' ),
@@ -46,17 +62,19 @@ class Printful_REST_API
             )
         ) );
 
-        register_rest_route('wc/v2', '/printful/version', array(
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/version', array(
             array(
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => array( 'Printful_REST_API', 'get_version' ),
+                'permission_callback' => array( $this, 'get_items_permissions_check' ),
+                'callback' => array( $this, 'get_version' ),
             )
         ) );
 
-        register_rest_route('wc/v2', '/printful/store_data', array(
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/store_data', array(
             array(
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => array( 'Printful_REST_API', 'get_store_data' ),
+                'permission_callback' => array( $this, 'get_items_permissions_check' ),
+                'callback' => array( $this, 'get_store_data' ),
             )
         ) );
     }
@@ -131,11 +149,10 @@ class Printful_REST_API
      * Allow remotely get plugin version for debug purposes
      */
     public static function get_version() {
-
         $error = false;
 
         try {
-            $client    = Printful_Integration::instance()->get_client();
+            $client     = Printful_Integration::instance()->get_client();
             $store_data = $client->get( 'store' );
         } catch ( Exception $exception ) {
             $error = $exception->getMessage();
@@ -176,5 +193,36 @@ class Printful_REST_API
             'version'   => WC()->version,
             'name'      => get_bloginfo( 'title', 'display' )
         );
+    }
+
+    /**
+     * Check whether a given request has permission to read printful endpoints.
+     *
+     * @param  WP_REST_Request $request Full details about the request.
+     * @return WP_Error|boolean
+     */
+    public function get_items_permissions_check( $request ) {
+        if ( ! wc_rest_check_user_permissions( 'read' ) ) {
+            return new WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot list resources.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a given request has access to update a product.
+     *
+     * @param  WP_REST_Request $request Full details about the request.
+     * @return WP_Error|boolean
+     */
+    public function update_item_permissions_check( $request ) {
+        $params = $request->get_url_params();
+        $post = get_post( (int) $params['product_id'] );
+
+        if ( $post && ! wc_rest_check_post_permissions( 'product', 'edit', $post->ID ) ) {
+            return new WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+        }
+
+        return true;
     }
 }

@@ -26,13 +26,14 @@ class Printful_Admin_Dashboard {
 
 	}
 
-	/**
-	 * Show the view
-	 */
+    /**
+     * Show the view
+     * @throws PrintfulException
+     */
 	public static function view() {
 
 		$dashboard = self::instance();
-		$api_key = Printful_Integration::instance()->get_option('printful_key');
+		$api_key = Printful_Integration::instance()->get_option( 'printful_key' );
 		$connect_status = Printful_Integration::instance()->is_connected();
 
 		if ( $connect_status ) {
@@ -52,8 +53,8 @@ class Printful_Admin_Dashboard {
 		$status = Printful_Admin_Status::instance();
 		$issues = array();
 
-		$api_enabled = $status->run_single_test('check_WC_API_enabled');
-		$permalinks_set = $status->run_single_test('check_permalinks');
+		$api_enabled = $status->run_single_test( 'check_WC_API_enabled' );
+		$permalinks_set = $status->run_single_test( 'check_permalinks' );
 
 		if ( $permalinks_set == Printful_Admin_Status::PF_STATUS_FAIL ) {
 			$message      = 'WooCommerce API will not work unless your permalinks are set up correctly. Go to <a href="%s">Permalinks settings</a> and make sure that they are NOT set to "plain".';
