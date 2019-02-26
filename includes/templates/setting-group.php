@@ -9,7 +9,7 @@
 <div class="printful-setting-group">
 
     <h2><?php echo esc_html($title); ?></h2>
-    <p><?php echo esc_html($description); ?></p>
+    <p><?php _e( $description, 'printful' ); ?></p>
 
 	<?php if ( !empty( $settings ) ) : ?>
 
@@ -41,7 +41,10 @@
                             <?php elseif ($setting['type'] == 'checkbox') : ?>
 
                                 <label for="<?php echo esc_attr($key); ?>">
-                                <input class="" type="checkbox" name="<?php echo esc_attr($key); ?>" id="<?php echo esc_attr($key); ?>" value="1" <?php if($setting['value'] == 'yes') { echo 'checked="checked"'; } ?>><?php echo esc_html($setting['label']); ?></label><br>
+                                <input class="" type="checkbox" name="<?php echo esc_attr($key); ?>" id="<?php echo esc_attr($key); ?>" value="1" <?php if($setting['value'] == 'yes') { echo 'checked="checked"'; } ?>>
+                                    <?php _e( $setting['label'] , 'printful' ); ?>
+                                </label>
+                                <br>
 
                             <?php elseif ($setting['type'] == 'checkbox-group') : ?>
 

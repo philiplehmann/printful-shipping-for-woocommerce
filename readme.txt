@@ -2,8 +2,8 @@
 Contributors: girts_u, kievins, kberzins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
-Tested up to: 5.0
-Stable tag: 2.0.7
+Tested up to: 5.1
+Stable tag: 2.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ See your order, revenue and profit statistics on WooCommerce Printful's dashboar
 1. Click the "Connect" button or add your Printful API key manually to Printful->Settings tab
 1. Enable shipping rate calculation in WooCommerce->Settings->Shipping->Printful Shipping tab
 1. To automatically calculate taxes please check 'Enable taxes and tax calculations' under WooCommerce Tax settings.
-1. Then go to Printful->Settings tab and check 'Calculated for all products shipped to North Carolina and California'.
+1. Then go to Printful->Settings tab and check 'Calculated for all products shipped to states where Printful applies sales tax'.
 
 == Frequently Asked Questions ==
 
@@ -37,6 +37,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 6. Shipping live rates in cart
 
 == Upgrade Notice ==
+
+= 2.0.8 =
+Shipping & Tax information improvements
 
 = 2.0.7 =
 Bug fixes, security improvements and improved i18n support
@@ -108,6 +111,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.0.8 =
+* Shipping & Tax information improvements
 
 = 2.0.7 =
 * Bug fixes, security improvements and improved i18n support

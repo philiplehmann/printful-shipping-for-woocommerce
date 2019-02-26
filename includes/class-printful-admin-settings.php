@@ -16,6 +16,12 @@ class Printful_Admin_Settings {
      */
 	public static function getIntegrationFields()
     {
+        $sales_tax_link = sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            esc_url( 'https://www.printful.com/faq/taxes-and-billing/sales-tax/371-which-states-does-printful-charge-sales-tax-in-' ),
+            esc_html__( 'states where Printful applies sales tax', 'printful' )
+        );
+
         return array(
             'printful_key' => array(
                 'title' => __( 'Printful store API key', 'printful' ),
@@ -27,7 +33,10 @@ class Printful_Admin_Settings {
             'calculate_tax' => array(
                 'title' => __( 'Calculate sales tax', 'printful' ),
                 'type' => 'checkbox',
-                'label' => __( 'Calculated for all products shipped to North Carolina and California', 'printful' ),
+                'label' => sprintf(
+                    'Calculated for all products shipped to %s',
+                    $sales_tax_link
+                ),
                 'default' => 'no',
             ),
             'disable_ssl' => array(
@@ -125,11 +134,22 @@ class Printful_Admin_Settings {
      * @throws PrintfulException
      */
 	public function setup_carrier_fields() {
+        $flat_rate_link = sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            esc_url( 'https://www.printful.com/shipping' ),
+            esc_html__( 'flat rates', 'printful' )
+        );
 
 		$carrier_settings = array(
-			'title'       => __( 'Carriers & Services', 'printful' ),
-			'description' => __( "You can specify here which shipping carriers are available for this store.\n
-			 Uncheck the ones you want to disable. If you leave “Flat rate” checked it means that any order where flat rate was selected can still ship with any carrier and service.", 'printful' ),
+			'title'       => __( 'Shipping Methods', 'printful' ),
+			'description' => sprintf(
+			     "Here you can choose the shipping methods you want Printful to use for shipping your orders.
+                Uncheck the ones you want to disable. From your selection, our algorithm will determine the fastest, most cost-effective, and most reliable method for each order. <br /><br />
+			    Checking “Flat Rate” enables Printful %s as a shipping option. When an order comes in and “Flat Rate” is the most cost-effective shipping option you’ve enabled, that’s the rate we’ll charge you.
+			    The order will be shipped with the least expensive shipping method available, regardless of what others you’ve enabled. 
+			    So if you want to use only specific shipping methods, make sure “Flat Rate” is disabled.",
+                $flat_rate_link
+            ),
 			'settings'    => array(),
 		);
 
