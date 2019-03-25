@@ -3,7 +3,7 @@ Contributors: girts_u, kievins, kberzins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 5.1
-Stable tag: 2.0.8
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 6. Shipping live rates in cart
 
 == Upgrade Notice ==
+
+= 2.1 =
+Personalization feature
 
 = 2.0.8 =
 Shipping & Tax information improvements
@@ -111,6 +114,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.1 =
+* Personalization feature
 
 = 2.0.8 =
 * Shipping & Tax information improvements

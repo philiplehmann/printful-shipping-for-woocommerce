@@ -176,7 +176,6 @@ class Printful_REST_API_Controller extends WC_REST_Controller
 
         return array(
             'version'          => Printful_Base::VERSION,
-            'api_key'          => Printful_Integration::instance()->get_option('printful_key'),
             'store_id'         => ! empty( $store_data['id'] ) ? $store_data['id'] : false,
             'error'            => $error,
             'status_checklist' => $checklist,

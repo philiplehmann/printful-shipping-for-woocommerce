@@ -97,7 +97,6 @@ class Printful_API_Resource extends WC_API_Resource {
 
 		return array(
 			'version'          => Printful_Base::VERSION,
-			'api_key'          => Printful_Integration::instance()->get_option('printful_key'),
 			'store_id'         => ! empty( $storeData['id'] ) ? $storeData['id'] : false,
 			'error'            => $error,
 			'status_checklist' => $checklist,

@@ -3,7 +3,7 @@
 Plugin Name: Printful Integration for WooCommerce
 Plugin URI: https://wordpress.org/plugins/printful-shipping-for-woocommerce/
 Description: Calculate correct shipping and tax rates for your Printful-Woocommerce integration.
-Version: 2.0.8
+Version: 2.1
 Author: Printful
 Author URI: http://www.printful.com
 License: GPL2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ if ( ! defined( 'PF_PLUGIN_FILE' ) ) {
 
 class Printful_Base {
 
-    const VERSION = '2.0.8';
+    const VERSION = '2.1';
 	const PF_HOST = 'https://www.printful.com/';
 	const PF_API_HOST = 'https://api.printful.com/';
 
@@ -64,6 +64,8 @@ class Printful_Base {
 	    require_once 'includes/class-printful-size-chart-tab.php';
 	    require_once 'includes/class-printful-size-chart-tab.php';
         require_once 'includes/class-printful-rest-api-controller.php';
+        require_once 'includes/class-printful-template.php';
+        require_once 'includes/class-printful-customizer.php';
 
 	    //launch init
 	    Printful_Taxes::init();
@@ -71,6 +73,8 @@ class Printful_Base {
 	    Printful_Request_log::init();
 	    Printful_Admin::init();
 	    Printful_Size_Chart_Tab::init();
+	    Printful_Template::init();
+	    Printful_Customizer::init();
 
 	    //hook ajax callbacks
 	    add_action( 'wp_ajax_save_printful_settings', array( 'Printful_Admin_Settings', 'save_printful_settings' ) );
@@ -111,6 +115,7 @@ class Printful_Base {
     public static function add_extra_info_to_api_index($available) {
 	    $available['printful_plugin_version'] = self::VERSION;
 	    $available['locale'] = get_locale();
+
     	return $available;
     }
 

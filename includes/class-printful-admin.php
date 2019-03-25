@@ -35,6 +35,7 @@ class Printful_Admin {
 	    wp_enqueue_style( 'printful-global', plugins_url( '../assets/css/global.css', __FILE__ ) );
 
 	    if ( strpos( $hook, 'printful-dashboard' ) !== false ) {
+		    wp_enqueue_style( 'wp-color-picker' );
 		    wp_enqueue_style( 'printful-dashboard', plugins_url( '../assets/css/dashboard.css', __FILE__ ) );
 		    wp_enqueue_style( 'printful-status', plugins_url( '../assets/css/status.css', __FILE__ ) );
 		    wp_enqueue_style( 'printful-support', plugins_url( '../assets/css/support.css', __FILE__ ) );
@@ -57,6 +58,7 @@ class Printful_Admin {
 	 */
 	public function add_admin_scripts($hook) {
 		if ( strpos( $hook, 'printful-dashboard' ) !== false ) {
+			wp_enqueue_script( 'wp-color-picker' );
 			wp_enqueue_script( 'printful-settings', plugins_url( '../assets/js/settings.js', __FILE__ ) );
 			wp_enqueue_script( 'printful-connect', plugins_url( '../assets/js/connect.js', __FILE__ ) );
 			wp_enqueue_script( 'printful-block-loader', plugins_url( '../assets/js/block-loader.js', __FILE__ ) );

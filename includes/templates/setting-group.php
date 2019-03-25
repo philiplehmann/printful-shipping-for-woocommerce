@@ -69,6 +69,9 @@
 
                                 <?php endforeach; ?>
 
+                            <?php elseif ($setting['type'] == 'color-picker') : ?>
+                                <label for="<?php esc_attr_e($key); ?>">
+                                <input type="text" name="<?php esc_attr_e($key); ?>" class="<?php esc_attr_e($key); ?>" value="<?php esc_attr_e($setting['value']); ?>" data-default-color="<?php esc_attr_e($setting['default']); ?>" />
                             <?php endif; ?>
 
                         </fieldset>
@@ -82,3 +85,8 @@
 	<?php endif; ?>
 
 </div>
+<script>
+    jQuery(document).ready(function($){
+        $('.pfc_button_color').wpColorPicker();
+    });
+</script>

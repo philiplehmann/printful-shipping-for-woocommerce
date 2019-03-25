@@ -10,6 +10,8 @@ class Printful_Admin_Settings {
 	const CARRIER_TYPE_INTERNATIONAL = 'international';
     const CARRIER_REGION_US = 'US';
     const CARRIER_REGION_EU = 'LV';
+    const DEFAULT_PERSONALIZE_BUTTON_TEXT = 'Personalize Design';
+    const DEFAULT_PERSONALIZE_BUTTON_COLOR = '#eee';
 
     /**
      * @return array
@@ -45,6 +47,18 @@ class Printful_Admin_Settings {
                 'label' => __( 'Use HTTP instead of HTTPS to connect to the Printful API (may be required if the plugin does not work for some hosting configurations)', 'printful' ),
                 'default' => 'no',
             ),
+	        'pfc_button_text' => array(
+		        'title' => __( 'Personalization button text', 'printful' ),
+		        'type' => 'text',
+		        'description' => __( 'Personalization button text', 'printful' ),
+		        'default' => self::DEFAULT_PERSONALIZE_BUTTON_TEXT
+	        ),
+	        'pfc_button_color' => array(
+		        'title' => __( 'Personalization button color', 'printful' ),
+		        'type' => 'color-picker',
+		        'description' => __( 'Personalization button background color', 'printful' ),
+		        'default' => self::DEFAULT_PERSONALIZE_BUTTON_COLOR,
+	        )
         );
     }
 
