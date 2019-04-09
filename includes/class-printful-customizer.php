@@ -19,8 +19,9 @@ class Printful_Customizer {
         add_filter( 'woocommerce_add_cart_item_data', array( $this, 'save_customizer_hash_data_to_cart' ), 10, 1 );
         add_filter( 'woocommerce_cart_item_thumbnail', array( $this, 'change_woocommerce_cart_item_thumbnail' ), 20, 2 );
 	    // add property to order
-	    add_action('woocommerce_add_order_item_meta', array( $this, 'save_customizer_hash_order_meta' ), 10, 3 );
-
+	    add_action('woocommerce_add_order_item_meta', array( $this, 'save_customizer_hash_order_meta' ), 10, 2 );
+        // hide hash from meta data provided to user
+        add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( $this, 'hide_hash_from_meta_data'), 10, 1 );
         add_action( 'wp_ajax_printful_customized_thumb', array( $this, 'printful_customized_thumb' ) );
         add_action( 'wp_ajax_nopriv_printful_customized_thumb', array( $this, 'printful_customized_thumb' ) );
     }
@@ -43,6 +44,11 @@ class Printful_Customizer {
         return $cart_item_data;
     }
 
+    /**
+     * @param $thumbnail
+     * @param $cart_item
+     * @return string
+     */
     public function change_woocommerce_cart_item_thumbnail( $thumbnail, $cart_item )
     {
         if ( $cart_item
@@ -70,11 +76,10 @@ class Printful_Customizer {
 	/**
 	 * @param $itemId
 	 * @param $values
-	 * @param $key
 	 *
 	 * @throws Exception
 	 */
-    public function save_customizer_hash_order_meta( $itemId, $values, $key )
+    public function save_customizer_hash_order_meta( $itemId, $values )
     {
     	if ( isset( $values['pfc_hash'] ) ) {
     		wc_add_order_item_meta( $itemId, 'pfc_hash', $values['pfc_hash'] );
@@ -118,5 +123,21 @@ class Printful_Customizer {
 
 	    echo json_encode($response);
 	    exit;
+    }
+
+    /**
+     * Hide pfc_hash from UI
+     * @param array $formatted_meta
+     * @return mixed
+     */
+    public function hide_hash_from_meta_data( $formatted_meta )
+    {
+        foreach( $formatted_meta as $key => $meta ) {
+            if ( in_array( $meta->key, array( 'pfc_hash' ) ) ) {
+                unset( $formatted_meta[$key] );
+            }
+        }
+
+        return $formatted_meta;
     }
 }

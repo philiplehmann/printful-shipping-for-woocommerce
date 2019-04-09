@@ -1,5 +1,6 @@
 <?php
 /**
+ * @var string $pfc_button_color
  * @var string $site_url
  * @var string $pfc_button_text
  */

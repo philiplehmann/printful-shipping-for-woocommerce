@@ -20,6 +20,11 @@ var Printful_Product_Customizer;
             var variation_id = jQuery('input[name="variation_id"]').val(); // get selected variation ID
 
             if (!variation_id) {
+                // if variation does not exist, probably means single variant product
+                variation_id = jQuery('button[name="add-to-cart"]').val();
+            }
+
+            if (!variation_id) {
                 return;
             }
 
@@ -140,7 +145,7 @@ var Printful_Product_Customizer;
             jQuery('#pfc_hash').val(hash);
             this.closeModal();
 
-            jQuery('.variations_form').submit();
+            jQuery('.single_add_to_cart_button').click();
         }
     };
 })();

@@ -115,11 +115,6 @@ class Printful_Size_Chart_Tab {
 			return;
 		}
 
-		//check if not empty
-		if ( empty( $_POST['pf_size_chart'] ) ) {
-			return;
-		}
-
 		// We need this save event to run once to avoid potential endless loops.
 		self::$saved_meta_boxes = true;
 

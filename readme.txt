@@ -3,7 +3,7 @@ Contributors: girts_u, kievins, kberzins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 3.8
 Tested up to: 5.1
-Stable tag: 2.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,32 @@ See order statistics, automate tax settings and enable live shipping rates for y
 
 == Description ==
 
-See your order, revenue and profit statistics on WooCommerce Printful's dashboard, automate tax settings and enable live shipping rates from carriers like FedEx on your WooCommerce checkout page. These rates are identical to the list you get when you submit an order manually and are specific to the shipping address your customer provides when checking out.
+= Partner with the #1 print-on-demand drop shipping plugin. Over 20,000 active stores and counting! =
+
+With Printful, you can focus on building your store. We will print, fulfill and ship the product for you. Simply upload your design, add it to your store and we will do the rest.
+
+We have a range of over 160 products, from t-shirts, leggings, and hats to posters, mugs, and beanbags. We'll fulfill and ship every order in-house, on-demand, and in an average of 3 business days at our locations in California, North Carolina, Mexico, and Europe.
+
+Using our plugin you also get access to automated tax settings and live shipping rates.
+
+= How does Printful work? =
+
+When a customer buys something from your WooCommerce store, the order is automatically imported to Printful, where we fulfill and ship it to them under your brand. You can then see your order, revenue and profit statistics on your WooCommerce dashboard.
+
+Learn more about the WooCommerce + Printful integration [here](https://www.printful.com/landing/woocommerce-print-products-fulfillment).
+
+= With WooCommerce + Printful, you get: =
+
+- Control your profit: We charge you to cover production – you set your retail price, and what's left is your profit
+- Automated tax settings and live shipping rates
+- Free design templates: Get creative with our product generator
+- Product personalization: create designs your customers customize themselves
+- Warehousing & Fulfillment services: You can store your entire inventory at our warehouse, meaning we can fulfill them as well as your Print-on-demand shirts
+- Stress-free shipping: Lost shipments are on us, and we offer shipping methods with tracking
+- Discounted samples: Order product samples with 20% off + free shipping to select destinations
+- 24/7 Customer Support
+
+Still not convinced? Check out our [demo store](https://demo-store.myprintful.com/) to see what's possible!
 
 == Installation ==
 1. Upload 'printful-shipping-for-woocommerce' to the '/wp-content/plugins/' directory
@@ -34,9 +59,11 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 3. Integration settings
 4. Plugin status page
 5. Support page
-6. Shipping live rates in cart
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+Improved support for WooCommerce 3.6 and other minor bug fixes
 
 = 2.1 =
 Personalization feature
@@ -114,6 +141,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.1.1 =
+* Improved support for WooCommerce 3.6 and other minor bug fixes
 
 = 2.1 =
 * Personalization feature
