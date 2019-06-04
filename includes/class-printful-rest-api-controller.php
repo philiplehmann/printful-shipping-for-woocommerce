@@ -28,6 +28,7 @@ class Printful_REST_API_Controller extends WC_REST_Controller
                 'methods' => WP_REST_Server::EDITABLE,
                 'callback' => array( $this, 'set_printful_access' ),
                 'permission_callback' => array( $this, 'get_items_permissions_check' ),
+                'show_in_index' => false,
                 'args' => array(
                     'accessKey' => array(
                         'required' => false,
@@ -48,6 +49,7 @@ class Printful_REST_API_Controller extends WC_REST_Controller
                 'methods' => WP_REST_Server::EDITABLE,
                 'callback' => array( $this, 'post_size_guide' ),
                 'permission_callback' => array( $this, 'update_item_permissions_check' ),
+                'show_in_index' => false,
                 'args' => array(
                     'product_id' => array(
                         'description' => __( 'Unique identifier for the resource.', 'printful' ),
@@ -67,6 +69,7 @@ class Printful_REST_API_Controller extends WC_REST_Controller
                 'methods' => WP_REST_Server::READABLE,
                 'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 'callback' => array( $this, 'get_version' ),
+                'show_in_index' => false,
             )
         ) );
 
@@ -75,6 +78,7 @@ class Printful_REST_API_Controller extends WC_REST_Controller
                 'methods' => WP_REST_Server::READABLE,
                 'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 'callback' => array( $this, 'get_store_data' ),
+                'show_in_index' => true,
             )
         ) );
     }

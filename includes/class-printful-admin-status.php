@@ -39,11 +39,6 @@ class Printful_Admin_Status {
                 'method'      => 'check_WP_version',
             ),
             array(
-                'name'        => __( 'WooCommerce API enabled', 'printful' ),
-                'description' => __( 'Your site needs to enbable WooCommerce API so that Printful can connect to it.', 'printful' ),
-                'method'      => 'check_WC_API_enabled',
-            ),
-            array(
                 'name'        => __( 'WooCommerce Webhooks', 'printful' ),
                 'description' => __( 'Printful requires WooCommerce webhooks to be set up to quickly capture you incoming orders, products updates etc.', 'printful' ),
                 'method'      => 'check_PF_webhooks',
@@ -62,6 +57,11 @@ class Printful_Admin_Status {
                 'name'        => __( 'WordPress remote requests', 'printful' ),
                 'description' => __( 'WordPress needs to be able to connect to Printful server to call webhooks. If this check fails, contact your hosting support.', 'printful' ),
                 'method'      => 'check_remote_requests',
+            ),
+            array(
+                'name'        => __( 'WordPress Site URL', 'printful' ),
+                'description' => __( 'If your currently setup WordPress site URL is redirected to another URL the integration might not work correctly. Typically this happens with incorrect http to https redirects. Go to Settings > General to fix this.' , 'printful' ),
+                'method'      => 'check_site_url_redirect',
             ),
             array(
                 'name'        => __( 'Recent store sync errors', 'printful' ),
@@ -132,8 +132,7 @@ class Printful_Admin_Status {
 	 * Render the view
 	 */
 	public function render() {
-
-		Printful_Admin::load_template( 'header', array( 'tabs' => Printful_Admin::get_tabs() ) );
+        Printful_Admin::load_template( 'header', array( 'tabs' => Printful_Admin::get_tabs() ) );
 
 		$checklist = self::get_checklist( true );
 		if ( $checklist ) {
@@ -457,20 +456,6 @@ class Printful_Admin_Status {
 	/**
 	 * @return int
 	 */
-    private function check_WC_API_enabled() {
-
-        $enabled = get_option( 'woocommerce_api_enabled', false );
-
-        if ( $enabled == 'yes' ) {
-            return self::PF_STATUS_OK;
-        }
-
-	    return self::PF_STATUS_FAIL;
-    }
-
-	/**
-	 * @return int
-	 */
 	private function check_permalinks() {
 
 		$permalinks = get_option( 'permalink_structure', false );
@@ -564,4 +549,23 @@ class Printful_Admin_Status {
 
 		return self::PF_STATUS_FAIL;
 	}
+
+    /**
+     * @return int
+     */
+	private function check_site_url_redirect()
+    {
+        $head = wp_remote_head(get_option( 'siteurl' ), array('redirection' => 0));
+        /** @var WP_HTTP_Requests_Response $response */
+        $response = $head['http_response'];
+        if ($response->get_status() == 200) {
+            return self::PF_STATUS_OK;
+        }
+
+        if (in_array($response->get_status(), array(301, 302, 303, 307))) {
+            return self::PF_STATUS_FAIL;
+        }
+
+        return self::PF_STATUS_WARNING;
+    }
 }

@@ -26,7 +26,6 @@
                 <tr valign="top">
 
                     <th scope="row" class="titledesc">
-                        <span class="woocommerce-help-tip"></span>
                         <label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($setting['title']); ?></label>
                     </th>
 

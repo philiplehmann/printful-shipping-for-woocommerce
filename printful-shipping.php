@@ -3,7 +3,7 @@
 Plugin Name: Printful Integration for WooCommerce
 Plugin URI: https://wordpress.org/plugins/printful-shipping-for-woocommerce/
 Description: Calculate correct shipping and tax rates for your Printful-Woocommerce integration.
-Version: 2.1.1
+Version: 2.1.2
 Author: Printful
 Author URI: http://www.printful.com
 License: GPL2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ if ( ! defined( 'PF_PLUGIN_FILE' ) ) {
 
 class Printful_Base {
 
-    const VERSION = '2.1.1';
+    const VERSION = '2.1.2';
 	const PF_HOST = 'https://www.printful.com/';
 	const PF_API_HOST = 'https://api.printful.com/';
 
@@ -43,12 +43,6 @@ class Printful_Base {
         if (!class_exists('WC_Integration')) {
             return;
         }
-
-	    //Register API endpoint
-	    add_filter('woocommerce_api_classes', array($this, 'add_api_resource'));
-
-	    //Add settings to WooCommerce Index response (legacy - v2)
-	    add_filter('woocommerce_api_index', array($this, 'add_extra_info_to_api_index'));
 
         //load required classes
 	    require_once 'includes/class-printful-integration.php';
@@ -94,29 +88,6 @@ class Printful_Base {
         load_plugin_textdomain( 'printful', false, plugin_basename( dirname( PF_PLUGIN_FILE ) ) . '/i18n/languages' );
     }
 
-	/**
-	 * Added API endpoints
-	 * @param $endpoints
-	 * @return array
-	 */
-    public function add_api_resource($endpoints) {
-        require_once 'includes/class-printful-api-resource.php';
-        $endpoints[] = 'Printful_API_Resource';
-
-        return $endpoints;
-    }
-
-	/**
-	 * @param $available
-	 * Include plugin version in WC API Index
-	 * @return mixed
-	 */
-    public static function add_extra_info_to_api_index($available) {
-	    $available['printful_plugin_version'] = self::VERSION;
-	    $available['locale'] = get_locale();
-
-    	return $available;
-    }
 
 	/**
 	 * @return string
@@ -155,7 +126,7 @@ class Printful_Base {
         }
 
         // Init REST API routes.
-        add_action( 'rest_api_init', array( $this, 'register_rest_routes' ));
+        add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 20);
     }
 
     public function register_rest_routes()

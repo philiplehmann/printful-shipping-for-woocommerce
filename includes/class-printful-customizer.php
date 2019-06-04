@@ -19,11 +19,26 @@ class Printful_Customizer {
         add_filter( 'woocommerce_add_cart_item_data', array( $this, 'save_customizer_hash_data_to_cart' ), 10, 1 );
         add_filter( 'woocommerce_cart_item_thumbnail', array( $this, 'change_woocommerce_cart_item_thumbnail' ), 20, 2 );
 	    // add property to order
-	    add_action('woocommerce_add_order_item_meta', array( $this, 'save_customizer_hash_order_meta' ), 10, 2 );
+	    add_action('woocommerce_new_order_item', array( $this, 'save_customizer_hash_order_meta' ), 10, 2 );
+
         // hide hash from meta data provided to user
         add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( $this, 'hide_hash_from_meta_data'), 10, 1 );
         add_action( 'wp_ajax_printful_customized_thumb', array( $this, 'printful_customized_thumb' ) );
         add_action( 'wp_ajax_nopriv_printful_customized_thumb', array( $this, 'printful_customized_thumb' ) );
+
+        add_action( 'wp_enqueue_scripts', array( $this, 'load_customizer_scripts' ));
+    }
+
+    /**
+     * Load customizer scripts for cart and product page
+     */
+    public function load_customizer_scripts() {
+        global $post;
+
+        $is_customized_product = $post && get_post_meta( $post->ID, 'pf_customizable', true );
+        if ($is_customized_product || is_cart()) {
+            wp_enqueue_script( 'printful-product-customizer', plugins_url( '../assets/js/product-customizer.js', __FILE__ ) );
+        }
     }
 
     /**

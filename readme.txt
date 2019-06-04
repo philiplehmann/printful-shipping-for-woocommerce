@@ -1,9 +1,9 @@
 === Printful Integration for WooCommerce ===
 Contributors: girts_u, kievins, kberzins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
-Requires at least: 3.8
+Requires at least: 4.4
 Tested up to: 5.1
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 5. Support page
 
 == Upgrade Notice ==
+
+= 2.1.2 =
+Improved theme support for personalized products and other minor bug fixes
 
 = 2.1.1 =
 Improved support for WooCommerce 3.6 and other minor bug fixes
@@ -141,6 +144,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.1.2 =
+* Improved theme support for personalized products and other minor bug fixes
 
 = 2.1.1 =
 * Improved support for WooCommerce 3.6 and other minor bug fixes

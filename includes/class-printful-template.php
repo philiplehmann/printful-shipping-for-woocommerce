@@ -32,8 +32,6 @@ class Printful_Template {
         global $post;
 
         if ( $post && get_post_meta( $post->ID, 'pf_customizable', true ) ) {
-            // bind script that's responsible for manipulation with personalization
-            wp_enqueue_script( 'printful-product-customizer', plugins_url( '../assets/js/product-customizer.js', __FILE__ ) );
             // load template for personalization button
             Printful_Admin::load_template( 'personalize-button', array(
                 'site_url' => get_site_url(),

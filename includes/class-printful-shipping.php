@@ -233,6 +233,7 @@ class Printful_Shipping extends WC_Shipping_Method
 			),
 			'items'     => array(),
 			'currency'  => get_woocommerce_currency(),
+            'locale'    => get_locale()
 		);
 
 
