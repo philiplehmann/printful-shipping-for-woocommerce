@@ -527,7 +527,6 @@ class Printful_Admin_Status {
 	 * @return int
 	 */
 	private function check_WC_auth_url_access() {
-
 		$url       = home_url( '/' ) . 'wc-auth/v1/authorize?app_name=Printful&scope=read_write&user_id=1&return_url=https%3A%2F%2Fwww.printful.com%2Fdashboard%2Fwoocommerce%2Freturn&callback_url=https%3A%2F%2Fapi.printful.com%2Fhook%2Fwoocommerce-auth-callback';
 		$http_args = array(
 			'timeout'    => 60,
@@ -555,14 +554,20 @@ class Printful_Admin_Status {
      */
 	private function check_site_url_redirect()
     {
-        $head = wp_remote_head(get_option( 'siteurl' ), array('redirection' => 0));
+        $regular_site_url_req = wp_remote_head( get_option( 'siteurl' ), array('redirection' => 0));
         /** @var WP_HTTP_Requests_Response $response */
-        $response = $head['http_response'];
-        if ($response->get_status() == 200) {
+        $regular_response = $regular_site_url_req['http_response'];
+
+        //need to not trigger issues for subfolder wordpress setups
+        $slashed_site_url_req = wp_remote_head( trailingslashit(get_option( 'siteurl' )), array('redirection' => 0));
+        /** @var WP_HTTP_Requests_Response $slashed_response */
+        $slashed_response = $slashed_site_url_req['http_response'];
+
+        if ($regular_response->get_status() == 200 || $slashed_response->get_status() == 200) {
             return self::PF_STATUS_OK;
         }
 
-        if (in_array($response->get_status(), array(301, 302, 303, 307))) {
+        if (in_array($regular_response->get_status(), array(301, 302, 303, 307))) {
             return self::PF_STATUS_FAIL;
         }
 
