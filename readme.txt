@@ -7,21 +7,23 @@ Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-See order statistics, automate tax settings and enable live shipping rates for your customers.
+Grow your store with the top print-on-demand dropshipping plugin
 
 == Description ==
 
-= Partner with the #1 print-on-demand drop shipping plugin. Over 20,000 active stores and counting! =
+= Partner with the #1 print-on-demand drop shipping plugin. Over 30,000 active stores and counting! =
 
 With Printful, you can focus on building your store. We will print, fulfill and ship the product for you. Simply upload your design, add it to your store and we will do the rest.
 
 We have a range of over 160 products, from t-shirts, leggings, and hats to posters, mugs, and beanbags. We'll fulfill and ship every order in-house, on-demand, and in an average of 3 business days at our locations in California, North Carolina, Mexico, and Europe.
 
-Using our plugin you also get access to automated tax settings and live shipping rates.
+Printful users have already made $540 million in sales, so start selling!
 
 = How does Printful work? =
 
 When a customer buys something from your WooCommerce store, the order is automatically imported to Printful, where we fulfill and ship it to them under your brand. You can then see your order, revenue and profit statistics on your WooCommerce dashboard.
+
+We’ve been trusted to print over 10 million products, when will we print yours?
 
 Learn more about the WooCommerce + Printful integration [here](https://www.printful.com/landing/woocommerce-print-products-fulfillment).
 
@@ -147,6 +149,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.1.3 =
+* Fixed minor issue with site URL verification in plugin status page
 
 = 2.1.2 =
 * Improved theme support for personalized products and other minor bug fixes
