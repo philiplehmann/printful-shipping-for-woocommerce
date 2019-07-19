@@ -3,7 +3,7 @@ Contributors: girts_u, kievins, kberzins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 4.4
 Tested up to: 5.2
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 5. Support page
 
 == Upgrade Notice ==
+
+= 2.1.4 =
+Fixed an issue with personalized order submit
 
 = 2.1.3 =
 Fixed minor issue with site URL verification in plugin status page
@@ -149,6 +152,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.1.4 =
+* Fixed an issue with personalized order submit
 
 = 2.1.3 =
 * Fixed minor issue with site URL verification in plugin status page

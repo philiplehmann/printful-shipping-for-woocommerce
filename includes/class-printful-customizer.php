@@ -90,14 +90,18 @@ class Printful_Customizer {
 
 	/**
 	 * @param $itemId
-	 * @param $values
+	 * @param $item
 	 *
 	 * @throws Exception
 	 */
-    public function save_customizer_hash_order_meta( $itemId, $values )
+    public function save_customizer_hash_order_meta( $itemId, $item )
     {
-    	if ( isset( $values['pfc_hash'] ) ) {
-    		wc_add_order_item_meta( $itemId, 'pfc_hash', $values['pfc_hash'] );
+        if (empty($item->legacy_values)) {
+            return;
+        }
+
+        if ( isset( $item->legacy_values['pfc_hash'] ) ) {
+    		wc_add_order_item_meta( $itemId, 'pfc_hash', $item->legacy_values['pfc_hash'] );
 	    }
     }
 
