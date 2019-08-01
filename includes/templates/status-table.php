@@ -34,7 +34,9 @@
 					echo '<span class="pass">' . esc_html__('OK', 'printful') .'</span>';
 				} else if ( $item['status'] == 0 ) {
 					echo '<span class="warning">' . esc_html__('WARNING', 'printful') .'&#42;</span>';
-				} else {
+				} else if ( $item['status'] == 2 ) {
+                    echo '<span class="fail">' . esc_html__('NOT CONNECTED', 'printful') .'</span>';
+                } else {
 					echo '<span class="fail">' . esc_html__('FAIL', 'printful') .'</span>';
 				}
 				?>

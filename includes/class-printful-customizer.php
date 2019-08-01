@@ -37,7 +37,11 @@ class Printful_Customizer {
 
         $is_customized_product = $post && get_post_meta( $post->ID, 'pf_customizable', true );
         if ($is_customized_product || is_cart()) {
-            wp_enqueue_script( 'printful-product-customizer', plugins_url( '../assets/js/product-customizer.js', __FILE__ ) );
+        	$customizer_script_handle = 'printful-product-customizer';
+            wp_enqueue_script( $customizer_script_handle, plugins_url( '../assets/js/product-customizer.js', __FILE__ ) );
+            wp_localize_script( $customizer_script_handle, 'pfGlobal', [
+            	'admin_url' => esc_url(admin_url())
+            ] );
         }
     }
 

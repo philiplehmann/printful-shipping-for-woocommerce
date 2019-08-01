@@ -171,6 +171,8 @@ class Printful_REST_API_Controller extends WC_REST_Controller
                 $checklist_item['status'] = 'OK';
             } elseif ( $checklist_item['status'] == Printful_Admin_Status::PF_STATUS_WARNING ) {
                 $checklist_item['status'] = 'WARNING';
+            } elseif ( $checklist_item['status'] == Printful_Admin_Status::PF_STATUS_NOT_CONNECTED ) {
+                $checklist_item['status'] = 'NOT CONNECTED';
             } else {
                 $checklist_item['status'] = 'FAIL';
             }

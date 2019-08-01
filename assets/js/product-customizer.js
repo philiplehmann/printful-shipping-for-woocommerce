@@ -168,10 +168,21 @@ setInterval(function () {
         return carry;
     }, {});
 
+    // Resolve admin base URL
+    var adminURL = window.pfGlobal && window.pfGlobal.admin_url && window.pfGlobal.admin_url.length
+        ? window.pfGlobal.admin_url
+        : '/wp-admin/';
+
+    // rtrim('/') + '/'
+    var hasSlash = adminURL.substring(adminURL.length - 1) === '/';
+    if (!hasSlash) {
+        adminURL += '/';
+    }
+
     // if pending (loading) images exist, request image urls
     if (Object.keys(hashes).length > 0) {
         jQuery.ajax({
-            url: '/wp-admin/admin-ajax.php',
+            url: adminURL + 'admin-ajax.php',
             type: 'GET',
             data: {
                 action: 'printful_customized_thumb',

@@ -6,6 +6,7 @@ class Printful_Admin_Status {
 	const PF_STATUS_OK = 1;
 	const PF_STATUS_WARNING = 0;
 	const PF_STATUS_FAIL = -1;
+	const PF_STATUS_NOT_CONNECTED = 2;
 
 	const API_KEY_SEARCH_STRING = 'Printful';
 	const PF_WEBHOOK_NAME = 'Printful Integration';
@@ -13,6 +14,12 @@ class Printful_Admin_Status {
 	const PF_REMOTE_REQUEST_TOPIC = 'woo.plugin.test';
 	const PF_STATUS_ISSUE_COUNT = 'printful_status_issue_count';
 	const PF_CACHED_CHECKLIST = 'printful_cached_checklist';
+    const STATUS_CONNECTED_DISPLAYABLE_METHODS = array(
+        'check_PF_webhooks',
+        'check_PF_sync_errors',
+        'check_PF_API_key',
+        'check_WC_API_access'
+    );
 
     public static $_instance;
     
@@ -155,11 +162,12 @@ class Printful_Admin_Status {
 		exit;
 	}
 
-	/**
-	 * Run the tests
-	 * @param bool $only_cached_results
-	 * @return array
-	 */
+    /**
+     * Run the tests
+     * @param bool $only_cached_results
+     * @return array
+     * @throws PrintfulException
+     */
 	public static function get_checklist( $only_cached_results = false ) {
 
 		$status = self::instance();
@@ -182,11 +190,16 @@ class Printful_Admin_Status {
 			if ( method_exists( $status, $item['method'] ) ) {
 				$list_item['status'] = $status->{$item['method']}();
 
+				// Do not display status for methods that are depending on connection status to Printful
+				if ( ! Printful_Integration::instance()->is_connected(true) && in_array( $item['method'], self::STATUS_CONNECTED_DISPLAYABLE_METHODS ) ) {
+				    continue;
+                }
+
 				if ( $status->should_result_be_visible( $list_item['status'], $item ) ) {
 					$list['items'][] = $list_item;
 				}
 
-				if ( $list_item['status'] == self::PF_STATUS_FAIL) {
+				if ( $list_item['status'] == self::PF_STATUS_FAIL || $list_item['status'] == self::PF_STATUS_NOT_CONNECTED ) {
 					$list['overall_status'] = false;
 					$issueCount ++;
 				}
@@ -384,16 +397,17 @@ class Printful_Admin_Status {
 		return self::PF_STATUS_FAIL;
 	}
 
-	/**
-	 * @return int
-	 */
+    /**
+     * @return int
+     * @throws PrintfulException
+     */
 	private function check_PF_API_connect() {
 
 		if ( Printful_Integration::instance()->is_connected(true) ) {
 			return self::PF_STATUS_OK;
 		}
 
-		return self::PF_STATUS_FAIL;
+		return self::PF_STATUS_NOT_CONNECTED;
 	}
 
 	/**
@@ -555,11 +569,17 @@ class Printful_Admin_Status {
 	private function check_site_url_redirect()
     {
         $regular_site_url_req = wp_remote_head( get_option( 'siteurl' ), array('redirection' => 0));
-        /** @var WP_HTTP_Requests_Response $response */
-        $regular_response = $regular_site_url_req['http_response'];
 
         //need to not trigger issues for subfolder wordpress setups
         $slashed_site_url_req = wp_remote_head( trailingslashit(get_option( 'siteurl' )), array('redirection' => 0));
+
+        if (is_wp_error($regular_site_url_req) || is_wp_error($slashed_site_url_req)) {
+            return self::PF_STATUS_FAIL;
+        }
+
+        /** @var WP_HTTP_Requests_Response $response */
+        $regular_response = $regular_site_url_req['http_response'];
+
         /** @var WP_HTTP_Requests_Response $slashed_response */
         $slashed_response = $slashed_site_url_req['http_response'];
 

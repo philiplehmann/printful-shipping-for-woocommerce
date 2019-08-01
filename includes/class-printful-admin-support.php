@@ -51,10 +51,11 @@ class Printful_Admin_Support {
 		exit;
 	}
 
-	/**
+    /**
      * Create system status report
-	 * @return string
-	 */
+     * @return string
+     * @throws PrintfulException
+     */
 	public function generate_report() {
 
 		if ( ! class_exists( 'WC_REST_System_Status_Controller' ) ) {
@@ -73,7 +74,9 @@ class Printful_Admin_Support {
 				$status = 'WARNING';
 			} else if($item['status'] == Printful_Admin_Status::PF_STATUS_FAIL) {
 				$status = 'FAIL';
-			}
+			} else if ($item['status'] == Printful_Admin_Status::PF_STATUS_NOT_CONNECTED) {
+			    $status = 'NOT CONNECTED';
+            }
 			echo "* ";
 			echo esc_html( str_pad( esc_html( $item['name'] ), 30 ) ) . '=> ' . esc_html( $status ) . "\n";
 		}
