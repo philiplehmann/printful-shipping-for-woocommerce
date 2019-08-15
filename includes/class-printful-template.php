@@ -36,7 +36,8 @@ class Printful_Template {
             Printful_Admin::load_template( 'personalize-button', array(
                 'site_url' => get_site_url(),
 	            'pfc_button_color' => Printful_Integration::instance()->get_option( 'pfc_button_color' ) ?: Printful_Admin_Settings::DEFAULT_PERSONALIZE_BUTTON_COLOR,
-	            'pfc_button_text' => Printful_Integration::instance()->get_option( 'pfc_button_text' ) ?: Printful_Admin_Settings::DEFAULT_PERSONALIZE_BUTTON_TEXT
+	            'pfc_button_text' => Printful_Integration::instance()->get_option( 'pfc_button_text' ) ?: Printful_Admin_Settings::DEFAULT_PERSONALIZE_BUTTON_TEXT,
+	            'pfc_modal_title' => Printful_Integration::instance()->get_option( 'pfc_modal_title' ) ?: Printful_Admin_Settings::DEFAULT_PERSONALIZE_MODAL_TITLE,
             ) );
         }
     }

@@ -12,6 +12,7 @@ class Printful_Admin_Settings {
     const CARRIER_REGION_EU = 'LV';
     const DEFAULT_PERSONALIZE_BUTTON_TEXT = 'Personalize Design';
     const DEFAULT_PERSONALIZE_BUTTON_COLOR = '#eee';
+    const DEFAULT_PERSONALIZE_MODAL_TITLE = 'Create a personalized design';
 
     /**
      * @return array
@@ -58,7 +59,13 @@ class Printful_Admin_Settings {
 		        'type' => 'color-picker',
 		        'description' => __( 'Personalization button background color', 'printful' ),
 		        'default' => self::DEFAULT_PERSONALIZE_BUTTON_COLOR,
-	        )
+	        ),
+            'pfc_modal_title' => array(
+                'title' => __( 'Personalization popup title', 'printful' ),
+                'type' => 'text',
+                'description' => __( 'Personalization popup title text', 'printful' ),
+                'default' => self::DEFAULT_PERSONALIZE_MODAL_TITLE,
+            ),
         );
     }
 

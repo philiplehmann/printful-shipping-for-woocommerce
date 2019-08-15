@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-05-28 12:28+0300\n"
+"POT-Creation-Date: 2019-08-15 10:44+0300\n"
 "PO-Revision-Date: 2018-04-26 13:50+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -25,138 +25,137 @@ msgstr ""
 msgid "Loading your orders..."
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:24
+#: includes/class-printful-admin-settings.php:25
 msgid "states where Printful applies sales tax"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:29
+#: includes/class-printful-admin-settings.php:30
 msgid "Printful store API key"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:32
+#: includes/class-printful-admin-settings.php:33
 msgid "Your store's Printful API key. Create it in the Prinful dashboard"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:36
+#: includes/class-printful-admin-settings.php:37
 msgid "Calculate sales tax"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:45
+#: includes/class-printful-admin-settings.php:46
 msgid "Disable SSL"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:47
+#: includes/class-printful-admin-settings.php:48
 msgid ""
 "Use HTTP instead of HTTPS to connect to the Printful API (may be required if "
 "the plugin does not work for some hosting configurations)"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:51
-#: includes/class-printful-admin-settings.php:53
+#: includes/class-printful-admin-settings.php:52
+#: includes/class-printful-admin-settings.php:54
 msgid "Personalization button text"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:57
+#: includes/class-printful-admin-settings.php:58
 msgid "Personalization button color"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:59
+#: includes/class-printful-admin-settings.php:60
 msgid "Personalization button background color"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:154
+#: includes/class-printful-admin-settings.php:64
+msgid "Personalization popup title"
+msgstr ""
+
+#: includes/class-printful-admin-settings.php:66
+msgid "Personalization popup title text"
+msgstr ""
+
+#: includes/class-printful-admin-settings.php:161
 msgid "flat rates"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:158
+#: includes/class-printful-admin-settings.php:165
 msgid "Shipping Methods"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:171
+#: includes/class-printful-admin-settings.php:178
 msgid "You need to be connected to Printful API to edit carrier settings!"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:310
+#: includes/class-printful-admin-settings.php:317
 msgid "International from USA"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:316
+#: includes/class-printful-admin-settings.php:323
 msgid "International from EU"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:22
+#: includes/class-printful-admin-status.php:29
 msgid "Connection to Printful API"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:23
+#: includes/class-printful-admin-status.php:30
 msgid "Is your store successfully connected to Printful API?"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:27
+#: includes/class-printful-admin-status.php:34
 msgid "Printful API key is set"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:28
+#: includes/class-printful-admin-status.php:35
 msgid ""
 "Your store needs access to Printful API to use most of it's features like "
 "shipping rates, tax rates and other settings."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:32
+#: includes/class-printful-admin-status.php:39
 msgid "WordPress Permalinks"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:33
+#: includes/class-printful-admin-status.php:40
 msgid ""
 "WooCommerce API will not work unless your permalinks in Settings > "
 "Permalinks are set up correctly. Make sure you that they are NOT set to "
 "\"plain\"."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:37
+#: includes/class-printful-admin-status.php:44
 msgid "WordPress version"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:38
+#: includes/class-printful-admin-status.php:45
 msgid ""
 "WordPress should always be updated to the latest version. Updates can be "
 "installed from your WordPress admin dashboard."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:42
-msgid "WooCommerce API enabled"
-msgstr ""
-
-#: includes/class-printful-admin-status.php:43
-msgid ""
-"Your site needs to enable WooCommerce API so that Printful can connect to it."
-msgstr ""
-
-#: includes/class-printful-admin-status.php:47
+#: includes/class-printful-admin-status.php:49
 msgid "WooCommerce Webhooks"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:48
+#: includes/class-printful-admin-status.php:50
 msgid ""
 "Printful requires WooCommerce webhooks to be set up to quickly capture you "
 "incoming orders, products updates etc."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:52
+#: includes/class-printful-admin-status.php:54
 msgid "WooCommerce API keys are set"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:53
+#: includes/class-printful-admin-status.php:55
 msgid ""
 "Printful needs access to your WooCommerce API for the integration to work - "
 "otherwise we can't sync your store, push or pull your products etc."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:57
+#: includes/class-printful-admin-status.php:59
 msgid "WooCommerce authentication URL access"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:58
+#: includes/class-printful-admin-status.php:60
 msgid ""
 "Printful needs access to WooCommerce API authorize page. This sometimes may "
 "get blocked due to hosts having unnecessarily intrusive security checks in "
@@ -165,99 +164,99 @@ msgid ""
 "authorize Printful app."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:62
+#: includes/class-printful-admin-status.php:64
 msgid "WordPress remote requests"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:63
+#: includes/class-printful-admin-status.php:65
 msgid ""
 "WordPress needs to be able to connect to Printful server to call webhooks. "
 "If this check fails, contact your hosting support."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:67
-msgid "WordPress site url"
+#: includes/class-printful-admin-status.php:69
+msgid "WordPress Site URL"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:68
+#: includes/class-printful-admin-status.php:70
 msgid ""
 "If your currently setup WordPress site URL is redirected to another URL the "
 "integration might not work correctly. Typically this happens with incorrect "
 "http to https redirects. Go to Settings > General to fix this."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:72
+#: includes/class-printful-admin-status.php:74
 msgid "Recent store sync errors"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:73
+#: includes/class-printful-admin-status.php:75
 msgid ""
 "Printful will connect to your store's API regularly and sync your latest "
 "products, orders etc. If there have been any recent issues with sync, this "
 "check will fail."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:77
+#: includes/class-printful-admin-status.php:79
 msgid "Write permissions"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:78
+#: includes/class-printful-admin-status.php:80
 msgid ""
 "Make the uploads directory writable. This is required for mockup generator "
 "product push to work correctly. Contact your hosting provider if you need "
 "help with this."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:82
+#: includes/class-printful-admin-status.php:84
 msgid "PHP memory limit"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:83
+#: includes/class-printful-admin-status.php:85
 msgid ""
 "Set PHP allocated memory limit to at least 128mb. Contact your hosting "
 "provider if you need help with this."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:87
+#: includes/class-printful-admin-status.php:89
 msgid "PHP script time limit"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:88
+#: includes/class-printful-admin-status.php:90
 msgid ""
 "Set PHP script execution time limit to at least 30 seconds. This is required "
 "to successfully push products with many variants. Contact your hosting "
 "provider if you need help with this."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:92
+#: includes/class-printful-admin-status.php:94
 msgid "W3 Total Cache DB Cache"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:93
+#: includes/class-printful-admin-status.php:95
 msgid ""
 "If you are using W3 Total Cache, the database caching feature needs to be "
 "disabled since it can cause issues with product push to store."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:98
+#: includes/class-printful-admin-status.php:100
 msgid "WP SpamShield"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:99
+#: includes/class-printful-admin-status.php:101
 msgid ""
 "If you are using WP SpamShield, you might experience problems connecting to "
 "Printful and pushing products."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:104
+#: includes/class-printful-admin-status.php:106
 msgid "Remove Print Aura plugin"
 msgstr ""
 
-#: includes/class-printful-admin-status.php:105
+#: includes/class-printful-admin-status.php:107
 msgid "Print Aura plugin is known to cause issues so it needs to be removed."
 msgstr ""
 
-#: includes/class-printful-admin-status.php:146
+#: includes/class-printful-admin-status.php:148
 msgid "Testing your store (this may take up to 30 seconds)..."
 msgstr ""
 
@@ -265,7 +264,7 @@ msgstr ""
 msgid "Building support report (this may take up to 30 seconds)..."
 msgstr ""
 
-#: includes/class-printful-admin-support.php:68
+#: includes/class-printful-admin-support.php:69
 msgid "##### Printful Checklist #####\n"
 msgstr ""
 
@@ -279,7 +278,7 @@ msgstr ""
 
 #: includes/class-printful-admin.php:112 includes/templates/order-table.php:12
 #: includes/templates/order-table.php:58 includes/templates/status-table.php:21
-#: includes/templates/status-table.php:49
+#: includes/templates/status-table.php:51
 msgid "Status"
 msgstr ""
 
@@ -327,11 +326,11 @@ msgstr ""
 msgid "You do not have permission to edit the size chart"
 msgstr ""
 
-#: includes/class-printful-rest-api-controller.php:209
+#: includes/class-printful-rest-api-controller.php:211
 msgid "Sorry, you cannot list resources."
 msgstr ""
 
-#: includes/class-printful-rest-api-controller.php:226
+#: includes/class-printful-rest-api-controller.php:228
 msgid "Sorry, you are not allowed to edit this resource."
 msgstr ""
 
@@ -515,12 +514,12 @@ msgid ""
 msgstr ""
 
 #: includes/templates/status-table.php:19
-#: includes/templates/status-table.php:47
+#: includes/templates/status-table.php:49
 msgid "Name"
 msgstr ""
 
 #: includes/templates/status-table.php:20
-#: includes/templates/status-table.php:48
+#: includes/templates/status-table.php:50
 msgid "Description"
 msgstr ""
 
@@ -533,10 +532,14 @@ msgid "WARNING"
 msgstr ""
 
 #: includes/templates/status-table.php:38
+msgid "NOT CONNECTED"
+msgstr ""
+
+#: includes/templates/status-table.php:40
 msgid "FAIL"
 msgstr ""
 
-#: includes/templates/status-table.php:54
+#: includes/templates/status-table.php:56
 msgid ""
 "Warnings are issued when the test was unable to come to a definite "
 "conclusion or if the result was passable, but not ideal."

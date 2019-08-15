@@ -82,7 +82,7 @@ var Printful_Product_Customizer;
             var modalHeaderTitle = document.createElement('h4');
             modalHeaderTitle.className = 'product-customizer__header-title';
             modalHeaderTitle.setAttribute('style', 'float: left;font-weight:bold;font-size:23px;color:#222;line-height:30px;margin:0px;clear:none;');
-            modalHeaderTitle.innerText = 'Create a personalized design';
+            modalHeaderTitle.innerText = window.pfGlobal && window.pfGlobal.modal_title ? window.pfGlobal.modal_title : 'Create a personalized design';
             modalHeader.appendChild(modalHeaderTitle);
 
             var modalContent = document.createElement('div');
