@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Printful_Admin_Settings {
-	
+
 	public static $_instance;
 	const CARRIER_TYPE_STANDARD = 'standard';
 	const CARRIER_TYPE_EXPEDITED = 'expedited';
@@ -37,7 +37,7 @@ class Printful_Admin_Settings {
                 'title' => __( 'Calculate sales tax', 'printful' ),
                 'type' => 'checkbox',
                 'label' => sprintf(
-                    'Calculated for all products shipped to %s',
+                    __('Calculated for all products listed on your store (including non-Printful products) that ship to %s. Before enabling, make sure you are registered for a seller permit in all these states.'),
                     $sales_tax_link
                 ),
                 'default' => 'no',

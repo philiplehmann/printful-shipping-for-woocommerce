@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-08-15 10:44+0300\n"
+"POT-Creation-Date: 2019-09-24 16:42+0300\n"
 "PO-Revision-Date: 2018-04-26 13:50+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -39,6 +39,14 @@ msgstr ""
 
 #: includes/class-printful-admin-settings.php:37
 msgid "Calculate sales tax"
+msgstr ""
+
+#: includes/class-printful-admin-settings.php:40
+#, php-format
+msgid ""
+"Calculated for all products listed on your store (including non-Printful "
+"products) that ship to %s. Before enabling, make sure you are registered for "
+"a seller permit in all these states."
 msgstr ""
 
 #: includes/class-printful-admin-settings.php:46
