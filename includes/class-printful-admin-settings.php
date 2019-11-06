@@ -110,7 +110,7 @@ class Printful_Admin_Settings {
 
 		Printful_Admin::load_template( 'setting-submit', array( 'nonce' => wp_create_nonce( 'printful_settings' ), 'disabled' => true ) );
 
-		echo '</from>';
+        echo '</form>';
 
 		Printful_Admin::load_template( 'footer' );
 	}
@@ -200,8 +200,8 @@ class Printful_Admin_Settings {
         $carrier_regions = Printful_Carriers::instance()->carriers;
 
         if ( empty( $carrier_regions ) ) {
-			return false;
-		}
+            return false;
+        }
 
         $us_carriers[ self::CARRIER_REGION_US ]  = ( ( ! empty( $_POST[ self::CARRIER_REGION_US ] ) && wp_verify_nonce( $_POST['_wpnonce'], 'printful_settings' ) ) ? $_POST[ self::CARRIER_REGION_US ] : array() );
         $eu_carriers[ self::CARRIER_REGION_EU ] = ( ( ! empty( $_POST[ self::CARRIER_REGION_EU ] ) && wp_verify_nonce( $_POST['_wpnonce'], 'printful_settings' ) ) ? $_POST[ self::CARRIER_REGION_EU ] : array() );

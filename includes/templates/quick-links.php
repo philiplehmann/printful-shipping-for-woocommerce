@@ -1,7 +1,7 @@
 <h2>Quick links</h2>
 
 <div class="printful-quick-links">
-	<a href="<?php echo esc_url(Printful_Base::get_printful_host()); ?>dashboard" target="_blank" class="printful-quick-links-item">
+	<a href="<?php echo esc_url(Printful_Base::get_printful_host()); ?>dashboard/default/orders" target="_blank" class="printful-quick-links-item">
 		<span class="dashicons dashicons-cart"></span>
 		<h4><?php esc_html_e('Orders', 'printful'); ?></h4>
 	</a>

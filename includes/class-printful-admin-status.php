@@ -307,9 +307,9 @@ class Printful_Admin_Status {
 			return self::PF_STATUS_FAIL;
 		}
 
-		if ( version_compare( $current, $latest, '==' ) ) {
-			return self::PF_STATUS_OK;
-		}
+        if ( version_compare( $current, $latest, '>=' ) ) {
+            return self::PF_STATUS_OK;
+        }
 
 		return self::PF_STATUS_FAIL;
 	}

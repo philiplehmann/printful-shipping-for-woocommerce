@@ -67,14 +67,17 @@ class Printful_Carriers {
 	 */
 	public function post_carriers( $data ) {
 
-		if ( empty( $data ) ) {
-			return false;
-		}
+        if ( empty( $data ) ) {
+            return false;
+        }
 
 		$shipping = new self;
 		try {
-            $carriers = Printful_Integration::instance()->get_client()->patch( 'store/update-shipping-methods', $data );
-			$shipping->update_carrier_cache( $carriers );
+			$carriers = Printful_Integration::instance()->get_client()->patch( 'store/update-shipping-methods', $data );
+
+			if ( empty( $carriers['error'] ) ) {
+				$shipping->update_carrier_cache( $carriers );
+			}
 		} catch ( PrintfulApiException $e ) {
 			$carriers = false;
 		} catch ( PrintfulException $e ) {
