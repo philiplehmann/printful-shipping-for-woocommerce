@@ -14,30 +14,30 @@ Grow your store with the top print-on-demand dropshipping plugin
 
 = Partner with the #1 print-on-demand drop shipping plugin. Over 30,000 active stores and counting! =
 
-With Printful, you can focus on building your store. We will print, fulfill and ship the product for you. Simply upload your design, add it to your store and we will do the rest.
+With Printful, you can focus on building your store. We'll print, fulfill and ship your products for you. Simply upload your design, add it to your store, and we'll do the rest.
 
-We have a range of over 160 products, from t-shirts, leggings, and hats to posters, mugs, and beanbags. We'll fulfill and ship every order in-house, on-demand, and in an average of 3 business days at our locations in California, North Carolina, Mexico, and Europe.
+We offer more than 220 products in various categories, from apparel, home items, jewelry, accessories, and more!  Once your orders start rolling in, we’ll fulfill and ship each one under your brand and in an average of 3 business days at our locations in California, North Carolina, Mexico, and Europe.
 
-Printful users have already made $540 million in sales, so start selling!
+Printful customers have already made more than $310 million in sales, so start selling today!
 
 = How does Printful work? =
 
-When a customer buys something from your WooCommerce store, the order is automatically imported to Printful, where we fulfill and ship it to them under your brand. You can then see your order, revenue and profit statistics on your WooCommerce dashboard.
+When a customer buys something from your WooCommerce store, the order is automatically imported to Printful, where we fulfill and ship it to them under your brand. You can then see your order, revenue, and profit statistics on your WooCommerce dashboard.
 
-We’ve been trusted to print over 10 million products, when will we print yours?
+We’re trusted to print over 14 million products. When will we print for you?
 
-Learn more about the WooCommerce + Printful integration [here](https://www.printful.com/landing/woocommerce-print-products-fulfillment).
+Learn more about the WooCommerce + Printful integration [here](https://www.printful.com/dashboard/woocommerce/register).
 
 = With WooCommerce + Printful, you get: =
 
-- Control your profit: We charge you to cover production – you set your retail price, and what's left is your profit
+- Control over your profit: We charge you to cover production while you set your retail price, and what's left is your profit
 - Automated tax settings and live shipping rates
 - Free design templates: Get creative with our product generator
-- Product personalization: create designs your customers customize themselves
-- Warehousing & Fulfillment services: You can store your entire inventory at our warehouse, meaning we can fulfill them as well as your Print-on-demand shirts
+- Product personalization: Sell designs your customers can personalize themselves
+- Warehousing & Fulfillment services: Store your inventory at our warehouse, and we'll fulfill all your orders
 - Stress-free shipping: Lost shipments are on us, and we offer shipping methods with tracking
-- Discounted samples: Order product samples with 20% off + free shipping to select destinations
-- 24/7 Customer Support
+- Samples orders: Get product samples with 20% off + free shipping to select destinations
+- 24/7 support: Get in touch with us using chat, email, or phone
 
 Still not convinced? Check out our [demo store](https://demo-store.myprintful.com/) to see what's possible!
 
