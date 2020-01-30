@@ -9,7 +9,7 @@ Author URI: http://www.printful.com
 License: GPL2 http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: printful
 WC requires at least: 3.0.0
-WC tested up to: 3.8
+WC tested up to: 3.9
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;

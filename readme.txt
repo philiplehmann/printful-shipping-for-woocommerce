@@ -39,7 +39,7 @@ Learn more about the WooCommerce + Printful integration [here](https://www.print
 - Samples orders: Get product samples with 20% off + free shipping to select destinations
 - 24/7 support: Get in touch with us using chat, email, or phone
 
-Still not convinced? Check out our [demo store](https://demo-store.myprintful.com/) to see what's possible!
+Still not convinced? Check out our [demo store](https://woocommerce-demo.printful.com/) to see what's possible!
 
 == Installation ==
 1. Upload 'printful-shipping-for-woocommerce' to the '/wp-content/plugins/' directory
