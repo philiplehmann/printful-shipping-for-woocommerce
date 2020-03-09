@@ -59,6 +59,9 @@
                                                 <?php if ( $carrier['value'] == 'yes' ) {
                                                     echo 'checked="checked"';
                                                 } ?>
+                                                <?php if ( $carrier['isDisabled'] ) {
+                                                    echo 'disabled="disabled"';
+                                                } ?>
                                             >
                                             <?php echo wp_kses_post( $carrier['label'] ); ?>
                                         </label>

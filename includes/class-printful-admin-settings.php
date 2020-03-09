@@ -155,22 +155,10 @@ class Printful_Admin_Settings {
      * @throws PrintfulException
      */
 	public function setup_carrier_fields() {
-        $flat_rate_link = sprintf(
-            '<a href="%s" target="_blank">%s</a>',
-            esc_url( 'https://www.printful.com/shipping' ),
-            esc_html__( 'flat rates', 'printful' )
-        );
-
 		$carrier_settings = array(
 			'title'       => __( 'Shipping Methods', 'printful' ),
-			'description' => sprintf(
-			     "Here you can choose the shipping methods you want Printful to use for shipping your orders.
-                Uncheck the ones you want to disable. From your selection, our algorithm will determine the fastest, most cost-effective, and most reliable method for each order. <br /><br />
-			    Checking “Flat Rate” enables Printful %s as a shipping option. When an order comes in and “Flat Rate” is the most cost-effective shipping option you’ve enabled, that’s the rate we’ll charge you.
-			    The order will be shipped with the least expensive shipping method available, regardless of what others you’ve enabled. 
-			    So if you want to use only specific shipping methods, make sure “Flat Rate” is disabled.",
-                $flat_rate_link
-            ),
+            'description' => __( 'Here you can choose the shipping methods you want Printful to use for shipping your orders.
+            Uncheck the ones you want to disable. From your selection, our algorithm will determine the fastest, most cost-effective, and most reliable method for each order.', 'printful' ),
 			'settings'    => array(),
 		);
 
@@ -210,10 +198,6 @@ class Printful_Admin_Settings {
         $us_carriers = $parsed_carriers['us_carriers'];
         $eu_carriers = $parsed_carriers['eu_carriers'];
 
-        if ( empty( $us_carriers ) && empty( $eu_carriers ) ) {
-			return false;
-		}
-
         $saved_carriers = array_merge( $us_carriers, $eu_carriers );
 		$request_body   = array();
 
@@ -224,6 +208,11 @@ class Printful_Admin_Settings {
 
                     if ( in_array( $carrier_method, $saved_carriers[ $region ][ $carrier_type ] ) ) {
                         $is_active = true;
+                    }
+
+                    // `isDisabled` means that user is not allowed to change `isActive` state
+                    if ($carrier_data['isDisabled']) {
+                        $is_active = $carrier_data['isActive'];
                     }
 
                     $request_body[ $region ][ $carrier_type ][ $carrier_method ] = array(
@@ -304,6 +293,7 @@ class Printful_Admin_Settings {
                     $carrier_item = array(
                         'label' => $carrier[ 'label' ] . ' <i>' . $carrier[ 'subtitle' ] . '</i>',
                         'value' => ( $carrier[ 'isActive' ] == true ? 'yes' : 'no' ),
+                        'isDisabled' => $carrier[ 'isDisabled' ]
                     );
 
                     $carrier_regions[ $region ][ $carrier_type ][ $carrier['key'] ] = $carrier_item;

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-09-24 16:42+0300\n"
+"POT-Creation-Date: 2020-03-09 10:02+0200\n"
 "PO-Revision-Date: 2018-04-26 13:50+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -80,23 +80,28 @@ msgstr ""
 msgid "Personalization popup title text"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:161
-msgid "flat rates"
-msgstr ""
-
-#: includes/class-printful-admin-settings.php:165
+#: includes/class-printful-admin-settings.php:159
 msgid "Shipping Methods"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:178
+#: includes/class-printful-admin-settings.php:160
+msgid ""
+"Here you can choose the shipping methods you want Printful to use for "
+"shipping your orders.\n"
+"            Uncheck the ones you want to disable. From your selection, our "
+"algorithm will determine the fastest, most cost-effective, and most reliable "
+"method for each order."
+msgstr ""
+
+#: includes/class-printful-admin-settings.php:166
 msgid "You need to be connected to Printful API to edit carrier settings!"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:317
+#: includes/class-printful-admin-settings.php:307
 msgid "International from USA"
 msgstr ""
 
-#: includes/class-printful-admin-settings.php:323
+#: includes/class-printful-admin-settings.php:313
 msgid "International from EU"
 msgstr ""
 

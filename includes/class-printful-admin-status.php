@@ -568,7 +568,8 @@ class Printful_Admin_Status {
      */
 	private function check_site_url_redirect()
     {
-        $regular_site_url_req = wp_remote_head( get_option( 'siteurl' ), array('redirection' => 0));
+
+        $regular_site_url_req = wp_remote_head( get_option( 'siteurl' ) . '/wp-json/', array('redirection' => 0));
 
         //need to not trigger issues for subfolder wordpress setups
         $slashed_site_url_req = wp_remote_head( trailingslashit(get_option( 'siteurl' )), array('redirection' => 0));
