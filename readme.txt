@@ -2,7 +2,7 @@
 Contributors: girts_u, kievins, kberzins
 Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillment, printing, fedex, carriers, checkout, t-shirts
 Requires at least: 4.9
-Tested up to: 5.3
+Tested up to: 5.4
 Requires PHP: 5.6
 Stable tag: 2.1.10
 License: GPLv2 or later
