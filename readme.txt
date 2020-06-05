@@ -178,6 +178,9 @@ First release
 
 == Changelog ==
 
+= 2.1.12 =
+* Improved support for WooCommerce 4.2
+
 = 2.1.11 =
 * Improved support for WooCommerce 4.1
 
