@@ -129,19 +129,20 @@ class Printful_REST_API_Controller extends WC_REST_Controller
         }
 
         //product exists
-        $product = get_post( $product_id );
-        if ( empty( $product ) || $product->post_type != 'product' ) {
+        /** @var WC_Product $product */
+        $product = wc_get_product( $product_id );
+        if ( empty( $product )) {
             return new WP_Error( 'printful_api_product_not_found', __( 'The product is not found', 'printful' ), array('status' => 400));
         }
 
         //how about permissions?
-        $post_type = get_post_type_object( $product->post_type );
-        if ( ! current_user_can( $post_type->cap->edit_post, $product->ID ) ) {
+        $post_type = get_post_type_object( 'product' );
+        if ( ! current_user_can( $post_type->cap->edit_post, $product->get_id() ) ) {
             return new WP_Error( 'printful_api_user_cannot_edit_product_size_chart', __( 'You do not have permission to edit the size chart', 'printful' ), array('status' => 401));
         }
 
         //lets do this
-        update_post_meta( $product_id, 'pf_size_chart', htmlspecialchars( $data['size_chart'] ) );
+        update_post_meta( $product->get_id(), 'pf_size_chart', htmlspecialchars( $data['size_chart'] ) );
 
         return array(
             'product'    => $product,
@@ -222,9 +223,9 @@ class Printful_REST_API_Controller extends WC_REST_Controller
      */
     public function update_item_permissions_check( $request ) {
         $params = $request->get_url_params();
-        $post = get_post( (int) $params['product_id'] );
+        $product = wc_get_product( (int) $params['product_id'] );
 
-        if ( $post && ! wc_rest_check_post_permissions( 'product', 'edit', $post->ID ) ) {
+        if ( empty( $product ) && ! wc_rest_check_post_permissions( 'product', 'edit', $product->get_id() ) ) {
             return new WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
         }
 
