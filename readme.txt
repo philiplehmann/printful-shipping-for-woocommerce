@@ -4,7 +4,7 @@ Tags: woocommerce, printful, drop shipping, shipping, shipping rates, fulfillmen
 Requires at least: 4.9
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 2.1.14
+Stable tag: 2.1.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 5. Support page
 
 == Upgrade Notice ==
+
+= 2.1.15 =
+Fix translations
 
 = 2.1.14 =
 Advanced size guide feature
@@ -184,8 +187,11 @@ First release
 
 == Changelog ==
 
+= 2.1.15 =
+* Fix translations
+
 = 2.1.14 =
-Advanced size guide feature
+* Advanced size guide feature
 
 = 2.1.13 =
 * Improved support for WooCommerce 4.3
