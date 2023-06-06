@@ -63,6 +63,9 @@ Go to https://www.printful.com/dashboard/store , select your WooCommerce store, 
 
 == Upgrade Notice ==
 
+= 2.2.2 =
+OAuth migration process update
+
 = 2.2.1 =
 Bugfixes
 
@@ -255,6 +258,9 @@ Minor improvements
 First release
 
 == Changelog ==
+
+= 2.2.2 =
+* OAuth migration process update
 
 = 2.2.1 =
 * Bugfixes

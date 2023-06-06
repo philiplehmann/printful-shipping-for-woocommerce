@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Printful_Token_Migration
 {
+    private const OPTION_NAME_MIGRATION = 'pf-migration-in-progress';
+
     public static $_instance;
 
     private $integration;
@@ -27,8 +29,10 @@ class Printful_Token_Migration
 
         if ($instance->shouldMigrate()) {
             try {
+                $instance->startMigration();
                 $instance->migrate();
             } catch (Throwable $throwable) {
+                $instance->restartMigration();
                 // allow migration to silently fail
             }
         }
@@ -38,7 +42,7 @@ class Printful_Token_Migration
         $restKey = $this->integration->get_option( 'printful_key' );
         $oauthKey = $this->integration->get_option( 'printful_oauth_key' );
 
-        return $restKey && !$oauthKey;
+        return $restKey && !$oauthKey && !$this->isMigrationRunning();
     }
 
     public function migrate() {
@@ -63,5 +67,20 @@ class Printful_Token_Migration
                 $this->integration->update_settings( $options );
             }
         }
+    }
+
+    protected function isMigrationRunning()
+    {
+        return (bool) get_option(self::OPTION_NAME_MIGRATION, 0);
+    }
+
+    protected function startMigration()
+    {
+        update_option(self::OPTION_NAME_MIGRATION, 1);
+    }
+
+    protected function restartMigration()
+    {
+        update_option(self::OPTION_NAME_MIGRATION, 0);
     }
 }
