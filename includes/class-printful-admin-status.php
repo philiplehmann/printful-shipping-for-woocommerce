@@ -156,6 +156,8 @@ class Printful_Admin_Status {
 	 */
 	public static function render_status_table_ajax() {
 
+		Printful_Admin::validateAdminAccess();
+
 		$checklist = self::get_checklist();
 		Printful_Admin::load_template( 'status-table', array( 'checklist' => $checklist ) );
 

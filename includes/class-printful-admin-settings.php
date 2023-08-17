@@ -210,6 +210,8 @@ class Printful_Admin_Settings {
      */
 	public static function render_carriers_ajax() {
 
+		Printful_Admin::validateAdminAccess();
+
 		$carrier_settings = self::instance()->setup_carrier_fields();
 		Printful_Admin::load_template( 'setting-group', $carrier_settings );
 		$enable_submit = 'Printful_Settings.enable_submit_btn();';
@@ -322,6 +324,8 @@ class Printful_Admin_Settings {
      * @throws PrintfulException
      */
 	public static function save_printful_settings() {
+
+		Printful_Admin::validateAdminAccess();
 
 		if ( ! empty( $_POST ) ) {
 

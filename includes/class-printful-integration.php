@@ -132,6 +132,9 @@ class Printful_Integration
      * @throws PrintfulException
      */
 	public static function ajax_force_check_connect_status() {
+
+		Printful_Admin::validateAdminAccess();
+
 		if ( Printful_Integration::instance()->is_connected( true ) ) {
 			die( 'OK' );
 		}
