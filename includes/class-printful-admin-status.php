@@ -158,6 +158,8 @@ class Printful_Admin_Status {
 
 		Printful_Admin::validateAdminAccess();
 
+        check_admin_referer( 'get_printful_status_checklist' );
+
 		$checklist = self::get_checklist();
 		Printful_Admin::load_template( 'status-table', array( 'checklist' => $checklist ) );
 
