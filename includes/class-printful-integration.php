@@ -88,7 +88,7 @@ class Printful_Integration {
 		//attempt to connect to printful to verify the API key
 		try {
 			$storeData = $client->get( 'store' );
-			if ( ! empty( $storeData ) && 'woocommerce' == $storeData['type']) {
+			if ( ! empty( $storeData['type'] ) && 'woocommerce' == $storeData['type'] ) {
 				$response = true;
 				$this->clear_connect_error();
 				set_transient( self::PF_API_CONNECT_STATUS, array( 'status' => 1 ) );  //no expiry

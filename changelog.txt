@@ -1,4 +1,15 @@
 *** Printful shipping for WooCommerce Changelog ***
+2026-11-16 - version 2.2.13
+* Updated - WordPress compatibility raised to 7.0
+* Updated - Minimum requirements raised to WordPress 6.2, PHP 7.4, WooCommerce 7.1
+* Fix - Translations are no longer loaded before init (WordPress 6.7+ notice)
+* Fix - PHP 8 errors and warnings on missing/invalid Printful API data
+* Fix - Tax calculation returned an invalid value when the Printful API was unreachable
+* Fix - REST size chart permission check crashed for unknown products
+* Fix - Dashboard order links (HPOS compatible) and "Open in Printful" link
+* Fix - "Disable SSL" option had no effect
+* Fix - Personalized cart thumbnails could throw uncaught errors and output unescaped attributes
+
 2026-13-01 - version 2.2.12
 * Updated - WordPress compatibility raised to 6.9
 * Updated - Woocommerce compatibility raised to 10.4.3

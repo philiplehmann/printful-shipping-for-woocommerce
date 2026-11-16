@@ -121,7 +121,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 </div>
 <script>
-    jQuery(document).ready(function($){
+    jQuery(function($){
         $('.pf-color-picker').wpColorPicker();
     });
 </script>

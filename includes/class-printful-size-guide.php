@@ -31,7 +31,7 @@ class Printful_Size_Guide {
 		}
 
 		$handle = 'printful-product-size-guide';
-		wp_enqueue_script( $handle, plugins_url( '../assets/js/product-size-guide.js', __FILE__ ) );
+		wp_enqueue_script( $handle, plugins_url( '../assets/js/product-size-guide.js', __FILE__ ), array(), Printful_Base::VERSION, true );
 		wp_localize_script(
 			$handle,
 			'pfGlobal',

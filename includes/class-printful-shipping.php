@@ -37,9 +37,6 @@ class Printful_Shipping extends WC_Shipping_Method {
 		//Initialize shipping methods for specific package (or no package)
 		add_filter( 'woocommerce_load_shipping_methods', array( $this, 'woocommerce_load_shipping_methods' ), 10000 );
 
-		//Remove other shipping methods for Printful package on WC < 2.6
-		add_filter( 'woocommerce_shipping_methods', array( $this, 'woocommerce_shipping_methods' ), 10000 );
-
 		add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'woocommerce_cart_shipping_packages' ), 10000 );
 	}
 
@@ -101,24 +98,6 @@ class Printful_Shipping extends WC_Shipping_Method {
 			//Show Printful tab on Shipping rate settings
 			WC()->shipping()->register_shipping_method( $this );
 		}
-	}
-
-	/**
-	 * Remove non-Printful methods for Printful packages on WC < 2.6
-	 *
-	 * @param $methods
-	 *
-	 * @return array
-	 */
-	public function woocommerce_shipping_methods( $methods ) {
-
-		if ( $this->override_defaults && $this->printful_package && version_compare( WC()->version, '2.6', '<' ) ) {
-			//For WC < 2.6 woocommerce_shipping_methods is executed after woocommerce_load_shipping_methods
-			//So we need to clean up unnecessary methods from there
-			return array();
-		}
-
-		return $methods;
 	}
 
 	/**
@@ -256,6 +235,9 @@ class Printful_Shipping extends WC_Shipping_Method {
 
 		foreach ( $package['contents'] as $item ) {
 			if ( ! empty( $item['data'] ) && ( $item['data']->is_virtual() || $item['data']->is_downloadable() ) ) {
+				continue;
+			}
+			if ( empty( $item['quantity'] ) || $item['quantity'] <= 0 ) {
 				continue;
 			}
 			$request['items'] [] = array(

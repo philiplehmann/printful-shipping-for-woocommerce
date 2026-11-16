@@ -271,17 +271,10 @@ class Printful_Admin_Status {
 	 */
 	private function check_PHP_memory_limit() {
 
-		$memory_limit = ini_get( 'memory_limit' );
+		$memory_limit = (string) ini_get( 'memory_limit' );
 
-		if ( preg_match( '/^(\d+)(.)$/', $memory_limit, $matches ) ) {
-			if ( 'M' == $matches[2] ) {
-				$memory_limit = $matches[1] * 1024 * 1024; // nnnM -> nnn MB
-			} else if ( 'K' == $matches[2] ) {
-				$memory_limit = $matches[1] * 1024; // nnnK -> nnn KB
-			}
-		}
-
-		$ok = ( $memory_limit >= 128 * 1024 * 1024 ); // at least 128M?
+		// -1 means unlimited; wp_convert_hr_to_bytes() handles K/M/G suffixes identically on PHP 7 and 8.
+		$ok = ( '-1' === trim( $memory_limit ) ) || ( wp_convert_hr_to_bytes( $memory_limit ) >= 128 * 1024 * 1024 ); // at least 128M?
 
 		if ( $ok ) {
 			return self::PF_STATUS_OK;
@@ -299,21 +292,22 @@ class Printful_Admin_Status {
 
 		$current = get_bloginfo( 'version' );
 
+		$obj    = null;
+		$latest = null;
+
 		try {
 			$url      = 'https://api.wordpress.org/core/version-check/1.7/';
 			$response = wp_remote_get( $url );
 
 			if ( ! is_wp_error( $response ) ) {
-				$json = $response['body'];
-				$obj  = json_decode( $json );
+				$obj = json_decode( wp_remote_retrieve_body( $response ) );
 			}
 
-			if ( empty( $obj ) ) {
+			if ( empty( $obj ) || empty( $obj->offers[0]->version ) ) {
 				return self::PF_STATUS_FAIL;
 			}
 
-			$version = $obj->offers[0];
-			$latest  = $version->version;
+			$latest = $obj->offers[0]->version;
 
 		} catch ( Exception $e ) {
 			return self::PF_STATUS_FAIL;
@@ -338,28 +332,11 @@ class Printful_Admin_Status {
 	private function check_PF_webhooks() {
 		global $wpdb;
 
-		// Get the webhooks
-		// In version 3.3 the webhooks are stored in separate table, before that they were stored in posts table
-		if ( version_compare( WC()->version, '3.3', '<' ) ) {
-
-			// Query args
-			$args = array(
-				'post_type'           => 'shop_webhook',
-				'nopaging'            => true,
-				'ignore_sticky_posts' => true,
-				's'                   => self::PF_WEBHOOK_NAME,
-				'post_status'         => 'published',
-			);
-
-			$webhook_results = new WP_Query( $args );
-			$webhooks        = $webhook_results->posts;
-			$count           = count( $webhooks ) > 0;
-		} else {
-			$count = $wpdb->get_var(
-				$wpdb->prepare( "SELECT COUNT(*) as webhook_count FROM {$wpdb->prefix}wc_webhooks WHERE name = %s",
-					self::PF_WEBHOOK_NAME
-				) );
-		}
+		// Webhooks are stored in their own table since WooCommerce 3.3.
+		$count = (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT COUNT(*) as webhook_count FROM {$wpdb->prefix}wc_webhooks WHERE name = %s",
+				self::PF_WEBHOOK_NAME
+			) );
 
 		if ( $count > 0 ) {
 			return self::PF_STATUS_OK;
@@ -486,7 +463,7 @@ class Printful_Admin_Status {
 			return self::PF_STATUS_OK;
 		}
 
-		$w3tc_config_file = get_home_path() . 'wp-content/w3tc-config/master.php';
+		$w3tc_config_file = WP_CONTENT_DIR . '/w3tc-config/master.php';
 		if ( file_exists( $w3tc_config_file ) && is_readable( $w3tc_config_file ) ) {
 			$content = @file_get_contents( $w3tc_config_file );
 			$config  = @json_decode( substr( $content, 14 ), true );

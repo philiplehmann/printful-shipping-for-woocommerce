@@ -39,12 +39,12 @@ class Printful_Client {
 		}
 		$this->key = $key;
 
+		//setup api host
+		$this->apiUrl = Printful_Base::get_printful_api_host();
+
 		if ( $disable_ssl ) {
 			$this->apiUrl = str_replace( 'https://', 'http://', $this->apiUrl );
 		}
-
-		//setup api host
-		$this->apiUrl = Printful_Base::get_printful_api_host();
 	}
 
 	/**

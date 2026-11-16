@@ -7,7 +7,7 @@
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
-<a href="javascript:" style="color: <?php esc_attr_e($size_guide_button_color); ?>"
+<a href="javascript:" style="color: <?php echo esc_attr( $size_guide_button_color ); ?>"
    onclick="Printful_Product_Size_Guide.onSizeGuideClick()">
-	<?php esc_html_e($size_guide_button_text, 'printful'); ?>
+	<?php echo esc_html( $size_guide_button_text ); ?>
 </a>

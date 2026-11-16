@@ -145,7 +145,7 @@ var Printful_Product_Customizer;
             jQuery('#pfc_hash').val(hash);
             this.closeModal();
 
-            jQuery('.single_add_to_cart_button').click();
+            jQuery('.single_add_to_cart_button').trigger('click');
         }
     };
 })();

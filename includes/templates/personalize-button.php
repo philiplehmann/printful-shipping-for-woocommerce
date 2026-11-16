@@ -9,7 +9,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <a class="button"
-   style="background-color: <?php esc_attr_e($pfc_button_color); ?>"
+   style="background-color: <?php echo esc_attr( $pfc_button_color ); ?>"
    onclick="Printful_Product_Customizer.onCustomizeClick( '<?php echo esc_url($site_url); ?>')">
-	<?php esc_html_e($pfc_button_text, 'printful'); ?>
+	<?php echo esc_html( $pfc_button_text ); ?>
 </a>

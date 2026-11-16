@@ -60,10 +60,11 @@ class Printful_Taxes {
 						),
 					) );
 				} catch ( Exception $e ) {
-					return false;
+					// The filter must always return an array of rates.
+					return $matched_tax_rates;
 				}
 
-				if ( isset( $response['rate'] ) ) {
+				if ( is_array( $response ) && isset( $response['rate'] ) ) {
 					$rate = $response;
 				} else {
 					$rate = array(
@@ -75,16 +76,21 @@ class Printful_Taxes {
 				set_transient( $key, $rate, 1800 );
 			}
 
-			if ( $rate['required'] ) {
-				$rate_item = array(
-					'rate'     => $rate['rate'] * 100,
+			if ( ! is_array( $matched_tax_rates ) ) {
+				$matched_tax_rates = array();
+			}
+
+			if ( is_array( $rate ) && ! empty( $rate['required'] ) ) {
+				$shipping_taxable = ! empty( $rate['shipping_taxable'] );
+				$rate_item        = array(
+					'rate'     => ( isset( $rate['rate'] ) ? (float) $rate['rate'] : 0 ) * 100,
 					'label'    => 'Sales Tax',
-					'shipping' => $rate['shipping_taxable'] ? 'yes' : 'no',
+					'shipping' => $shipping_taxable ? 'yes' : 'no',
 					'compound' => 'no',
 				);
 
 				if ( $this->isRateUnique( $rate_item, $matched_tax_rates ) ) {
-					$id                       = $this->get_printful_rate_id( $country, $state, $rate['shipping_taxable'] );
+					$id                       = $this->get_printful_rate_id( $country, $state, $shipping_taxable );
 					$matched_tax_rates[ $id ] = $rate_item;
 				}
 			}
@@ -130,9 +136,14 @@ class Printful_Taxes {
 				$client = Printful_Integration::instance()->get_client();
 				$list   = $client->get( 'tax/countries' );
 
-				foreach ( $list as $country ) {
+				foreach ( is_array( $list ) ? $list : array() as $country ) {
+					if ( ! isset( $country['code'] ) || empty( $country['states'] ) || ! is_array( $country['states'] ) ) {
+						continue;
+					}
 					foreach ( $country['states'] as $state ) {
-						$countries[ $country['code'] ][ $state['code'] ] = 1;
+						if ( isset( $state['code'] ) ) {
+							$countries[ $country['code'] ][ $state['code'] ] = 1;
+						}
 					}
 				}
 

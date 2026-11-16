@@ -69,7 +69,11 @@ class Printful_Size_Chart_Tab {
 	public function get_size_chart_content() {
 		global $post;
 
-        return htmlspecialchars_decode(get_post_meta( $post->ID, 'pf_size_chart', true ), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
+		if ( empty( $post ) ) {
+			return '';
+		}
+
+        return htmlspecialchars_decode( (string) get_post_meta( $post->ID, 'pf_size_chart', true ), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
     }
 
 	/**
@@ -81,8 +85,8 @@ class Printful_Size_Chart_Tab {
 		$settings = array(
 			'textarea_name' => 'pf_size_chart',
 			'tinymce'       => array(
-				'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
-				'theme_advanced_buttons2' => '',
+				'toolbar1' => 'bold,italic,strikethrough,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink,undo,redo',
+				'toolbar2' => '',
 			),
 			'editor_css'    => '<style>#wp-pf_size_chart-editor-container .wp-editor-area{height:175px; width:100%;} .wp-editor-area{height:175px; width:100%;}</style>',
 		);
