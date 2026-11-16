@@ -3,13 +3,16 @@
 Plugin Name: Printful Integration for WooCommerce
 Plugin URI: https://wordpress.org/plugins/printful-shipping-for-woocommerce/
 Description: Connects your Printful account with WooCommerce.
-Version: 2.2.12
+Version: 2.2.13
 Author: Printful
 Author URI: http://www.printful.com
 License: GPL3 https://www.gnu.org/licenses/gpl-3.0.en.html
 Text Domain: printful
-WC requires at least: 3.0.0
-WC tested up to: 9.6.1
+Requires at least: 6.2
+Requires PHP: 7.4
+Requires Plugins: woocommerce
+WC requires at least: 7.1
+WC tested up to: 10.4.3
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,7 +31,7 @@ add_action( 'before_woocommerce_init', function () {
 
 class Printful_Base {
 
-	const VERSION = '2.2.12';
+	const VERSION = '2.2.13';
 	const PF_HOST = 'https://www.printful.com/';
 	const PF_API_HOST = 'https://api.printful.com/';
 
@@ -37,7 +40,7 @@ class Printful_Base {
 	 */
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
-		add_action( 'plugins_loaded', array( $this, 'printful_load_plugin_textdomain' ) );
+		add_action( 'init', array( $this, 'printful_load_plugin_textdomain' ) );
 	}
 
 	/**
@@ -53,30 +56,30 @@ class Printful_Base {
 		$this->rest_api_init();
 
 		//load required classes
-		require_once 'includes/class-printful-integration.php';
-		require_once 'includes/class-printful-carriers.php';
-		require_once 'includes/class-printful-taxes.php';
-		require_once 'includes/class-printful-shipping.php';
-		require_once 'includes/class-printful-request-log.php';
-		require_once 'includes/class-printful-admin.php';
-		require_once 'includes/class-printful-admin-dashboard.php';
-		require_once 'includes/class-printful-admin-settings.php';
-		require_once 'includes/class-printful-admin-status.php';
-		require_once 'includes/class-printful-admin-support.php';
-		require_once 'includes/class-printful-size-chart-tab.php';
-		require_once 'includes/class-printful-size-chart-tab.php';
-		require_once 'includes/class-printful-template.php';
-		require_once 'includes/class-printful-customizer.php';
-		require_once 'includes/class-printful-size-guide.php';
-		require_once 'includes/class-printful-token-migration.php';
-		require_once 'includes/Exceptions/class-printful-exception.php';
-		require_once 'includes/Exceptions/class-printful-api-exception.php';
+		require_once __DIR__ . '/includes/class-printful-integration.php';
+		require_once __DIR__ . '/includes/class-printful-carriers.php';
+		require_once __DIR__ . '/includes/class-printful-taxes.php';
+		require_once __DIR__ . '/includes/class-printful-shipping.php';
+		require_once __DIR__ . '/includes/class-printful-request-log.php';
+		require_once __DIR__ . '/includes/class-printful-admin.php';
+		require_once __DIR__ . '/includes/class-printful-admin-dashboard.php';
+		require_once __DIR__ . '/includes/class-printful-admin-settings.php';
+		require_once __DIR__ . '/includes/class-printful-admin-status.php';
+		require_once __DIR__ . '/includes/class-printful-admin-support.php';
+		require_once __DIR__ . '/includes/class-printful-size-chart-tab.php';
+		require_once __DIR__ . '/includes/class-printful-template.php';
+		require_once __DIR__ . '/includes/class-printful-customizer.php';
+		require_once __DIR__ . '/includes/class-printful-size-guide.php';
+		require_once __DIR__ . '/includes/class-printful-token-migration.php';
+		require_once __DIR__ . '/includes/Exceptions/class-printful-exception.php';
+		require_once __DIR__ . '/includes/Exceptions/class-printful-api-exception.php';
 
 		Printful_Token_Migration::init();
 
 		//launch init
 		Printful_Taxes::init();
-		Printful_Shipping::init();
+		// Built on init: the shipping method translates its form fields, which must not happen before init (WP 6.7+).
+		add_action( 'init', array( 'Printful_Shipping', 'init' ), 1 );
 		Printful_Request_log::init();
 		Printful_Admin::init();
 		Printful_Size_Chart_Tab::init();
@@ -149,7 +152,7 @@ class Printful_Base {
 	}
 
 	public function register_rest_routes() {
-		require_once 'includes/class-printful-rest-api-controller.php';
+		require_once __DIR__ . '/includes/class-printful-rest-api-controller.php';
 
 		$printfulRestAPIController = new Printful_REST_API_Controller();
 		$printfulRestAPIController->register_routes();

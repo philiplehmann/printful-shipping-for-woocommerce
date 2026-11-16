@@ -69,9 +69,9 @@ class Printful_Request_Log {
 		$code_success = null;
 
 		if ( ! is_wp_error( $result ) ) {
-			$result       = json_decode( $result['body'], true );
+			$result       = json_decode( isset( $result['body'] ) ? (string) $result['body'] : '', true );
 			$params_set   = ! isset( $result['code'], $result['result'] );
-			$status       = (int) $result['code'];
+			$status       = isset( $result['code'] ) ? (int) $result['code'] : 0;
 			$code_success = ( $status < 200 || $status >= 300 );
 		}
 

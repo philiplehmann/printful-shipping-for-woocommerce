@@ -63,10 +63,10 @@ class Printful_Admin {
 	public function add_admin_scripts( $hook ) {
 		if ( strpos( $hook, 'printful-dashboard' ) !== false ) {
 			wp_enqueue_script( 'wp-color-picker' );
-			wp_enqueue_script( 'printful-settings', plugins_url( '../assets/js/settings.js', __FILE__ ) );
-			wp_enqueue_script( 'printful-connect', plugins_url( '../assets/js/connect.js', __FILE__ ) );
-			wp_enqueue_script( 'printful-block-loader', plugins_url( '../assets/js/block-loader.js', __FILE__ ) );
-			wp_enqueue_script( 'printful-intercom', plugins_url( '../assets/js/intercom.min.js', __FILE__ ) );
+			wp_enqueue_script( 'printful-settings', plugins_url( '../assets/js/settings.js', __FILE__ ), array( 'jquery' ), Printful_Base::VERSION );
+			wp_enqueue_script( 'printful-connect', plugins_url( '../assets/js/connect.js', __FILE__ ), array( 'jquery' ), Printful_Base::VERSION );
+			wp_enqueue_script( 'printful-block-loader', plugins_url( '../assets/js/block-loader.js', __FILE__ ), array( 'jquery' ), Printful_Base::VERSION );
+			wp_enqueue_script( 'printful-intercom', plugins_url( '../assets/js/intercom.min.js', __FILE__ ), array(), Printful_Base::VERSION );
 		}
 	}
 
@@ -150,7 +150,7 @@ class Printful_Admin {
 			$args = array(
 				'id'     => 'printful_toolbar_status',
 				'parent' => 'printful_toolbar',
-				'title'  => 'Integration status' . ( $issueCount > 0 ? ' (' . esc_attr( $issueCount ) . _n( ' issue', ' issues', $issueCount ) . ')' : '' ),
+				'title'  => 'Integration status' . ( $issueCount > 0 ? ' (' . esc_attr( $issueCount ) . _n( ' issue', ' issues', $issueCount, 'printful' ) . ')' : '' ),
 				'href'   => get_admin_url( null, 'admin.php?page=' . self::MENU_SLUG_DASHBOARD . '&tab=status' ),
 				'meta'   => array( 'class' => 'printful-toolbar-status' ),
 			);

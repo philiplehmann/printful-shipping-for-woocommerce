@@ -44,7 +44,7 @@ class Printful_Admin_Settings {
 				'type' => 'checkbox',
 				'label' => sprintf(
 				/* translators: %s is a placeholder for a sales tax link */
-					__('Calculated for all products listed on your store (including non-Printful products) that ship to %s. Before enabling, make sure you are registered for a seller permit in all these states.'),
+					__('Calculated for all products listed on your store (including non-Printful products) that ship to %s. Before enabling, make sure you are registered for a seller permit in all these states.', 'printful'),
 					$sales_tax_link
 				),
 				'default' => 'no',
@@ -331,8 +331,8 @@ class Printful_Admin_Settings {
 					}
 
 					// `isDisabled` means that user is not allowed to change `isActive` state
-					if ($carrier_data['isDisabled']) {
-						$is_active = $carrier_data['isActive'];
+					if ( ! empty( $carrier_data['isDisabled'] ) ) {
+						$is_active = ! empty( $carrier_data['isActive'] );
 					}
 
 					$request_body[ $region ][ $carrier_type ][ $carrier_method ] = array(
@@ -411,6 +411,15 @@ class Printful_Admin_Settings {
 		foreach ( $carrier_regions as $region => $carrier_types ) {
 			foreach ($carrier_types as $carrier_type => $carrier_data) {
 				foreach ($carrier_data as $key => $carrier) {
+					if ( ! is_array( $carrier ) || ! isset( $carrier['key'] ) ) {
+						continue;
+					}
+					$carrier = wp_parse_args( $carrier, array(
+						'label'      => '',
+						'subtitle'   => '',
+						'isActive'   => false,
+						'isDisabled' => false,
+					) );
 					$carrier_item = array(
 						'label' => $carrier[ 'label' ] . ' <i>' . $carrier[ 'subtitle' ] . '</i>',
 						'value' => ( true == $carrier[ 'isActive' ] ? 'yes' : 'no' ),
@@ -458,8 +467,8 @@ class Printful_Admin_Settings {
 		}
 
 		return array(
-			self::CARRIER_REGION_US => $item_array[ self::CARRIER_REGION_US ],
-			self::CARRIER_REGION_EU => $item_array[ self::CARRIER_REGION_EU ],
+			self::CARRIER_REGION_US => isset( $item_array[ self::CARRIER_REGION_US ] ) ? $item_array[ self::CARRIER_REGION_US ] : array(),
+			self::CARRIER_REGION_EU => isset( $item_array[ self::CARRIER_REGION_EU ] ) ? $item_array[ self::CARRIER_REGION_EU ] : array(),
 		);
 	}
 
@@ -471,13 +480,28 @@ class Printful_Admin_Settings {
 	 * @return array
 	 */
 	private function parse_region_carriers( $us_carriers, $eu_carriers ) {
+		if ( ! is_array( $us_carriers[ self::CARRIER_REGION_US ] ) ) {
+			$us_carriers[ self::CARRIER_REGION_US ] = array();
+		}
+		if ( ! is_array( $eu_carriers[ self::CARRIER_REGION_EU ] ) ) {
+			$eu_carriers[ self::CARRIER_REGION_EU ] = array();
+		}
+
 		foreach ( $us_carriers[ self::CARRIER_REGION_US ] as $carrier_type => $carrier_methods ) {
+			if ( ! is_array( $carrier_methods ) ) {
+				unset( $us_carriers[ self::CARRIER_REGION_US ][ $carrier_type ] );
+				continue;
+			}
 			foreach ( $carrier_methods as $key => $carrier_method ) {
 				$us_carriers[ self::CARRIER_REGION_US ][ $carrier_type ][ $key ] = str_replace( self::CARRIER_REGION_US . '_' . $carrier_type . '_', '', $carrier_method );
 			}
 		}
 
 		foreach ( $eu_carriers[ self::CARRIER_REGION_EU ] as $carrier_type => $carrier_methods ) {
+			if ( ! is_array( $carrier_methods ) ) {
+				unset( $eu_carriers[ self::CARRIER_REGION_EU ][ $carrier_type ] );
+				continue;
+			}
 			foreach ( $carrier_methods as $key => $carrier_method ) {
 				$eu_carriers[ self::CARRIER_REGION_EU ][ $carrier_type ][ $key ] = str_replace( self::CARRIER_REGION_EU . '_' . $carrier_type . '_', '', $carrier_method );
 			}

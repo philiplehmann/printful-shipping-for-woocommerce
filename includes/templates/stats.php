@@ -1,5 +1,15 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Normalize API data so missing keys don't emit PHP 8 warnings.
+$stats = is_array( $stats ) ? $stats : array();
+foreach ( array( 'orders_today', 'orders_last_7_days', 'orders_last_28_days' ) as $pf_period ) {
+	$stats[ $pf_period ] = wp_parse_args(
+		isset( $stats[ $pf_period ] ) && is_array( $stats[ $pf_period ] ) ? $stats[ $pf_period ] : array(),
+		array( 'total' => 0, 'orders' => 0, 'trend' => '' )
+	);
+}
+$stats = wp_parse_args( $stats, array( 'currency' => '', 'profit_last_28_days' => 0, 'profit_trend_last_28_days' => '' ) );
 ?>
 
 <div class="printful-stats">

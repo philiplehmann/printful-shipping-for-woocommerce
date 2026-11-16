@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<img src="<?php echo esc_url( admin_url( 'images/spinner-2x.gif' ) ); ?>" class="loader hidden" width="20px" height="20px" alt="loader"/>
 
 		<script type="text/javascript">
-			jQuery(document).ready(function () {
+			jQuery(function () {
 				Printful_Connect.init('<?php echo esc_url( admin_url( 'admin-ajax.php?action=ajax_force_check_connect_status' ) ) . '&_wpnonce=' . esc_attr(wp_create_nonce( 'check_connect_status' )); ?>');
 			});
 		</script>

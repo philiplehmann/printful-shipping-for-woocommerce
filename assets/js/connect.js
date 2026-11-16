@@ -13,7 +13,7 @@ var Printful_Connect;
             this.listen_auth_return();
         },
         loader: function () {
-            jQuery('.printful-connect-button').click(function () {
+            jQuery('.printful-connect-button').on('click', function () {
                 jQuery(this).hide();
                 jQuery(this).siblings('.loader').removeClass('hidden');
 

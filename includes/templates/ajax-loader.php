@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	</div>
 </div>
 <script type="text/javascript">
-	jQuery(document).ready(function () {
+	jQuery(function () {
 		Printful_Block_Loader.load('<?php echo esc_url(admin_url( 'admin-ajax.php?action=' . $action )) . '&_wpnonce=' . esc_attr(wp_create_nonce($action)); ?>', 'loader-block-<?php echo esc_attr($action); ?>');
 	});
 </script>

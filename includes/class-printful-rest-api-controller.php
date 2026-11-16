@@ -257,10 +257,11 @@ class Printful_REST_API_Controller extends WC_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function update_item_permissions_check( $request ) {
-		$params = $request->get_url_params();
-		$product = wc_get_product( (int) $params['product_id'] );
+		$params     = $request->get_url_params();
+		$product_id = isset( $params['product_id'] ) ? (int) $params['product_id'] : 0;
+		$product    = $product_id ? wc_get_product( $product_id ) : false;
 
-		if ( empty( $product ) && ! wc_rest_check_post_permissions( 'product', 'edit', $product->get_id() ) ) {
+		if ( empty( $product ) || ! wc_rest_check_post_permissions( 'product', 'edit', $product->get_id() ) ) {
 			return new WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 

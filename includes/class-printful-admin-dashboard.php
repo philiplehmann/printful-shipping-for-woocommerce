@@ -161,7 +161,8 @@ class Printful_Admin_Dashboard {
 		if ( ! empty( $stats ) && ! is_wp_error( $stats ) ) {
 			Printful_Admin::load_template( 'stats', array( 'stats' => $stats ) );
 		} else {
-			Printful_Admin::load_template( 'error', array( 'error' => $stats->get_error_message( 'printful' ) ) );
+			$message = is_wp_error( $stats ) ? $stats->get_error_message( 'printful' ) : __( 'Could not load store statistics. Please try again later!', 'printful' );
+			Printful_Admin::load_template( 'error', array( 'error' => $message ) );
 		}
 
 		exit;
@@ -232,11 +233,15 @@ class Printful_Admin_Dashboard {
 		try {
 			$order_data = Printful_Integration::instance()->get_client()->get( 'orders' );
 
+			if ( ! is_array( $order_data ) ) {
+				$order_data = array();
+			}
+
 			if ( ! empty( $order_data ) ) {
 
 				foreach ( $order_data as $key => $order ) {
 
-					if ( 'pending' == $order['status'] ) {
+					if ( isset( $order['status'] ) && 'pending' == $order['status'] ) {
 						$order_data[$key]['status'] = 'Waiting for fulfillment';
 					}
 				}
@@ -256,7 +261,7 @@ class Printful_Admin_Dashboard {
 	public function get_connect_url() {
 		$consumer_key = $this->_get_consumer_key();
 
-		return Printful_Base::get_printful_host() . 'integration-callback/woocommerce/connect?website=' . urlencode( trailingslashit( get_home_url() ) ) . '&key=' . urlencode( $consumer_key ) . '&returnUrl=' . urlencode( get_admin_url( null, 'admin.php?page=' . Printful_Admin::MENU_SLUG_DASHBOARD ) );
+		return Printful_Base::get_printful_host() . 'integration-callback/woocommerce/connect?website=' . urlencode( trailingslashit( get_home_url() ) ) . '&key=' . urlencode( (string) $consumer_key ) . '&returnUrl=' . urlencode( get_admin_url( null, 'admin.php?page=' . Printful_Admin::MENU_SLUG_DASHBOARD ) );
 	}
 
 	/**

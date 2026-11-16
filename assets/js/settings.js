@@ -12,7 +12,7 @@ var Printful_Settings;
             var pass = form.find('.loader-wrap .pass');
             var fail = form.find('.loader-wrap .fail');
 
-            submit_button.click(function (e) {
+            submit_button.on('click', function (e) {
 
                 e.preventDefault();
                 submit_button.attr('disabled', 'disabled');

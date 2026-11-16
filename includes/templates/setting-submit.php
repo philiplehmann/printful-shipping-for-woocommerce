@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	</span>
 </p>
 <script type="text/javascript">
-	jQuery(document).ready(function () {
+	jQuery(function () {
 		Printful_Settings.init_submit();
 	});
 </script>

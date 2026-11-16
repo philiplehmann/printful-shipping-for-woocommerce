@@ -239,11 +239,14 @@ class Printful_Admin_Support {
 			return $report;
 		}
 
-		foreach ( $request_log as $log ) {
+		foreach ( (array) $request_log as $log ) {
+			if ( ! is_array( $log ) ) {
+				continue;
+			}
 			$report[] = array(
-				'date'    => $log['date'],
-				'path'    => $log['request'],
-				'message' => $log['result'],
+				'date'    => isset( $log['date'] ) ? $log['date'] : '',
+				'path'    => isset( $log['request'] ) ? $log['request'] : '',
+				'message' => isset( $log['result'] ) ? $log['result'] : '',
 			);
 		}
 

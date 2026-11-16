@@ -38,7 +38,7 @@ class Printful_Customizer {
 		$is_customized_product = $post && get_post_meta( $post->ID, 'pf_customizable', true );
 		if ($is_customized_product || is_cart()) {
 			$customizer_script_handle = 'printful-product-customizer';
-			wp_enqueue_script( $customizer_script_handle, plugins_url( '../assets/js/product-customizer.js', __FILE__ ) );
+			wp_enqueue_script( $customizer_script_handle, plugins_url( '../assets/js/product-customizer.js', __FILE__ ), array( 'jquery' ), Printful_Base::VERSION, true );
 			wp_localize_script( $customizer_script_handle, 'pfGlobalCustomizer', array(
 				'admin_url' => esc_url(admin_url()),
 				'modal_title' => Printful_Integration::instance()
@@ -86,7 +86,7 @@ class Printful_Customizer {
 			$class = 'attachment-shop_thumbnail wp-post-image'; // Default cart thumbnail class.
 			$src = esc_url( Printful_Base::get_asset_url() . 'images/loading.gif' );
 			// Construct img tag.
-			return "<img src='{$src}' class='{$class} pf-image-pending' data-hash='{$cart_item['pfc_hash']}' />";
+			return "<img src='" . esc_url( $src ) . "' class='" . esc_attr( $class ) . " pf-image-pending' data-hash='" . esc_attr( $cart_item['pfc_hash'] ) . "' />";
 		} else if ($cart_item
 			&& !empty( $cart_item['pfc_hash'] )
 			&& !empty( $cart_item['customizer_image_generated'] )
@@ -95,7 +95,7 @@ class Printful_Customizer {
 		) {
 			$class = 'attachment-shop_thumbnail wp-post-image'; // Default cart thumbnail class.
 			// Construct img tag.
-			return "<img src='{$cart_item['customizer_image']}' class='{$class}' data-hash='{$cart_item['pfc_hash']}' />";
+			return "<img src='" . esc_url( $cart_item['customizer_image'] ) . "' class='" . esc_attr( $class ) . "' data-hash='" . esc_attr( $cart_item['pfc_hash'] ) . "' />";
 		}
 
 		return $thumbnail;
@@ -132,14 +132,26 @@ class Printful_Customizer {
 		// Sanitize each item in the hashes array
 		$hashes = array_map('sanitize_text_field', $_GET['hashes']);
 
-		$client = Printful_Integration::instance()->get_client();
 		$hashes = implode(',', $hashes);
 
-		$response = $client->get('woocommerce/get-hash-images', array(
-			'hashes' => $hashes,
-		));
+		try {
+			$client   = Printful_Integration::instance()->get_client();
+			$response = $client->get('woocommerce/get-hash-images', array(
+				'hashes' => $hashes,
+			));
+		} catch ( Exception $e ) {
+			$response = array();
+		}
 
-		// global $woocommerce;
+		if ( ! is_array( $response ) ) {
+			$response = array();
+		}
+
+		if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+			echo wp_json_encode( (object) $response );
+			exit;
+		}
+
 		$items = WC()->cart->get_cart();
 
 		foreach ($items as $key => $item) {
@@ -158,7 +170,7 @@ class Printful_Customizer {
 
 		WC()->cart->set_session();
 
-		echo json_encode($response);
+		echo wp_json_encode( (object) $response );
 		exit;
 	}
 
